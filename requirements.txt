@@ -3,3 +3,6 @@ Werkzeug==0.14.1
 Jinja2==2.10
 Flask-BabelEx==0.9.3
 Babel==2.5.3
+click==6.7
+coverage==4.5.1
+Flask-Testing==0.7.1

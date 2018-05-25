@@ -1,8 +1,20 @@
-from babel.messages.frontend import CommandLineInterface
-from .webapp import create_app
-from .webapp.config import default as defaul_config
+# -*- coding: utf-8 -*-
+import os
+import sys
 
-app = create_app()
+from babel.messages.frontend import CommandLineInterface
+import click
+
+COV = None
+if os.environ.get('FLASK_COVERAGE'):
+    import coverage
+    COV = coverage.coverage(branch=True, include='biblat_manager/webapp/*')
+    COV.start()
+
+from .webapp import create_app  # NOQA
+from .config import default as defaul_config  # NOQA
+
+app = create_app(os.getenv('BIBLAT_CONFIG', 'default'))
 
 
 # Comandos para i18n
@@ -14,7 +26,7 @@ def make_messages():
     """
     args = [
         'pybabel', 'extract',
-        '-F', 'biblat_manager/webapp/config/babel.cfg',
+        '-F', 'biblat_manager/config/babel.cfg',
         '-k', 'lazy_gettext',
         '-k', '__',
         '-o', 'biblat_manager/webapp/translations/messages.pot', '.'
@@ -25,8 +37,8 @@ def make_messages():
 @app.cli.command()
 def create_catalog():
     """
-    Crea los catálogos para los idiomas definidos en biblat_manager/webapp/config,
-    a partir de las cadenas en: biblat_manager/webapp/translations/messages.pot
+        Crea los catálogos para los idiomas definidos en biblat_manager/config,
+        a partir de las cadenas en: biblat_manager/webapp/translations/messages.pot
     """
     for lang in defaul_config.LANGUAGES:
         args = [
@@ -60,3 +72,30 @@ def compile_messages():
         '-d', 'biblat_manager/webapp/translations'
     ]
     return CommandLineInterface().run(args)
+
+
+# Pruebas unitarias
+@app.cli.command()
+@click.option('--coverage/--no-coverage', default=False,
+              help='Run tests under code coverage.')
+def test(coverage):
+    """Ejecutar pruebas unitarias."""
+    if coverage and not os.environ.get('FLASK_COVERAGE'):
+        import subprocess
+        os.environ['FLASK_COVERAGE'] = '1'
+        sys.exit(subprocess.call(sys.argv))
+
+    import unittest
+    tests = unittest.TestLoader().discover('biblat_manager/tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
+
+    if COV:
+        COV.stop()
+        COV.save()
+        print('Coverage Summary:')
+        COV.report()
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        coverage_dir = os.path.join(basedir, 'tmp/coverage')
+        COV.html_report(directory=coverage_dir)
+        print('HTML version: file://%s/index.html' % coverage_dir)
+        COV.erase()
