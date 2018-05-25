@@ -21,7 +21,7 @@ class MainTestCase(TestCase):
     def test_change_set_locale(self):
         """
         Test para cambiar el idioma de la interfaz, con la URL:
-        '/set_locale/<string:lang_code>', que debe crear una varible
+        '/set_locale/<string:lang_code>', que debe crear una variable
         de sesión con el valor de lang_code.
         """
 

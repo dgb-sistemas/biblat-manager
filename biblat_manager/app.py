@@ -5,6 +5,8 @@ import sys
 from babel.messages.frontend import CommandLineInterface
 import click
 
+from .config import settings
+
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
@@ -12,7 +14,6 @@ if os.environ.get('FLASK_COVERAGE'):
     COV.start()
 
 from .webapp import create_app  # NOQA
-from .config import default as defaul_config  # NOQA
 
 app = create_app(os.getenv('BIBLAT_CONFIG', 'default'))
 
@@ -21,8 +22,8 @@ app = create_app(os.getenv('BIBLAT_CONFIG', 'default'))
 @app.cli.command()
 def make_messages():
     """
-        Escanea biblat_manager/webapp buscando strings traducible y el resultado lo almacena en
-        biblat_manager/webapp/translations/messages.pot
+    Escanea biblat_manager/webapp buscando strings traducible y el resultado
+    lo almacena en: biblat_manager/webapp/translations/messages.pot
     """
     args = [
         'pybabel', 'extract',
@@ -37,10 +38,10 @@ def make_messages():
 @app.cli.command()
 def create_catalog():
     """
-        Crea los catálogos para los idiomas definidos en biblat_manager/config,
-        a partir de las cadenas en: biblat_manager/webapp/translations/messages.pot
+    Crea los catálogos para los idiomas definidos en biblat_manager/config,
+    a partir de las cadenas en: biblat_manager/webapp/translations/messages.pot
     """
-    for lang in defaul_config.LANGUAGES:
+    for lang in settings.Config.LANGUAGES:
         args = [
             'pybabel', 'init',
             '-i', 'biblat_manager/webapp/translations/messages.pot',
@@ -53,8 +54,8 @@ def create_catalog():
 @app.cli.command()
 def update_catalog():
     """
-        Actualiza los catálogos a partir de las cadenas en:
-        biblat_manager/webapp/translations/messages.pot
+    Actualiza los catálogos a partir de las cadenas en:
+    biblat_manager/webapp/translations/messages.pot
     """
     args = [
         'pybabel', 'update',
@@ -74,10 +75,10 @@ def compile_messages():
     return CommandLineInterface().run(args)
 
 
-# Pruebas unitarias
+# Comando de pruebas unitarias
 @app.cli.command()
 @click.option('--coverage/--no-coverage', default=False,
-              help='Run tests under code coverage.')
+              help='Ejecutar tests con cobertura.')
 def test(coverage):
     """Ejecutar pruebas unitarias."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
