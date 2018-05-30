@@ -9,6 +9,7 @@ import os
         * BIBLAT_SECRET_KEY: Clave necesaria para la seguridad de las sesiones
 """
 
+
 class Config:
     SECRET_KEY = os.environ.get('BIBLAT_SECRET_KEY', 'secr3t-k3y')
     # Idioma predeterminado:

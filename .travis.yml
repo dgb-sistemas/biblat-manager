@@ -8,7 +8,7 @@ env:
   - FLASK_APP=biblat_manager.app
 
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
 
 script:
-- flask test --coverage
+  - flask test --coverage
