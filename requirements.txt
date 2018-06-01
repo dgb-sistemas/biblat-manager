@@ -1,6 +1,6 @@
 click==6.7
 coverage==4.5.1
-Babel==2.5.3
+Babel==2.6.0
 Flask==1.0.2
 Flask-BabelEx==0.9.3
 Flask-Testing==0.7.1
