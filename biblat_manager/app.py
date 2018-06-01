@@ -100,3 +100,4 @@ def test(coverage):
         COV.html_report(directory=coverage_dir)
         print('HTML version: file://%s/index.html' % coverage_dir)
         COV.erase()
+

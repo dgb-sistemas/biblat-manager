@@ -55,3 +55,4 @@ class MainTestCase(TestCase):
                              headers={'Referer': '/'},
                              follow_redirects=True)
             self.assertStatus(response, 200)
+
