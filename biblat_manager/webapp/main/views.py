@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, current_app, redirect, url_for, abort
+from flask import request, session, current_app, redirect, url_for, abort, render_template
 from flask_babelex import gettext as _
 
 from . import main
@@ -10,6 +10,15 @@ from biblat_manager.webapp import babel
 def index():
     return _('Hello world!')
 
+@main.route('/base_layout', methods=['GET', 'POST'])
+def base_layout():
+    ### Metodo de prueba para base_layout###
+    return render_template("base_layout.html",)
+
+@main.route('/index', methods=['GET', 'POST'])
+def index_base():
+    ### Metodo de prueba, herencia de base_layout ###
+    return render_template("index.html")
 
 # i18n
 @babel.localeselector
@@ -40,3 +49,4 @@ def set_locale(lang_code):
     if request.referrer is None:
         return redirect(url_for('main.index'))
     return redirect(request.referrer)
+

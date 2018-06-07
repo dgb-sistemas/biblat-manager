@@ -11,17 +11,9 @@
 	<title></title>
 	<link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" sizes="any" type="image/x-icon">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.css') }}" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
 	 crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	 crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-	 crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js" integrity="sha256-19J3rT3tQdidgtqqdQ3xNu++Gd7EoP/ag/0x1lHi0xY="
-	 crossorigin="anonymous"></script>
-	<script src="{{ url_for('static', filename='js/bootstrap-material-design.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='css/style.css') }}"></script>
 </head>
 
 <body>
@@ -59,7 +51,17 @@
 			<nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
 				<div class="container-fluid">
 					<div class="navbar-wrapper">
-						<a class="navbar-brand" href="#pablo">Revista mexicana de física</a>
+					
+						<!--
+							***************
+							
+							Esta etiqueta es donde va el titulo de la pagina, se encierra en una etiqueta <a>, con el siguiente formato:
+							<a class="navbar-brand" href="#pablo">Revista mexicana de física</a>
+							
+							***************
+						-->
+						{% block titulo %}{% endblock %}
+
 					</div>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index"
 					 aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +103,14 @@
 			</nav>
 			<div class="content">
 			
-				<!-- {% block contenido %}{% endblock %} -->
+				<!--
+							***************
+							
+							Esta etiqueta es donde va el contenido de la pagina
+							
+							***************
+				-->
+				{% block contenido %}{% endblock %}
 				
 			</div>
 			<footer class="footer">
@@ -116,6 +125,14 @@
 			</footer>
 		</div>
 	</div>
+	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
+	<script src="{{ url_for('static', filename='js/popper.min.js') }}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	 crossorigin="anonymous"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}" integrity="sha256-19J3rT3tQdidgtqqdQ3xNu++Gd7EoP/ag/0x1lHi0xY="
+	 crossorigin="anonymous"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap-material-design.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='css/style.css') }}"></script>
 </body>
 
 </html>
