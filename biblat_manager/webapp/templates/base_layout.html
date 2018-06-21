@@ -10,7 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 	<title></title>
 	<link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" sizes="any" type="image/x-icon">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/googleStyles.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.css') }}" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
 	 crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
@@ -52,14 +52,6 @@
 				<div class="container-fluid">
 					<div class="navbar-wrapper">
 					
-						<!--
-							***************
-							
-							Esta etiqueta es donde va el titulo de la pagina, se encierra en una etiqueta <a>, con el siguiente formato:
-							<a class="navbar-brand" href="#pablo">Revista mexicana de física</a>
-							
-							***************
-						-->
 						{% block titulo %}{% endblock %}
 
 					</div>
@@ -103,13 +95,6 @@
 			</nav>
 			<div class="content">
 			
-				<!--
-							***************
-							
-							Esta etiqueta es donde va el contenido de la pagina
-							
-							***************
-				-->
 				{% block contenido %}{% endblock %}
 				
 			</div>
@@ -132,7 +117,6 @@
 	<script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}" integrity="sha256-19J3rT3tQdidgtqqdQ3xNu++Gd7EoP/ag/0x1lHi0xY="
 	 crossorigin="anonymous"></script>
 	<script src="{{ url_for('static', filename='js/bootstrap-material-design.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='css/style.css') }}"></script>
 </body>
 
 </html>
