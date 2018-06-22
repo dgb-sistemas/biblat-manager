@@ -20,7 +20,7 @@ def index():
 
 @main.route('/base_layout', methods=['GET', 'POST'])
 def base_layout():
-    ### Metodo de prueba para base_layout###
+    # Metodo de prueba para base_layout#
     return render_template("base_layout.html",)
 
 
@@ -53,4 +53,3 @@ def set_locale(lang_code):
     if request.referrer is None:
         return redirect(url_for('main.index'))
     return redirect(request.referrer)
-
