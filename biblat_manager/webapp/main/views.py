@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, current_app, redirect, url_for, abort
+from flask import (request,
+                   session,
+                   current_app,
+                   redirect,
+                   url_for,
+                   abort,
+                   render_template)
 from flask_babelex import gettext as _
 
 from . import main
@@ -8,7 +14,7 @@ from biblat_manager.webapp import babel
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    return _('Hello world!')
+    return render_template('main/index.html')
 
 
 # i18n
