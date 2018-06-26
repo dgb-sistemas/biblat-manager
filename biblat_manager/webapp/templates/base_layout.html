@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+
+{% include 'header.html' %}
+
+<body>
+	<div class="wrapper">
+
+		{% include 'sidebar.html' %}
+
+		<div class="main-panel">
+
+			{% include 'navbar.html' %}
+
+			<div class="content">
+			
+				{% block contenido %}{% endblock %}
+				
+			</div>
+
+			{% include 'footer.html' %}
+
+		</div>
+	</div>
+
+{% include 'scripts.html' %}
+
+</body>
+
+</html>
