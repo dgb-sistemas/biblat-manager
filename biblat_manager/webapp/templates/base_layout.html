@@ -17,35 +17,9 @@
 
 <body>
 	<div class="wrapper">
-		<div class="sidebar" data-color="purple" data-background-color="white" data-image="{{ url_for('static', filename='img/sidebar.jpg') }}">
-			<div class="logo">
-				<a href="#" class="simple-text logo-normal">
-					Biblat Manager
-				</a>
-			</div>
-			<div class="sidebar-wrapper">
-				<ul class="nav">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">
-							<i class="fas fa-bookmark"></i>
-							<p>Revistas</p>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">
-							<i class="fas fa-university"></i>
-							<p>Institución</p>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">
-							<i class="fas fa-balance-scale"></i>
-							<p>Licencias</p>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
+
+		{% block sidebar %}{% endblock %}
+
 		<div class="main-panel">
 			<nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
 				<div class="container-fluid">
@@ -97,16 +71,9 @@
 				{% block contenido %}{% endblock %}
 				
 			</div>
-			<footer class="footer">
-				<div class="container-fluid">
-					<div class="copyright float-right">
-						&copy;
-						<script>
-							document.write(new Date().getFullYear())
-						</script> Todos los derechos reservados. Dirección General de Bibliotecas, UNAM.
-					</div>
-				</div>
-			</footer>
+
+			{% block footer %}{% endblock %}
+
 		</div>
 	</div>
 	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}" ></script>
