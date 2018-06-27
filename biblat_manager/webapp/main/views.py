@@ -7,7 +7,7 @@ from flask import (request,
                    abort,
                    render_template,
                    flash)
-from flask_babelex import gettext as _
+from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 
 from . import main
@@ -15,7 +15,7 @@ from biblat_manager.webapp import babel
 
 
 @main.route('/', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.', _('Inicio'))
+@register_breadcrumb(main, '.', __('Inicio'))
 def index():
     data = {
         'html_title': 'Biblat Manager - Index'
@@ -28,7 +28,7 @@ def index():
 
 
 @main.route('/revistas', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.revistas', _('Revistas'))
+@register_breadcrumb(main, '.revistas', __('Revistas'))
 def revistas():
     data = {
         'html_title': 'Biblat Manager - Revistas'

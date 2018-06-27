@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-05-24 14:01-0500\n"
+"POT-Creation-Date: 2018-06-27 16:48-0500\n"
 "PO-Revision-Date: 2018-05-24 14:06-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,7 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: biblat_manager/webapp/main/views.py:11
-msgid "Hello world!"
-msgstr "Hola mundo!"
+#: biblat_manager/webapp/main/views.py:18
+msgid "Inicio"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:31
+msgid "Revistas"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:60
+msgid "Código de idioma inválido"
+msgstr ""
+
+#: biblat_manager/webapp/templates/header.html:11
+msgid "Buscar"
+msgstr ""
+
+#: biblat_manager/webapp/templates/header.html:91
+msgid "Mi perfil"
+msgstr ""
+
+#: biblat_manager/webapp/templates/header.html:93
+msgid "Notificaciones"
+msgstr ""
+
+#: biblat_manager/webapp/templates/header.html:95
+msgid "Configuración"
+msgstr ""
+
+#: biblat_manager/webapp/templates/header.html:97
+msgid "Cerrar sesión"
+msgstr ""
+
+#: biblat_manager/webapp/templates/sidebar_layout.html:46
+msgid "Cerrar"
+msgstr ""
+
+#: biblat_manager/webapp/templates/main/index.html:4
+msgid "Hola mundo!"
+msgstr ""
+
+#~ msgid "Hello world!"
+#~ msgstr "Hola mundo!"
+
+#~ msgid "Buscar ..."
+#~ msgstr ""
 
