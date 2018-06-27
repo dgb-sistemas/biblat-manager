@@ -30,14 +30,22 @@
 
         <div class="content mt-3">
 
-            <div class="col-sm-12">
-                <div class="alert  alert-success alert-dismissible fade show" role="alert">
-                  <span class="badge badge-pill badge-success">Success</span> You successfully read this important alert message.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="col-sm-12">
+                    {% for cagegory, message in messages %}
+                    <div class="sufee-alert alert with-close alert-{{ cagegory.replace('error', 'danger') }} alert-dismissible fade show">
+                        <span class="badge badge-pill badge-{{ cagegory.replace('error', 'danger') }}">{{ cagegory|title }}</span>
+                            {{ message }}
+                          <button type="button" class="close" data-dismiss="alert" aria-label="{{ _('Cerrar') }}">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>
+              {% endif %}
+            {% endwith %}
+
 
             {% block content %}{% endblock %}
 
