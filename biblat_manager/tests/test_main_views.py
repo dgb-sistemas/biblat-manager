@@ -17,6 +17,9 @@ class MainTestCase(TestCase):
             with self.client as c:
                 response = c.get(url_for('main.index'))
                 self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assert_template_used("main/index.html")
 
     def test_change_set_locale(self):
         """
