@@ -14,7 +14,10 @@ from biblat_manager.webapp import babel
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('main/index.html')
+    data = {
+        'html_title': 'Biblat Manager - Index'
+    }
+    return render_template('main/index.html', **data)
 
 
 # i18n
