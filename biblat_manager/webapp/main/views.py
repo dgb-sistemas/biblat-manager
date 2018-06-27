@@ -8,12 +8,14 @@ from flask import (request,
                    render_template,
                    flash)
 from flask_babelex import gettext as _
+from flask_breadcrumbs import register_breadcrumb
 
 from . import main
 from biblat_manager.webapp import babel
 
 
 @main.route('/', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.', _('Inicio'))
 def index():
     data = {
         'html_title': 'Biblat Manager - Index'
@@ -22,6 +24,15 @@ def index():
     flash('You successfully read this important error message.', 'error')
     flash('You successfully read this important warning message.', 'warning')
     flash('You successfully read this important info message.', 'info')
+    return render_template('main/index.html', **data)
+
+
+@main.route('/revistas', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.revistas', _('Revistas'))
+def revistas():
+    data = {
+        'html_title': 'Biblat Manager - Revistas'
+    }
     return render_template('main/index.html', **data)
 
 

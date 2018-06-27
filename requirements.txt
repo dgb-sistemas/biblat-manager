@@ -4,6 +4,7 @@ coverage==4.5.1
 Babel==2.5.3
 Flask==1.0.2
 Flask-BabelEx==0.9.3
+Flask-Breadcrumbs==0.4.0
 Flask-Testing==0.7.1
 Jinja2==2.10
 Werkzeug==0.14.1
