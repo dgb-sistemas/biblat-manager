@@ -65,3 +65,10 @@ def set_locale(lang_code):
     if request.referrer is None:
         return redirect(url_for('main.index'))
     return redirect(request.referrer)
+
+
+@main.route('/menutoggle/')
+def set_menutoggle():
+    session['menutoggle'] = 'open' \
+        if session.get('menutoggle', '') == '' else ''
+    return session['menutoggle']

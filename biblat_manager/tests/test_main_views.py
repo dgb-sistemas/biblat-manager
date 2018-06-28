@@ -73,3 +73,15 @@ class MainTestCase(TestCase):
                              headers={'Referer': '/'},
                              follow_redirects=True)
             self.assertStatus(response, 200)
+
+    def test_set_menutoggle(self):
+        """Test para verificar el cambio de menú en sesión"""
+        with self.client as c:
+            response = c.get(url_for('main.set_menutoggle'))
+            self.assertStatus(response, 200)
+            self.assertEqual(flask.session['menutoggle'], 'open')
+            self.assertEqual(response.data.decode('utf-8'), 'open')
+            response = c.get(url_for('main.set_menutoggle'))
+            self.assertStatus(response, 200)
+            self.assertEqual(flask.session['menutoggle'], '')
+            self.assertEqual(response.data.decode('utf-8'), '')
