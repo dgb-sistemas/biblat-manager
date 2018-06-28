@@ -44,9 +44,9 @@ class MainTestCase(TestCase):
         """
 
         with self.client as c:
-            response = c.get(url_for('main.set_locale', lang_code='es'))
+            response = c.get(url_for('main.set_locale', lang_code='es_MX'))
             self.assertEqual(302, response.status_code)
-            self.assertEqual(flask.session['lang'], 'es')
+            self.assertEqual(flask.session['lang'], 'es_MX')
 
     def test_change_set_locale_with_unknow_lang(self):
         """
@@ -69,7 +69,7 @@ class MainTestCase(TestCase):
         """
 
         with self.client as c:
-            response = c.get(url_for('main.set_locale', lang_code='es'),
+            response = c.get(url_for('main.set_locale', lang_code='es_MX'),
                              headers={'Referer': '/'},
                              follow_redirects=True)
             self.assertStatus(response, 200)

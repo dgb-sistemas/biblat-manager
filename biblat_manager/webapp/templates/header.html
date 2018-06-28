@@ -100,15 +100,14 @@
 
                     <div class="language-select dropdown" id="language-select">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown"  id="language" aria-haspopup="true" aria-expanded="true">
-                            <i class="flag-icon flag-icon-{{ session.get('lang', config.get('BABEL_DEFAULT_LOCALE')).replace('en', 'us') }}"></i>
+                            <i class="flag-icon flag-icon-{{ session.get('lang', config.get('BABEL_DEFAULT_LOCALE'))[-2:].lower() }}"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="language" >
-                            <div class="dropdown-item">
-                                <a href="{{ url_for('.set_locale', lang_code='es') }}"><i class="flag-icon flag-icon-es"></i></a>
-                            </div>
-                            <div class="dropdown-item">
-                                <a href="{{ url_for('.set_locale', lang_code='en') }}"><i class="flag-icon flag-icon-us"></i></a>
-                            </div>
+                            {% for lang in config.LANGUAGES %}
+                                <div class="dropdown-item">
+                                    <a href="{{ url_for('.set_locale', lang_code=lang) }}"><i class="flag-icon flag-icon-{{ lang[-2:].lower() }}"></i></a>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
 
