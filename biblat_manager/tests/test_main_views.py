@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import flask
 from flask import current_app, url_for
+from flask_breadcrumbs import current_breadcrumbs
 from flask_testing import TestCase
 
 from biblat_manager.webapp import create_app
@@ -19,6 +20,20 @@ class MainTestCase(TestCase):
                 self.assertStatus(response, 200)
                 self.assertEqual('text/html; charset=utf-8',
                                  response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/'])
+                self.assert_template_used("main/index.html")
+
+    def test_journals_page(self):
+        """Test de la página de revistas"""
+        with current_app.app_context():
+            with self.client as c:
+                response = c.get(url_for('main.revistas'))
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/revistas'])
                 self.assert_template_used("main/index.html")
 
     def test_change_set_locale(self):
