@@ -10,6 +10,7 @@
         {% include "header.html" %}
 
         <div class="breadcrumbs">
+            {% if breadcrumbs %}
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
@@ -32,26 +33,13 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
+
 
         <div class="content mt-3">
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                <div class="col-sm-12">
-                    {% for cagegory, message in messages %}
-                    <div class="sufee-alert alert with-close alert-{{ cagegory.replace('error', 'danger') }} alert-dismissible fade show">
-                        <span class="badge badge-pill badge-{{ cagegory.replace('error', 'danger') }}">{{ cagegory|title }}</span>
-                            {{ message }}
-                          <button type="button" class="close" data-dismiss="alert" aria-label="{{ _('Cerrar') }}">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    {% endfor %}
-                </div>
-              {% endif %}
-            {% endwith %}
-
+            {% include 'flash_messages.html' %}
 
             {% block content %}{% endblock %}
 
