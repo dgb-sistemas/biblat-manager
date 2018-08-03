@@ -13,11 +13,11 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('BIBLAT_SECRET_KEY', 'secr3t-k3y')
     # Idioma predeterminado:
-    BABEL_DEFAULT_LOCALE = 'es'
+    BABEL_DEFAULT_LOCALE = 'es_MX'
     # Idiomas soportados
     LANGUAGES = {
-        'en': 'English',
-        'es': 'Español',
+        'en_US': 'English',
+        'es_MX': 'Español',
     }
 
     @staticmethod

@@ -1,0 +1,46 @@
+<!doctype html>
+{% with html_lang=session.get('lang', config.get('BABEL_DEFAULT_LOCALE')).replace('_', '-')  %}
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{{ html_lang }}"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="{{ html_lang }}"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="{{ html_lang }}"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="{{ html_lang }}"> <!--<![endif]-->
+{% endwith %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ html_title or 'Biblat Manager' }}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/cs-skin-elastic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/scss/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/lib/vector-map/jqvmap.min.css') }}">
+
+    <link href="{{ url_for('static', filename='assets/css/font_open_sans.css') }}" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="{{ url_for('static', filename='assets/js/html5shiv.min.js') }}"></script>
+    <![endif]-->
+
+</head>
+<body class="{{ session.get('menutoggle', '') }}">
+
+    {% block body %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    {% block extra_script %}{% endblock %}
+</body>
+</html>

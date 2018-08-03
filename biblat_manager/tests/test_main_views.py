@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import flask
 from flask import current_app, url_for
+from flask_breadcrumbs import current_breadcrumbs
 from flask_testing import TestCase
 
 from biblat_manager.webapp import create_app
@@ -17,6 +18,23 @@ class MainTestCase(TestCase):
             with self.client as c:
                 response = c.get(url_for('main.index'))
                 self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/'])
+                self.assert_template_used("main/index.html")
+
+    def test_journals_page(self):
+        """Test de la página de revistas"""
+        with current_app.app_context():
+            with self.client as c:
+                response = c.get(url_for('main.revistas'))
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/revistas'])
+                self.assert_template_used("main/index.html")
 
     def test_change_set_locale(self):
         """
@@ -26,9 +44,9 @@ class MainTestCase(TestCase):
         """
 
         with self.client as c:
-            response = c.get(url_for('main.set_locale', lang_code='es'))
+            response = c.get(url_for('main.set_locale', lang_code='es_MX'))
             self.assertEqual(302, response.status_code)
-            self.assertEqual(flask.session['lang'], 'es')
+            self.assertEqual(flask.session['lang'], 'es_MX')
 
     def test_change_set_locale_with_unknow_lang(self):
         """
@@ -51,7 +69,19 @@ class MainTestCase(TestCase):
         """
 
         with self.client as c:
-            response = c.get(url_for('main.set_locale', lang_code='es'),
+            response = c.get(url_for('main.set_locale', lang_code='es_MX'),
                              headers={'Referer': '/'},
                              follow_redirects=True)
             self.assertStatus(response, 200)
+
+    def test_set_menutoggle(self):
+        """Test para verificar el cambio de menú en sesión"""
+        with self.client as c:
+            response = c.get(url_for('main.set_menutoggle'))
+            self.assertStatus(response, 200)
+            self.assertEqual(flask.session['menutoggle'], 'open')
+            self.assertEqual(response.data.decode('utf-8'), 'open')
+            response = c.get(url_for('main.set_menutoggle'))
+            self.assertStatus(response, 200)
+            self.assertEqual(flask.session['menutoggle'], '')
+            self.assertEqual(response.data.decode('utf-8'), '')
