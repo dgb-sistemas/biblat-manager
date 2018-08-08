@@ -1,0 +1,23 @@
+{% extends 'base_layout.html' %}
+{% from "_formhelpers.html" import render_field_icon %}
+{% block base_body %}
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                {% include 'flash_messages.html' %}
+                <div class="card">
+                  <div class="card-header">{{ _('Recuperar a contraseña') }}</div>
+                  <div class="login-form">
+                    <form action="" method="post" class="">
+                        {{ render_field_icon(form.email, 'at', class_='form-control') }}
+                        <div class="form-actions form-group">
+                            {{ form.hidden_tag() }}
+                            <button type="submit" class="btn btn-primary btn-sm">{{ _('Recuperar contraseña') }} <i class="fa fa-envelope fa-lg"></i></button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

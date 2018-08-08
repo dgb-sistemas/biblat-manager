@@ -13,10 +13,9 @@ from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
 
 from . import main
-from biblat_manager.webapp import babel
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -164,4 +163,61 @@ def confirm_email(token):
     controllers.set_user_email_confirmed(user)
     flash(_('Email: %(email)s confirmado com éxito!', email=user.email), 'success')
     return redirect(url_for('.index'))
+
+
+@main.route('/reset/password', methods=['GET', 'POST'])
+def reset():
+    form = EmailForm()
+
+    if request.method == 'POST' and form.validate():
+        user = controllers.get_user_by_email(email=form.data['email'])
+        if not user:
+            abort(404, _('Usuario no registrado'))
+        if not user.email_confirmed:
+            user.send_confirmation_email()
+            return render_template('auth/unconfirmed_email.html')
+
+        was_sent, error_msg = user.send_reset_password_email()
+        if was_sent:
+            flash(_('Se enviaron instrucciones para recuperar su contraseña '
+                    'al correo: %(email)s', email=user.email), 'info')
+        else:
+            flash(_('Ocurrió un problema al enviar el correo con las '
+                    'instrucciones de recuperación de contraseña a la '
+                    'dirección: %(email)s. Erro: %(error)s',
+                    email=user.email,
+                    error=error_msg),
+                  'error')
+
+        return redirect(url_for('.index'))
+
+    return render_template('auth/reset.html', form=form)
+
+
+@main.route('/reset/password/<token>', methods=['GET', 'POST'])
+def reset_with_token(token):
+    try:
+        ts = get_timed_serializer()
+        email = ts.loads(token,
+                         salt=current_app.config.get('TOKEN_EMAIL_SALT'),
+                         max_age=current_app.config.get('TOKEN_MAX_AGE'))
+    except Exception:
+        abort(404)
+
+    form = PasswordForm()
+    if request.method == 'POST' and form.validate():
+        user = controllers.get_user_by_email(email=email)
+        if not user.email_confirmed:
+            user.send_confirmation_email()
+            return render_template('auth/unconfirmed_email.html')
+
+        controllers.set_user_password(user, form.password.data)
+        flash(_('Nueva contraseña guardada con éxito!'), 'success')
+        return redirect(url_for('.index'))
+
+    data = {
+        'form': form,
+        'token': token
+    }
+    return render_template('auth/reset_with_token.html', **data)
 

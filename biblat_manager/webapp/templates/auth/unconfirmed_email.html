@@ -1,0 +1,22 @@
+{% extends 'base_layout.html' %}
+{% from "_formhelpers.html" import render_field_icon %}
+{% block base_body %}
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                {% include 'flash_messages.html' %}
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">{% trans %}Correo electrónico no confirmado!{% endtrans %}</h4>
+                        <hr>
+                        <p>
+                            {% trans %}Primero <strong>debe</strong> confirmar su correo electrónico, se envió un nuevo correo de verificación.{% endtrans %}
+                        </p>
+                        <hr>
+                        <p class="text-right">
+                            <a href="{{ url_for('main.login') }}">Regresar</a>
+                        </p>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

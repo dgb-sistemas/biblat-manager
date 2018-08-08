@@ -47,6 +47,13 @@ class User(UserMixin, db.Document):
         else:
             return notifications.send_confirmation_email(self.email)
 
+    def send_reset_password_email(self):
+        if not self._check_valid_email():
+            raise ValueError('El usuario debe tener un correo electrónico '
+                             'válido para realizar el envío')
+        else:
+            return notifications.send_reset_password_email(self.email)
+
     def _check_valid_email(self):
         """
         retorna True cuando la instancia (self) del usuario, tiene um email válido.

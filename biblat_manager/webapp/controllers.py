@@ -25,3 +25,15 @@ def set_user_email_confirmed(user):
 
     user.email_confirmed = True
     user.save()
+
+
+def set_user_password(user, password):
+    """
+     Actualiza un usuario (user) con la contraseña (password) del parámetro
+    """
+
+    if not isinstance(user, User):
+        raise ValueError(__('Usuario debe ser de tipo %s' % User))
+
+    user.password = password
+    user.save()

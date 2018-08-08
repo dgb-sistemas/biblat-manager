@@ -37,3 +37,13 @@ class EmailForm(FlaskForm):
         validators.required(),
         validators.email()])
 
+
+class PasswordForm(FlaskForm):
+    password = PasswordField(__('Nueva contraseña'), [
+        validators.DataRequired(),
+        validators.EqualTo(
+            'confirm',
+            message=__('Las contraseñas deben coincidir')
+        )
+    ])
+    confirm = PasswordField(__('Confirmar contraseña'))
