@@ -21,6 +21,17 @@ class RegistrationForm(FlaskForm):
     confirm = PasswordField(__('Confirmar contraseña'))
 
 
+class LoginForm(FlaskForm):
+    email = StringField(__('Correo electrónico'), [
+        validators.Length(min=6, max=35),
+        validators.Email(),
+        validators.DataRequired()
+    ])
+    password = PasswordField(__('Contraseña'), [
+        validators.DataRequired(),
+    ])
+
+
 class EmailForm(FlaskForm):
     email = StringField(__('Email'), validators=[
         validators.required(),

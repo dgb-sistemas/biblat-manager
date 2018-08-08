@@ -10,12 +10,13 @@ from flask import (request,
                    flash)
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
+from flask_login import current_user, login_user, logout_user
 
 from . import main
 from biblat_manager.webapp import babel
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm
+    RegistrationForm, LoginForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -79,6 +80,34 @@ def set_menutoggle():
     session['menutoggle'] = 'open' \
         if session.get('menutoggle', '') == '' else ''
     return session['menutoggle']
+
+
+@main.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('.login'))
+
+
+@main.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('.index'))
+    form = LoginForm()
+    if request.method == 'POST' and form.validate():
+        user = User.objects(email=form.email.data).first()
+        if user and user.check_password_hash(form.password.data) \
+                and user.email_confirmed:
+            login_user(user)
+            flash(_('Sesión iniciada como %s' % user.email), 'success')
+            return redirect(session.get('next') or url_for('.index'))
+        if not user.id:
+            flash(_('Usuario no registrado'), 'error')
+        if user and not user.check_password_hash(form.password.data):
+            flash(_('Contraseña incorrecta'), 'error')
+        if user and not user.email_confirmed:
+            flash(_('Correo electrónico no verificado'), 'error')
+    return render_template('auth/login.html', form=form)
 
 
 # USER

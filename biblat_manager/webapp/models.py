@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import dbmongo as db
+from . import dbmongo as db, login_manager
 from . import notifications, utils
 
 
@@ -61,3 +61,8 @@ class User(UserMixin, db.Document):
 
     def __unicode__(self):
         return self.email
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(pk=user_id).first()

@@ -1,0 +1,42 @@
+{% extends "base_layout.html" %}
+{% from "_formhelpers.html" import render_field_icon %}
+{% block extra_css %}
+    <style type="text/css">
+        body {
+            background-image: linear-gradient(to bottom,rgba(0,0,0,.60) 0,rgba(0,0,0,.60) 100%),url({{ url_for('static', filename='images/bg.jpg') }});
+        }
+    </style>
+{%  endblock %}
+{% block base_body %}
+            <div class="sufee-login d-flex align-content-center flex-wrap">
+                <div class="container">
+                    <div class="login-content">
+
+                        {% include 'flash_messages.html' %}
+
+                        <div class="login-logo">
+                            <a href="../main/index.html">
+                                <img class="align-content" src="{{ url_for('static', filename='images/biblat-single.svg') }}" alt="">
+                            </a>
+                        </div>
+                        <div class="login-form">
+                            <form action="{{ url_for('main.login') }}" method="post">
+                                {{ render_field_icon(form.email, 'at', class_='form-control') }}
+                                {{ render_field_icon(form.password, 'key', class_='form-control') }}
+                                <div class="checkbox">
+                                    <!--label>
+                                        <input type="checkbox"> {{ _('Recordarme') }}
+                                    </label-->
+                                    <label class="pull-right">
+                                        <a href="{{ url_for('main.reset') }}">{{ _('Recuperar contraseña') }}</a>
+                                    </label>
+
+                                </div>
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">{{ _('Iniciar sesión') }} <i class="fa fa-sign-in fa-lg"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}

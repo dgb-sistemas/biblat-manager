@@ -47,6 +47,9 @@ class Config:
         MONGODB_SETTINGS['username'] = MONGODB_USER
         MONGODB_SETTINGS['password'] = MONGODB_PASS
 
+    # Login
+    USE_SESSION_FOR_NEXT = True
+
     # Mail
     MAIL_DEFAULT_SENDER = 'info@biblat.unam.mx'
 
