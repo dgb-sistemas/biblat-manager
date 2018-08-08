@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import socket
 from flask import (request,
                    session,
                    current_app,
@@ -12,6 +13,12 @@ from flask_breadcrumbs import register_breadcrumb
 
 from . import main
 from biblat_manager.webapp import babel
+from biblat_manager.webapp import babel, controllers
+from biblat_manager.webapp.forms import (
+    RegistrationForm
+)
+from biblat_manager.webapp.models import User
+from biblat_manager.webapp.utils import get_timed_serializer
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -72,3 +79,58 @@ def set_menutoggle():
     session['menutoggle'] = 'open' \
         if session.get('menutoggle', '') == '' else ''
     return session['menutoggle']
+
+
+# USER
+
+
+@main.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if request.method == 'POST' and form.validate():
+        existing_user = User.objects(email=form.email.data).first()
+        if existing_user is None:
+            user_data = {
+                'username': form.username.data,
+                'email': form.email.data,
+                'password': form.password.data
+            }
+            user = User(**user_data).save()
+            if user.id:
+                try:
+                    was_sent, error_msg = user.send_confirmation_email()
+                except (ValueError, socket.error) as e:
+                    was_sent = False
+                    error_msg = e.message
+                # Enviamos el email de confirmación a el usuario.
+                if was_sent:
+                    flash(_('Se envío un correo de confirmación a: %(email)s',
+                            email=user.email), 'info')
+                else:
+                    flash(_('Ocurrió un error en el envío del correo de '
+                            'confirmación  a: %(email)s %(error_msg)s',
+                            email=user.email, error_msg=error_msg),
+                          'error')
+        else:
+            flash(_('El correo electrónico ya esta registrado'), 'error')
+    return render_template('forms/register.html', form=form)
+
+
+@main.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        ts = get_timed_serializer()
+        email = ts.loads(token,
+                         salt=current_app.config.get('TOKEN_EMAIL_SALT'),
+                         max_age=current_app.config.get('TOKEN_MAX_AGE'))
+    except Exception:  # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
+        abort(404)
+
+    user = controllers.get_user_by_email(email=email)
+    if not user:
+        abort(404, _('Usuario no encontrado'))
+
+    controllers.set_user_email_confirmed(user)
+    flash(_('Email: %(email)s confirmado com éxito!', email=user.email), 'success')
+    return redirect(url_for('.index'))
+

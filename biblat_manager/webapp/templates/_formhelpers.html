@@ -1,0 +1,16 @@
+{% macro render_field_icon(field, icon) %}
+    <div class="form-group">
+        <label>{{ field.label }}</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text"><i class="fa fa-{{ icon }}"></i></div>
+            </div>
+            {{ field(**kwargs)|safe }}
+        </div>
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
