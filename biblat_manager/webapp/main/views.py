@@ -10,7 +10,7 @@ from flask import (request,
                    flash)
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from . import main
 from biblat_manager.webapp import babel
@@ -24,6 +24,7 @@ from biblat_manager.webapp.utils import get_timed_serializer
 
 @main.route('/', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.', __('Inicio'))
+@login_required
 def index():
     data = {
         'html_title': 'Biblat Manager - Index'
@@ -37,6 +38,7 @@ def index():
 
 @main.route('/revistas', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.revistas', __('Revistas'))
+@login_required
 def revistas():
     data = {
         'html_title': 'Biblat Manager - Revistas'
