@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  biblat_manager_webapp:
+    container_name: biblat_manager_webapp
+    build:
+      context: .
+      args:
+        - BIBLAT_MANAGER_BUILD_DATE=${BIBLAT_MANAGER_BUILD_DATE}            # export BIBLAT_MANAGER_BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+        - BIBLAT_MANAGER_VCS_REF=${BIBLAT_MANAGER_VCS_REF}                  # export BIBLAT_MANAGER_VCS_REF=`git rev-parse --short HEAD`
+        - BIBLAT_MANAGER_WEBAPP_VERSION=${BIBLAT_MANAGER_WEBAPP_VERSION}    # export BIBLAT_MANAGER_WEBAPP_VERSION="v0.1.0-dev"
+    user: nobody
+    restart: always
+    hostname: biblat_manager_webapp
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    environment:
+      - BIBLAT_SECRET_KEY=s3kr3tk3y
