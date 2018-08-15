@@ -12,7 +12,7 @@ def send_confirmation_email(recipient_email):
      - (False, 'MENSAJE DE ERROR/EXCEPCIÓN') en caso de error/excepción
     """
     if not isinstance(recipient_email, six.string_types) \
-            or not utils.REGEX_EMAIL.match(recipient_email):
+            or not utils.check_valid_email(recipient_email):
         raise ValueError('recipient_email é inválido!')
     try:
         ts = utils.get_timed_serializer()
@@ -37,7 +37,7 @@ def send_reset_password_email(recipient_email):
      - (False, 'MENSAJE DE ERROR/EXCEPCIÓN') en caso de error/excepción
     """
     if not isinstance(recipient_email, six.string_types) \
-            or not utils.REGEX_EMAIL.match(recipient_email):
+            or not utils.check_valid_email(recipient_email):
         raise ValueError('recipient_email es inválido!')
     try:
         ts = utils.get_timed_serializer()

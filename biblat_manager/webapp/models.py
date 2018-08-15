@@ -59,12 +59,7 @@ class User(UserMixin, db.Document):
         retorna True cuando la instancia (self) del usuario, tiene um email válido.
         retorna False en otro caso.
         """
-        from .forms import EmailForm
-        if not self.email or self.email == '' or self.email == '':
-            return False
-        else:
-            form = EmailForm(data={'email': self.email})
-            return form.validate()
+        return utils.check_valid_email(self.email)
 
     def __unicode__(self):
         return self.email

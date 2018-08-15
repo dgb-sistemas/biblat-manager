@@ -23,6 +23,13 @@ def get_timed_serializer():
     return URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
 
 
+def check_valid_email(email):
+    validation = True
+    if not REGEX_EMAIL.match(email):
+        validation = False
+    return validation
+
+
 def send_email(recipient, subject, html):
     """
     Método para el envío de emails
