@@ -99,7 +99,7 @@ def login():
         user = User.objects(email=form.email.data).first()
         if user and user.check_password_hash(form.password.data) \
                 and user.email_confirmed:
-            login_user(user)
+            login_user(user, remember=form.remember.data)
             flash(_('Sesión iniciada como %s' % user.email), 'success')
             return redirect(session.get('next') or url_for('.index'))
         if not user.id:

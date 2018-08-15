@@ -24,9 +24,9 @@
                                 {{ render_field_icon(form.email, 'at', class_='form-control') }}
                                 {{ render_field_icon(form.password, 'key', class_='form-control') }}
                                 <div class="checkbox">
-                                    <!--label>
-                                        <input type="checkbox"> {{ _('Recordarme') }}
-                                    </label-->
+                                    <label>
+                                        {{ form.remember }} {{ form.remember.label }}
+                                    </label>
                                     <label class="pull-right">
                                         <a href="{{ url_for('main.reset') }}">{{ _('Recuperar contraseña') }}</a>
                                     </label>

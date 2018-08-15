@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators
+from wtforms import StringField, PasswordField, BooleanField, validators
 
 
 class RegistrationForm(FlaskForm):
@@ -30,6 +30,8 @@ class LoginForm(FlaskForm):
     password = PasswordField(__('Contraseña'), [
         validators.DataRequired(),
     ])
+
+    remember = BooleanField(__('Recordarme'))
 
 
 class EmailForm(FlaskForm):
