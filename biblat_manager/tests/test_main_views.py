@@ -5,6 +5,7 @@ from flask_breadcrumbs import current_breadcrumbs
 from flask_testing import TestCase
 
 from biblat_manager.webapp import create_app
+from biblat_manager.webapp.controllers import create_user
 
 
 class MainTestCase(TestCase):
@@ -14,8 +15,20 @@ class MainTestCase(TestCase):
 
     def test_home_page(self):
         """Test de la página principal"""
+        admin_user = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(admin_user['email'], admin_user['password'], True)
+        login_url = url_for('main.login')
         with current_app.app_context():
             with self.client as c:
+                # login de usuario admin
+                login_response = c.post(
+                    login_url,
+                    data=admin_user,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
                 response = c.get(url_for('main.index'))
                 self.assertStatus(response, 200)
                 self.assertEqual('text/html; charset=utf-8',
@@ -26,8 +39,20 @@ class MainTestCase(TestCase):
 
     def test_journals_page(self):
         """Test de la página de revistas"""
+        admin_user = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(admin_user['email'], admin_user['password'], True)
+        login_url = url_for('main.login')
         with current_app.app_context():
             with self.client as c:
+                # login de usuario admin
+                login_response = c.post(
+                    login_url,
+                    data=admin_user,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
                 response = c.get(url_for('main.revistas'))
                 self.assertStatus(response, 200)
                 self.assertEqual('text/html; charset=utf-8',
