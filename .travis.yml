@@ -5,7 +5,9 @@ python:
   - "3.6"
 
 env:
-  - FLASK_APP=biblat_manager.app
+  global:
+    - FLASK_APP=biblat_manager.app
+    - BIBLAT_CONFIG=testing
 
 install:
   - pip install -r requirements.txt

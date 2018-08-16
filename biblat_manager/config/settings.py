@@ -80,6 +80,9 @@ class Config:
     TOKEN_EMAIL_SALT = os.environ.get('BIBLAT_TOKEN_EMAIL_SALT',
                                       'email-secr3t-k3y')
 
+    # webassets
+    # SASS_STYLE = 'compressed'
+
     @staticmethod
     def init_app(app):
         pass
@@ -91,6 +94,12 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    WTF_CSRF_ENABLED = False
+    MONGODB_SETTINGS = {
+        'db': 'biblat_test',
+        'host': 'mongomock://localhost',
+        'port': 27017,
+    }
 
 
 class ProductionConfig(Config):
