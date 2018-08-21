@@ -1,0 +1,39 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import bool_formatter %}
+{% block content %}
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-user"></i><strong class="card-title pl-2">{{ _('Datos de usuario') }}</strong>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><i class="fa fa-id-badge"></i> {{ _('ID') }}:</td>
+                            <td>{{ user.id }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-user"></i> {{ _('Nombre de usuario') }}:</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-envelope-o"></i> {{ _('Correo electrónico') }}:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-key"></i> {{ _('Contraseña') }}:</td>
+                            <td>{{ user.password }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-envelope-o"></i> {{ _('Correo electrónico verificado') }}?</td>
+                            <td>{{ bool_formatter(user.email_confirmed) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

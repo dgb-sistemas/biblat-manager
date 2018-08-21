@@ -132,6 +132,16 @@ def list_users(page=1):
     return render_template('main/users.html', **data)
 
 
+@main.route('/usuarios/detalle/<id>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users.detail', __('Detalle'))
+def user_detail(id):
+    user = User.get_by_id(id)
+    data = {
+        'user': user
+    }
+    return render_template('main/user.html', **data)
+
+
 @main.route('/usuarios/editar/<id>', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.users.edit', __('Editar'))
 def user_edit(id):
