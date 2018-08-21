@@ -8,7 +8,7 @@ from . import notifications, utils
 
 class User(UserMixin, db.Document):
     _id = db.StringField(max_length=32, primary_key=True,
-                         default=utils.generate_uuid_32_string())
+                         default=lambda: utils.generate_uuid_32_string())
     username = db.StringField(max_length=100, unique=True)
     email = db.StringField(max_length=100, required=True)
     _password = db.StringField(required=True, db_field='password')
