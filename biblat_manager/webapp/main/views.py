@@ -112,6 +112,24 @@ def login():
 
 
 # USER
+@main.route('/usuarios', methods=['GET', 'POST'])
+@main.route('/usuarios/<int:page>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users', __('Usuarios'))
+def list_users(page=1):
+    order_by = request.args.get('order_by', None)
+    column_list = {
+        'username': _('Nombre de usuario'),
+        'email': _('Correo electrónico'),
+        'email_confirmed': _('Correo verificado?'),
+    }
+    users = User.objects.order_by(order_by).paginate(page=page, per_page=10)
+    data = {
+        'html_title': 'Biblat Manager - %s' % _('Usuarios'),
+        'users': users,
+        'order_by': order_by,
+        'column_list': column_list
+    }
+    return render_template('main/users.html', **data)
 
 
 @main.route('/usuarios/agregar', methods=['GET', 'POST'])

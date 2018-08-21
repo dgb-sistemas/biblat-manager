@@ -30,10 +30,23 @@ class CustomJSONEncoder(JSONEncoder):
         return super(CustomJSONEncoder, self).default(obj)
 
 
+def is_bool(value):
+    return isinstance(value, bool)
+
+
 def create_app(config_name):
     app = Flask(__name__)
 
     app.json_encoder = CustomJSONEncoder
+
+    # Remove strict slash from Werkzeug
+    app.url_map.strict_slashes = False
+
+    # Jinja filters
+
+    app.jinja_env.filters.update({
+        'is_bool': is_bool,
+    })
 
     # Configuraciones
     app.config.from_object(settings.config[config_name])

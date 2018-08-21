@@ -1,0 +1,62 @@
+{% macro render_field_icon(field, icon) %}
+    <div class="form-group">
+        <label>{{ field.label }}</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text"><i class="fa fa-{{ icon }}"></i></div>
+            </div>
+            {{ field(**kwargs)|safe }}
+        </div>
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro bool_formatter(value) %}
+    {% set glyph = 'ok-circle' if value else 'minus-sign' %}
+    {% set fa = 'check-circle' if value else 'minus-circle' %}
+    <span class="fa fa-{{ fa }} glyphicon glyphicon-{{ glyph }} icon-{{ glyph }}"></span>
+{% endmacro %}
+
+
+{# Macro para crear links de navegación, es necesario un objeto paginate #}
+{% macro render_navigation(pagination, endpoint) %}
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+            {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev_num, **request.args) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in pagination.iter_pages() %}
+                {% if page %}
+                  {% if page != pagination.page %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=page, **request.args) }}">{{ page }}</a></li>
+                  {% else %}
+                      <li class="page-item active">
+                          <span class="page-link">
+                              {{ page }}<span class="sr-only">(current)</span>
+                          </span>
+                      </li>
+                  {% endif %}
+                {% else %}
+                    <li class="page-item"><span class="page-link">…</span></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for(endpoint, page=pagination.next_num, **request.args) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            {% endif %}
+      </ul>
+    </nav>
+{% endmacro %}

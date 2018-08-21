@@ -1,0 +1,78 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import bool_formatter, render_navigation %}
+{% block content %}
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs">
+                          <li class="nav-item">
+                            <a class="nav-link active" href="#">{{ _('Listado (%s)' % users.total) }}</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.user_add') }}">{{ _('Agregar') }} <i class="fa fa-user-plus"></i></a>
+                          </li>
+                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover model-list">
+                                <thead>
+                                  <tr>
+                                      <th></th>
+                                      {% for column, column_name in column_list.items() %}
+                                          {% set order_class = 'sorting_asc' if order_by == column else '' %}
+                                          {% set order_class = 'sorting_desc' if order_by and order_by[1:] == column else order_class %}
+                                          {% set column_order = '-{0}'.format(column) if order_class == 'sorting_asc' else column %}
+                                          <th class="sorting {{ order_class }}">
+                                              <a href="{{ url_for('main.list_users', order_by=column_order) }}">
+                                                  {{ column_name }}
+                                              </a>
+                                          </th>
+                                      {% endfor %}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users.items %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <a class="icon" href="#" title="{{ _('Ver registro') }}">
+                                                  <span class="fa fa-eye glyphicon glyphicon-eye-open"></span>
+                                                </a>
+                                                <a class="icon" href="#" title="{{ _('Editar registro') }}" >
+                                                    <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                                {% if not user.email_confirmed %}
+                                                    <a class="icon" href="#" title="{{ _('Enviar correo de confirmación') }}" >
+                                                        <span class="fa fa-envelope glyphicon glyphicon-envelope"></span>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                            {% for column in column_list %}
+                                                {% if user[column] | is_bool %}
+                                                    <td class="text-center">{{ bool_formatter(user[column]) }}</td>
+                                                {% else %}
+                                                    <td>{{ user[column] }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{ render_navigation(users, 'main.list_users') }}
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div><!-- .animated -->
+    </div>
+
+    <div class="modal fade" id="fa_modal_window" tabindex="-1" role="dialog" aria-labelledby="fa_modal_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+{% endblock %}
