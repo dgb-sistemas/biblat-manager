@@ -2,16 +2,12 @@
 import flask
 from flask import current_app, url_for
 from flask_breadcrumbs import current_breadcrumbs
-from flask_testing import TestCase
 
-from biblat_manager.webapp import create_app
 from biblat_manager.webapp.controllers import create_user
+from biblat_manager.tests.base import BaseTestCase
 
 
-class MainTestCase(TestCase):
-
-    def create_app(self):
-        return create_app('testing')
+class MainTestCase(BaseTestCase):
 
     def test_home_page(self):
         """Test de la página principal"""

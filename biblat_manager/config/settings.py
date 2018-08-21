@@ -97,7 +97,7 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
     MONGODB_SETTINGS = {
         'db': 'biblat_test',
-        'host': 'mongomock://localhost',
+        'host': 'mongomock://localhost/biblat_test',
         'port': 27017,
     }
 
