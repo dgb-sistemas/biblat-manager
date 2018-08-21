@@ -132,6 +132,41 @@ def list_users(page=1):
     return render_template('main/users.html', **data)
 
 
+@main.route('/usuarios/editar/<id>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users.edit', __('Editar'))
+def user_edit(id):
+    user = User.get_by_id(id)
+    form = RegistrationForm(obj=user)
+    if request.method == 'POST' and form.validate():
+        existing_user = User.get_by_email(form.email.data)
+        if existing_user is None or user.id == existing_user.id:
+            user.username = form.username.data
+            user.email = form.email.data
+            user.password = form.password.data
+            user.save()
+            flash(_('Usuario actualizado correctamente!'), 'info')
+            if user.email != existing_user.email:
+                user.email_confirmed = False
+                user.save()
+                try:
+                    was_sent, error_msg = user.send_confirmation_email()
+                except (ValueError, socket.error) as e:
+                    was_sent = False
+                    error_msg = e.message
+                # Enviamos el email de confirmación a el usuario.
+                if was_sent:
+                    flash(_('Se envío un correo de confirmación a: %(email)s',
+                            email=user.email), 'info')
+                else:
+                    flash(_('Ocurrió un error en el envío del correo de '
+                            'confirmación  a: %(email)s %(error_msg)s',
+                            email=user.email, error_msg=error_msg),
+                          'error')
+        else:
+            flash(_('El correo electrónico ya esta registrado'), 'error')
+    return render_template('forms/register.html', form=form)
+
+
 @main.route('/usuarios/agregar', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.users.add', __('Agregar'))
 def user_add():
