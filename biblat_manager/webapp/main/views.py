@@ -102,7 +102,7 @@ def login():
             login_user(user, remember=form.remember.data)
             flash(_('Sesión iniciada como %s' % user.email), 'success')
             return redirect(session.get('next') or url_for('.index'))
-        if not user.id:
+        if not user:
             flash(_('Usuario no registrado'), 'error')
         if user and not user.check_password_hash(form.password.data):
             flash(_('Contraseña incorrecta'), 'error')
