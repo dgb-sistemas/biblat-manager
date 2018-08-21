@@ -14,7 +14,7 @@ if os.environ.get('FLASK_COVERAGE'):
     COV = coverage.coverage(branch=True, include='biblat_manager/webapp/*')
     COV.start()
 
-from biblat_manager.webapp import create_app, controllers, utils  # NOQA
+from biblat_manager.webapp import create_app, models, utils  # NOQA
 
 app = create_app(os.getenv('BIBLAT_CONFIG', 'default'))
 
@@ -98,7 +98,7 @@ def create_superuser():
             if not utils.check_valid_email(user_email):
                 user_email = None
                 print('Debe introducir un correo electrónico válido!')
-            elif controllers.get_user_by_email(user_email):
+            elif models.User.get_by_email(user_email):
                 user_email = None
                 print('El correo electrónico ya esta registrado!')
 

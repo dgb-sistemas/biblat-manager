@@ -114,11 +114,12 @@ def login():
 # USER
 
 
-@main.route('/register', methods=['GET', 'POST'])
-def register():
+@main.route('/usuarios/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users.add', __('Agregar'))
+def user_add():
     form = RegistrationForm()
     if request.method == 'POST' and form.validate():
-        existing_user = User.objects(email=form.email.data).first()
+        existing_user = User.get_by_email(form.email.data)
         if existing_user is None:
             user_data = {
                 'username': form.username.data,
@@ -141,6 +142,7 @@ def register():
                             'confirmación  a: %(email)s %(error_msg)s',
                             email=user.email, error_msg=error_msg),
                           'error')
+            return redirect(url_for('main.user_add'))
         else:
             flash(_('El correo electrónico ya esta registrado'), 'error')
     return render_template('forms/register.html', form=form)
@@ -156,7 +158,7 @@ def confirm_email(token):
     except Exception:  # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
         abort(404)
 
-    user = controllers.get_user_by_email(email=email)
+    user = User.get_by_email(email)
     if not user:
         abort(404, _('Usuario no encontrado'))
 
@@ -170,7 +172,7 @@ def reset():
     form = EmailForm()
 
     if request.method == 'POST' and form.validate():
-        user = controllers.get_user_by_email(email=form.data['email'])
+        user = User.get_by_email(form.email.data)
         if not user:
             abort(404, _('Usuario no registrado'))
         if not user.email_confirmed:
@@ -206,7 +208,7 @@ def reset_with_token(token):
 
     form = PasswordForm()
     if request.method == 'POST' and form.validate():
-        user = controllers.get_user_by_email(email=email)
+        user = User.get_by_email(email)
         if not user.email_confirmed:
             user.send_confirmation_email()
             return render_template('auth/unconfirmed_email.html')
