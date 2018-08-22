@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_login import UserMixin
 from mongoengine import queryset_manager
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import dbmongo as db, login_manager
-from . import notifications, utils
+from . import dbmongo as db, login_manager, notifications, utils
 
 
 class User(UserMixin, db.Document):
@@ -30,7 +28,7 @@ class User(UserMixin, db.Document):
 
     @password.setter
     def password(self, plaintext):
-        self._password = generate_password_hash(plaintext, method='sha256')
+        self._password = utils.pwd_context.hash(plaintext)
 
     def check_password_hash(self, plaintext):
         """
@@ -39,7 +37,7 @@ class User(UserMixin, db.Document):
         if not self._password:
             return False
         else:
-            return check_password_hash(self._password, plaintext)
+            return utils.pwd_context.verify(plaintext, self._password)
 
     def send_confirmation_email(self):
         if not self._check_valid_email():

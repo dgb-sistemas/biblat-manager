@@ -4,12 +4,15 @@ import uuid
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 from flask_mail import Message
+from passlib.context import CryptContext
 from biblat_manager.webapp import mail
 
 REGEX_EMAIL = re.compile(
     r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:["
     r"a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
     re.IGNORECASE)  # RFC 2822 (simplified)
+
+pwd_context = CryptContext(schemes=['bcrypt_sha256'])
 
 
 def generate_uuid_32_string():
