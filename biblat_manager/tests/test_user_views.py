@@ -127,5 +127,26 @@ class UserTestCase(BaseTestCase):
                                  response.content_type)
                 self.assert_template_used("main/index.html")
 
+    def test_logout(self):
+        """Test de logout de usuario"""
+        admin_user = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(admin_user['email'], admin_user['password'], True)
+        login_url = url_for('main.login')
+        logout_url = url_for('main.logout')
 
-
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                response_login = c.post(
+                    login_url,
+                    data=admin_user,
+                    follow_redirects=True)
+                self.assertStatus(response_login, 200)
+                # logout de usuario
+                logout_response = c.get(logout_url, follow_redirects=True)
+                self.assertEqual('text/html; charset=utf-8',
+                                 logout_response.content_type)
+                self.assert_template_used("auth/login.html")
