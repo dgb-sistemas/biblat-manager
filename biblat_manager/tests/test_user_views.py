@@ -5,9 +5,23 @@ from flask_breadcrumbs import current_breadcrumbs
 
 from biblat_manager.webapp.controllers import create_user
 from biblat_manager.tests.base import BaseTestCase
+from biblat_manager.webapp import forms
 
 
 class UserTestCase(BaseTestCase):
+
+    def test_login_view(self):
+        """"Test de las vista de login"""
+        login_url = url_for('main.login')
+        with current_app.app_context():
+            with self.client as c:
+                response = c.get(login_url)
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assert_template_used("auth/login.html")
+                context_form = self.get_context_variable('form')
+                self.assertIsInstance(context_form, forms.LoginForm)
 
     def test_login_registered_user(self):
         """Test de login de usuario registrado"""
