@@ -1,6 +1,15 @@
 version: '2'
 
 services:
+
+  biblat_mongo:
+    container_name: biblat_manager_mongodb
+    image: mongo:latest
+    hostname: bibmanager-mongo
+    volumes:
+      - ./mongodata:/data/db
+    ports:
+      - "27017:27017"
   biblat_manager_webapp:
     container_name: biblat_manager_webapp
     build:
@@ -18,3 +27,5 @@ services:
       - "8000:8000"
     environment:
       - BIBLAT_SECRET_KEY=s3kr3tk3y
+      - BIBLAT_MONGODB_NAME=biblat
+      - BIBLAT_MONGODB_HOST=bibmanager-mongo
