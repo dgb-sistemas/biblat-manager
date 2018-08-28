@@ -4,6 +4,7 @@ import re
 from itsdangerous import URLSafeTimedSerializer
 from mock import patch
 from flask import current_app, url_for
+from flask_breadcrumbs import current_breadcrumbs
 
 from biblat_manager.tests.base import BaseTestCase
 from biblat_manager.webapp import forms, mail
@@ -407,3 +408,112 @@ class UserTestCase(BaseTestCase):
                     self.assertTrue(user.check_password_hash(
                         user_data['password'])
                     )
+
+    def test_list_users(self):
+        """Test para la vista list_users"""
+        user_data = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(user_data['email'], user_data['password'], True)
+        login_url = url_for('main.login')
+        list_users_url = url_for('main.list_users')
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                login_response = c.post(
+                    login_url,
+                    data=user_data,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
+                response = c.get(list_users_url)
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/usuarios'])
+                self.assert_template_used("main/users.html")
+
+    def test_user_detail(self):
+        """Test para la vista user_detail"""
+        user_data = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(user_data['email'], user_data['password'], True)
+        login_url = url_for('main.login')
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                login_response = c.post(
+                    login_url,
+                    data=user_data,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
+                # Vista user_detail
+                user = User.get_by_email(user_data['email'])
+                user_detail_url = url_for('main.user_detail', user_id=user.id)
+                response = c.get(user_detail_url)
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/usuarios', user_detail_url])
+                self.assert_template_used("main/user.html")
+
+    def test_user_edit(self):
+        """Test para la vista user_edit"""
+        user_data = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(user_data['email'], user_data['password'], True)
+        login_url = url_for('main.login')
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                login_response = c.post(
+                    login_url,
+                    data=user_data,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
+                # Vista user_detail
+                user = User.get_by_email(user_data['email'])
+                user_edit_url = url_for('main.user_edit', user_id=user.id)
+                response = c.get(user_edit_url)
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/usuarios', user_edit_url])
+                self.assert_template_used("forms/register.html")
+                context_form = self.get_context_variable('form')
+                self.assertIsInstance(context_form, forms.RegistrationForm)
+
+    def test_user_add(self):
+        """Test para la vista user_add"""
+        user_data = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'foobarbaz',
+        }
+        create_user(user_data['email'], user_data['password'], True)
+        login_url = url_for('main.login')
+        user_add_url = (url_for('main.user_add'))
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                login_response = c.post(
+                    login_url,
+                    data=user_data,
+                    follow_redirects=True)
+                self.assertStatus(login_response, 200)
+                # Vista user_detail
+                response = c.get(user_add_url)
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assertEqual([i.url for i in current_breadcrumbs],
+                                 ['/', '/usuarios', user_add_url])
+                self.assert_template_used("forms/register.html")
+                context_form = self.get_context_variable('form')
+                self.assertIsInstance(context_form, forms.RegistrationForm)

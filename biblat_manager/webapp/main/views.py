@@ -115,6 +115,7 @@ def login():
 @main.route('/usuarios', methods=['GET', 'POST'])
 @main.route('/usuarios/<int:page>', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.users', __('Usuarios'))
+@login_required
 def list_users(page=1):
     order_by = request.args.get('order_by', None)
     column_list = {
@@ -132,20 +133,28 @@ def list_users(page=1):
     return render_template('main/users.html', **data)
 
 
-@main.route('/usuarios/detalle/<id>', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.users.detail', __('Detalle'))
-def user_detail(id):
-    user = User.get_by_id(id)
+@main.route('/usuarios/detalle/<user_id>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users.detail', __('Detalle'),
+                     endpoint_arguments_constructor=lambda: {
+                         'user_id': request.view_args['user_id']
+                     })
+@login_required
+def user_detail(user_id):
+    user = User.get_by_id(user_id)
     data = {
         'user': user
     }
     return render_template('main/user.html', **data)
 
 
-@main.route('/usuarios/editar/<id>', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.users.edit', __('Editar'))
-def user_edit(id):
-    user = User.get_by_id(id)
+@main.route('/usuarios/editar/<user_id>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.users.edit', __('Editar'),
+                     endpoint_arguments_constructor=lambda: {
+                         'user_id': request.view_args['user_id']
+                     })
+@login_required
+def user_edit(user_id):
+    user = User.get_by_id(user_id)
     form = RegistrationForm(obj=user)
     if request.method == 'POST' and form.validate():
         existing_user = User.get_by_email(form.email.data)
@@ -179,6 +188,7 @@ def user_edit(id):
 
 @main.route('/usuarios/agregar', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.users.add', __('Agregar'))
+@login_required
 def user_add():
     form = RegistrationForm()
     if request.method == 'POST' and form.validate():

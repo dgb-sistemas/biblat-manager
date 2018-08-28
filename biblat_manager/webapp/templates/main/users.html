@@ -37,10 +37,10 @@
                                     {% for user in users.items %}
                                         <tr>
                                             <td class="text-center">
-                                                <a class="icon" href="{{ url_for('main.user_detail', id=user.id) }}" title="{{ _('Ver registro') }}">
+                                                <a class="icon" href="{{ url_for('main.user_detail', user_id=user.id) }}" title="{{ _('Ver registro') }}">
                                                   <span class="fa fa-eye glyphicon glyphicon-eye-open"></span>
                                                 </a>
-                                                <a class="icon" href="{{ url_for('main.user_edit', id=user.id) }}" title="{{ _('Editar registro') }}" >
+                                                <a class="icon" href="{{ url_for('main.user_edit', user_id=user.id) }}" title="{{ _('Editar registro') }}" >
                                                     <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
                                                 </a>
                                                 {% if not user.email_confirmed %}
