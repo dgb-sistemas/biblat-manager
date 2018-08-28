@@ -267,7 +267,7 @@ def reset_with_token(token):
                          salt=current_app.config.get('TOKEN_EMAIL_SALT'),
                          max_age=current_app.config.get('TOKEN_MAX_AGE'))
     except Exception:
-        abort(404)
+        abort(404, _('Token inválido'))
 
     form = PasswordForm()
     if request.method == 'POST' and form.validate():
