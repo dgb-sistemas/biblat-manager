@@ -13,7 +13,7 @@ def send_confirmation_email(recipient_email):
     """
     if not isinstance(recipient_email, six.string_types) \
             or not utils.check_valid_email(recipient_email):
-        raise ValueError('recipient_email é inválido!')
+        raise ValueError('recipient_email es inválido!')
     try:
         ts = utils.get_timed_serializer()
         token = ts.dumps(recipient_email,
@@ -46,7 +46,7 @@ def send_reset_password_email(recipient_email):
     except Exception as e:
         return False, 'Token inválido: %s' % str(e)
     else:
-        recover_url = url_for('main.reset_with_token', token=token,_external=True)
+        recover_url = url_for('main.reset_with_token', token=token, _external=True)
         sent_results = utils.send_email(
             recipient_email,
             "Instrucciones para recuperar su contraseña",

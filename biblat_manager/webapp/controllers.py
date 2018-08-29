@@ -38,6 +38,7 @@ def create_user(user_email, user_password, user_email_confirmed):
     ``user_email_confirmed`` bool para confirmar el correo electrónico
     """
     user_data = {
+        'username': user_email.split("@")[0],
         'email': user_email,
         'password': user_password,
         'email_confirmed': user_email_confirmed

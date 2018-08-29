@@ -159,27 +159,28 @@ def user_edit(user_id):
     if request.method == 'POST' and form.validate():
         existing_user = User.get_by_email(form.email.data)
         if existing_user is None or user.id == existing_user.id:
-            user.username = form.username.data
-            user.email = form.email.data
-            user.password = form.password.data
-            user.save()
+            update_user = User.get_by_id(user_id)
+            update_user.username = form.username.data
+            update_user.email = form.email.data
+            update_user.password = form.password.data
+            update_user.save()
             flash(_('Usuario actualizado correctamente!'), 'info')
-            if user.email != existing_user.email:
+            if user.email != update_user.email:
                 user.email_confirmed = False
                 user.save()
                 try:
-                    was_sent, error_msg = user.send_confirmation_email()
+                    was_sent, error_msg = update_user.send_confirmation_email()
                 except (ValueError, socket.error) as e:
                     was_sent = False
-                    error_msg = e.message
-                # Enviamos el email de confirmación a el usuario.
+                    error_msg = str(e)
+                # Enviamos el email de confirmación al usuario.
                 if was_sent:
                     flash(_('Se envío un correo de confirmación a: %(email)s',
-                            email=user.email), 'info')
+                            email=update_user.email), 'info')
                 else:
                     flash(_('Ocurrió un error en el envío del correo de '
                             'confirmación  a: %(email)s %(error_msg)s',
-                            email=user.email, error_msg=error_msg),
+                            email=update_user.email, error_msg=error_msg),
                           'error')
         else:
             flash(_('El correo electrónico ya esta registrado'), 'error')
@@ -200,28 +201,27 @@ def user_add():
                 'password': form.password.data
             }
             user = User(**user_data).save()
-            if user.id:
-                try:
-                    was_sent, error_msg = user.send_confirmation_email()
-                except (ValueError, socket.error) as e:
-                    was_sent = False
-                    error_msg = e.message
-                # Enviamos el email de confirmación a el usuario.
-                if was_sent:
-                    flash(_('Se envío un correo de confirmación a: %(email)s',
-                            email=user.email), 'info')
-                else:
-                    flash(_('Ocurrió un error en el envío del correo de '
-                            'confirmación  a: %(email)s %(error_msg)s',
-                            email=user.email, error_msg=error_msg),
-                          'error')
+            try:
+                was_sent, error_msg = user.send_confirmation_email()
+            except (ValueError, socket.error) as e:
+                was_sent = False
+                error_msg = str(e)
+            # Enviamos el email de confirmación al usuario.
+            if was_sent:
+                flash(_('Se envío un correo de confirmación a: %(email)s',
+                        email=user.email), 'info')
+            else:
+                flash(_('Ocurrió un error en el envío del correo de '
+                        'confirmación  a: %(email)s %(error_msg)s',
+                        email=user.email, error_msg=error_msg),
+                      'error')
             return redirect(url_for('main.user_add'))
         else:
             flash(_('El correo electrónico ya esta registrado'), 'error')
     return render_template('forms/register.html', form=form)
 
 
-@main.route('/confirm/<token>')
+@main.route('/user/confirm/<token>')
 def confirm_email(token):
     try:
         ts = get_timed_serializer()
