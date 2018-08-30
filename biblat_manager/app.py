@@ -14,7 +14,7 @@ if os.environ.get('FLASK_COVERAGE'):
     COV = coverage.coverage(branch=True, include='biblat_manager/webapp/*')
     COV.start()
 
-from biblat_manager.webapp import create_app, models, utils  # NOQA
+from biblat_manager.webapp import create_app, models, controllers, utils  # NOQA
 
 app = create_app(os.getenv('BIBLAT_CONFIG', 'default'))
 
