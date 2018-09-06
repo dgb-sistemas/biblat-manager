@@ -88,7 +88,7 @@ def test(coverage):
 
     import unittest
     tests = unittest.TestLoader().discover('biblat_manager/tests')
-    unittest.TextTestRunner(verbosity=2).run(tests)
+    ret = not unittest.TextTestRunner(verbosity=2).run(tests).wasSuccessful()
 
     if COV:
         COV.stop()
@@ -100,3 +100,5 @@ def test(coverage):
         COV.html_report(directory=coverage_dir)
         print('HTML version: file://%s/index.html' % coverage_dir)
         COV.erase()
+
+    sys.exit(ret)
