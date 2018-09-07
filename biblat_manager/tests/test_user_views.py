@@ -197,7 +197,7 @@ class UserTestCase(BaseTestCase):
                     reset_url,
                     data=user_data,
                     follow_redirects=True)
-                self.assertStatus(response, 404)
+                self.assertStatus(response, 200)
                 self.assertIn(expected_errors_msg,
                               response.data.decode('utf-8'))
 

@@ -247,7 +247,8 @@ def reset():
     if request.method == 'POST' and form.validate():
         user = User.get_by_email(form.email.data)
         if not user:
-            abort(404, _('Usuario no registrado'))
+            flash(_('Usuario no registrado'), 'error')
+            return render_template('auth/reset.html', form=form)
         if not user.email_confirmed:
             user.send_confirmation_email()
             return render_template('auth/unconfirmed_email.html')
