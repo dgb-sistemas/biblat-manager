@@ -11,12 +11,13 @@ class RegistrationForm(FlaskForm):
     ])
     email = StringField(__('Correo electrónico'), [
         validators.Length(min=6, max=35),
-        validators.Email(),
+        validators.Email(__('Correo electrónico inválido!')),
         validators.DataRequired()
     ])
     password = PasswordField(__('Contraseña'), [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='La contraseñas deben coincidir')
+        validators.EqualTo('confirm',
+                           message=__('Las contraseñas deben coincidir'))
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
 
@@ -24,7 +25,7 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField(__('Correo electrónico'), [
         validators.Length(min=6, max=35),
-        validators.Email(),
+        validators.Email(__('Correo electrónico inválido!')),
         validators.DataRequired()
     ])
     password = PasswordField(__('Contraseña'), [
@@ -37,7 +38,7 @@ class LoginForm(FlaskForm):
 class EmailForm(FlaskForm):
     email = StringField(__('Email'), validators=[
         validators.required(),
-        validators.email()])
+        validators.email(__('Correo electrónico inválido!'))])
 
 
 class PasswordForm(FlaskForm):
