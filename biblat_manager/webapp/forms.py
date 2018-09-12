@@ -1,7 +1,29 @@
 # -*- coding: utf-8 -*-
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, validators
+import safe
+from wtforms import (
+    StringField,
+    PasswordField,
+    BooleanField,
+    validators,
+    ValidationError)
+
+
+def check_secure_password(form, field):
+    strength = safe.check(field.data)
+    messages = {
+        'password is too short': __('La contraseña es muy corta, la longitud '
+                                    'mínima es de 8 caracteres'),
+        'password has a pattern': __('La contraseña es un patrón'),
+        'password is too common': __('La contraseña es muy común'),
+        'password is too simple': __('La contraseña es muy simple'),
+        'password is good enough, but not strong':
+            __('La contraseña es buena, pero no lo suficiente, utilice '
+               'números, letras y símbolos'),
+    }
+    if not strength.valid:
+        raise ValidationError(messages[strength.message])
 
 
 class RegistrationForm(FlaskForm):
@@ -17,7 +39,8 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(__('Contraseña'), [
         validators.DataRequired(),
         validators.EqualTo('confirm',
-                           message=__('Las contraseñas deben coincidir'))
+                           message=__('Las contraseñas deben coincidir')),
+        check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
 
@@ -47,6 +70,7 @@ class PasswordForm(FlaskForm):
         validators.EqualTo(
             'confirm',
             message=__('Las contraseñas deben coincidir')
-        )
+        ),
+        check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))

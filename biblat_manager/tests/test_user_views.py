@@ -33,7 +33,7 @@ class UserTestCase(BaseTestCase):
         """Test de login de usuario registrado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -54,7 +54,7 @@ class UserTestCase(BaseTestCase):
         """Test de login de usuario no registrado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         login_url = url_for('main.login')
 
@@ -77,11 +77,11 @@ class UserTestCase(BaseTestCase):
         """Test de login de usuario con contraseña incorrecta"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
-        user_data['password'] = 'quxquuxcorge'
+        user_data['password'] = 'Quxquuxc0rge$'
 
         with current_app.app_context():
             with self.client as c:
@@ -102,7 +102,7 @@ class UserTestCase(BaseTestCase):
         """Test de login de usuario con correo no verificado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], False)
         login_url = url_for('main.login')
@@ -127,7 +127,7 @@ class UserTestCase(BaseTestCase):
         """Test de login de usuario registrado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -151,7 +151,7 @@ class UserTestCase(BaseTestCase):
         """Test de logout de usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -205,7 +205,7 @@ class UserTestCase(BaseTestCase):
         """Test de recuperación con email no registrado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], False)
         reset_url = url_for('main.reset')
@@ -224,7 +224,7 @@ class UserTestCase(BaseTestCase):
         """Test de recuperación con email no registrado"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         reset_url = url_for('main.reset')
@@ -262,7 +262,7 @@ class UserTestCase(BaseTestCase):
         """Test de error en envío de coreo de recuperación de contraseña"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         reset_url = url_for('main.reset')
@@ -302,7 +302,7 @@ class UserTestCase(BaseTestCase):
         """Test de las vista reset_with_token"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         reset_url = url_for('main.reset')
@@ -333,7 +333,7 @@ class UserTestCase(BaseTestCase):
         """Test de recuperación de contraseña"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         reset_url = url_for('main.reset')
@@ -354,7 +354,7 @@ class UserTestCase(BaseTestCase):
                     self.assertEqual(1, len(reset_url_with_token))
                     reset_url_with_token = reset_url_with_token[0]
                     # Llamamos a la vista reset_with_token con la contraseña
-                    new_password = 'quxquuxcorge'
+                    new_password = 'Quxquuxc0rge$'
                     response = c.post(
                         reset_url_with_token,
                         data={'password': new_password,
@@ -370,7 +370,7 @@ class UserTestCase(BaseTestCase):
         """Test de recuperación de contraseña"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         reset_url = url_for('main.reset')
@@ -395,7 +395,7 @@ class UserTestCase(BaseTestCase):
                     user.email_confirmed = False
                     user.save()
                     # Llamamos a la vista reset_with_token con la contraseña
-                    new_password = 'quxquuxcorge'
+                    new_password = 'Quxquuxc0rge$'
                     response = c.post(
                         reset_url_with_token,
                         data={'password': new_password,
@@ -413,7 +413,7 @@ class UserTestCase(BaseTestCase):
         """Test para la vista list_users"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -438,7 +438,7 @@ class UserTestCase(BaseTestCase):
         """Test para la vista user_detail"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -465,7 +465,7 @@ class UserTestCase(BaseTestCase):
         """Test para la vista user_edit"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -494,7 +494,7 @@ class UserTestCase(BaseTestCase):
         """Test para actualizar un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         user = User.get_by_email(user_data['email'])
@@ -514,8 +514,8 @@ class UserTestCase(BaseTestCase):
                 user_data_update.update(user_data)
                 user_data_update.update({
                     'username': 'administrador',
-                    'password': 'quxquuxcorge',
-                    'confirm': 'quxquuxcorge'
+                    'password': 'Quxquuxc0rge$',
+                    'confirm': 'Quxquuxc0rge$'
                 })
                 user_edit_url = url_for('main.user_edit', user_id=user.id)
                 response = c.post(
@@ -536,7 +536,7 @@ class UserTestCase(BaseTestCase):
         """Test para actualizar un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         user = User.get_by_email(user_data['email'])
@@ -557,8 +557,8 @@ class UserTestCase(BaseTestCase):
                 user_data_update.update({
                     'email': 'user@biblat.unam.mx',
                     'username': 'administrador',
-                    'password': 'quxquuxcorge',
-                    'confirm': 'quxquuxcorge'
+                    'password': 'Quxquuxc0rge$',
+                    'confirm': 'Quxquuxc0rge$'
                 })
                 user_edit_url = url_for('main.user_edit', user_id=user.id)
                 response = c.post(
@@ -579,7 +579,7 @@ class UserTestCase(BaseTestCase):
         """Test para actualizar un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         user = User.get_by_email(user_data['email'])
@@ -602,8 +602,8 @@ class UserTestCase(BaseTestCase):
                     user_data_update.update({
                         'email': 'user@biblat.unam.mx',
                         'username': 'administrador',
-                        'password': 'quxquuxcorge',
-                        'confirm': 'quxquuxcorge'
+                        'password': 'Quxquuxc0rge$',
+                        'confirm': 'Quxquuxc0rge$'
                     })
                     user_edit_url = url_for('main.user_edit', user_id=user.id)
                     response = c.post(
@@ -627,7 +627,7 @@ class UserTestCase(BaseTestCase):
         """Test para actualizar un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         user = User.get_by_email(user_data['email'])
@@ -650,8 +650,8 @@ class UserTestCase(BaseTestCase):
                     user_data_update.update({
                         'email': 'user@biblat.unam.mx',
                         'username': 'administrador',
-                        'password': 'quxquuxcorge',
-                        'confirm': 'quxquuxcorge'
+                        'password': 'Quxquuxc0rge$',
+                        'confirm': 'Quxquuxc0rge$'
                     })
                     user_edit_url = url_for('main.user_edit', user_id=user.id)
                     response = c.post(
@@ -676,11 +676,11 @@ class UserTestCase(BaseTestCase):
         """Test para registro de un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
 
         create_user(user_data['email'], user_data['password'], True)
-        create_user('user@biblat.unam.mx', 'foobarbaz', True)
+        create_user('user@biblat.unam.mx', 'F00barbaz$', True)
         user = User.get_by_email(user_data['email'])
         login_url = url_for('main.login')
 
@@ -699,8 +699,8 @@ class UserTestCase(BaseTestCase):
                 user_data_update.update({
                     'email': 'user@biblat.unam.mx',
                     'username': 'admin',
-                    'password': 'quxquuxcorge',
-                    'confirm': 'quxquuxcorge'
+                    'password': 'Quxquuxc0rge$',
+                    'confirm': 'Quxquuxc0rge$'
                 })
                 user_edit_url = url_for('main.user_edit', user_id=user.id)
                 response = c.post(
@@ -721,7 +721,7 @@ class UserTestCase(BaseTestCase):
         """Test para la vista user_add"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -749,13 +749,13 @@ class UserTestCase(BaseTestCase):
         """Test para registro de un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         new_user_data = {
             'username': 'newuser',
             'email': 'newuser@biblat.unam.mx',
-            'password': 'foobarbaz',
-            'confirm': 'foobarbaz'
+            'password': 'F00barbaz$',
+            'confirm': 'F00barbaz$'
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -784,17 +784,55 @@ class UserTestCase(BaseTestCase):
                 user = User.get_by_email(new_user_data['email'])
                 self.assertIsInstance(user, User)
 
+    def test_user_add_insert_one_week_password(self):
+        """Test para registro de un usuario con contraseña debil"""
+        user_data = {
+            'email': 'admin@biblat.unam.mx',
+            'password': 'F00barbaz$',
+        }
+        new_user_data = {
+            'username': 'newuser',
+            'email': 'newuser@biblat.unam.mx',
+            'password': 'qwerty',
+            'confirm': 'qwerty'
+        }
+        create_user(user_data['email'], user_data['password'], True)
+        login_url = url_for('main.login')
+        user_add_url = (url_for('main.user_add'))
+        expected_error_msg = 'La contraseña es muy corta, la longitud mínima ' \
+                             'es de 8 caracteres'
+        with current_app.app_context():
+            with self.client as c:
+                # login de usuario
+                c.post(
+                    login_url,
+                    data=user_data,
+                    follow_redirects=True)
+
+                # registro de usuario
+                response = c.post(
+                    user_add_url,
+                    data=new_user_data,
+                    follow_redirects=True
+                )
+                self.assertStatus(response, 200)
+                self.assertEqual('text/html; charset=utf-8',
+                                 response.content_type)
+                self.assert_template_used("forms/register.html")
+                self.assertIn(expected_error_msg,
+                              response.data.decode('utf-8'))
+
     def test_user_add_insert_email_duplicated(self):
         """Test para registro de un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         new_user_data = {
             'username': 'newuser',
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
-            'confirm': 'foobarbaz'
+            'password': 'F00barbaz$',
+            'confirm': 'F00barbaz$'
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -825,13 +863,13 @@ class UserTestCase(BaseTestCase):
         """Test para registro de un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         new_user_data = {
             'username': 'newuser',
             'email': 'newuser@biblat.unam.mx',
-            'password': 'foobarbaz',
-            'confirm': 'foobarbaz'
+            'password': 'F00barbaz$',
+            'confirm': 'F00barbaz$'
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -868,13 +906,13 @@ class UserTestCase(BaseTestCase):
         """Test para registro de un usuario"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         new_user_data = {
             'username': 'newuser',
             'email': 'newuser@biblat.unam.mx',
-            'password': 'foobarbaz',
-            'confirm': 'foobarbaz'
+            'password': 'F00barbaz$',
+            'confirm': 'F00barbaz$'
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
@@ -912,13 +950,13 @@ class UserTestCase(BaseTestCase):
         """Test para registro de un usuario con confirmación de correo"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
-            'password': 'foobarbaz',
+            'password': 'F00barbaz$',
         }
         new_user_data = {
             'username': 'newuser',
             'email': 'newuser@biblat.unam.mx',
-            'password': 'foobarbaz',
-            'confirm': 'foobarbaz'
+            'password': 'F00barbaz$',
+            'confirm': 'F00barbaz$'
         }
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
