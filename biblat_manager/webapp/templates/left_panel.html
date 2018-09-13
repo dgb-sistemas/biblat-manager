@@ -22,6 +22,10 @@
                             <li><i class="fa fa-list-alt"></i><a href="{{ url_for('main.list_users') }}">{{ _('Listado') }}</a></li>
                             <li><i class="fa fa-user-plus"></i><a href="{{ url_for('main.user_add') }}">{{ _('Agregar') }}</a></li>
                         </ul>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa-university"></i>{{ _('Fasciculos') }}</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-bookmark-o"></i><a href="{{ url_for('main.fasciculos') }}">{{ _('Agregar fasciculo') }}</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

@@ -16,7 +16,7 @@ from flask_admin.contrib import mongoengine
 from . import main
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, FasciculoForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -296,6 +296,14 @@ def reset_with_token(token):
         'token': token
     }
     return render_template('auth/reset_with_token.html', **data)
+
+
+@main.route('/fasciculos/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.fasciculos', __('Fasciculos'))
+@login_required
+def fasciculos():
+    form = FasciculoForm()
+    return render_template('forms/fasciculo.html', form=form)
 
 
 class BiblatSchemaAdminView(mongoengine.ModelView):
