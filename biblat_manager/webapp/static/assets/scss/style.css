@@ -2234,4 +2234,47 @@ header .form-inline {
         .right-panel .content #bootstrap-data-table_wrapper .table td, .right-panel .content #bootstrap-data-table_wrapper .table th {
           padding: 5px; } }
 
+table thead th.sorting.sorting:after{
+  content: "\f0dc";
+  opacity: 0.2;
+}
+
+table thead th.sorting.sorting_desc:after{
+  content: "\f161";
+  opacity: 1;
+}
+
+table thead th.sorting.sorting_asc:after{
+  content: "\f160";
+  opacity: 1;
+}
+
+table thead .sorting,
+table thead .sorting_asc,
+table thead .sorting_desc,
+table thead .sorting_asc_disabled,
+table thead .sorting_desc_disabled {
+  cursor: pointer;
+  position: relative;
+}
+
+table thead .sorting:after,
+table thead .sorting_asc:after,
+table thead .sorting_desc:after,
+table thead .sorting_asc_disabled:after,
+table thead .sorting_desc_disabled:after{
+  position: absolute;
+  bottom: 12px;
+  right: 0.5em;
+  display: block;
+  font-family: 'FontAwesome';
+  opacity: 0.5;
+}
+
+.model-list {
+    position: static;
+    margin-top: -1px;
+    z-index: 999;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -1,0 +1,24 @@
+{% extends 'base_layout.html' %}
+{% from "_helpers.html" import render_field_icon %}
+{% block base_body %}
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                {% include 'flash_messages.html' %}
+                <div class="card">
+                  <div class="card-header">{{ _('Recuperar a contraseña') }}</div>
+                  <div class="login-form">
+                    <form action="{{ url_for('main.reset_with_token', token=token) }}" method="post" class="">
+                        {{ render_field_icon(form.password, 'key', class_='form-control') }}
+                        {{ render_field_icon(form.confirm, 'key', class_='form-control') }}
+                        <div class="form-actions form-group">
+                            {{ form.hidden_tag() }}
+                            <button type="submit" class="btn btn-primary btn-sm">{{ _('Guardar nueva contraseña') }}</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

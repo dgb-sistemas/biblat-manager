@@ -1,0 +1,45 @@
+{% extends "sidebar_layout.html" %}
+
+{% block content %}
+    <h1>Fasciculo.</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.revista.label }}<br>
+            {{ form.revista(size=150) }}
+        </div>
+        <div>
+            {{ form.volumen.label }}<br>
+            {{ form.volumen(size=15) }}
+        </div>
+        <div>
+            {{ form.numero.label }}<br>
+            {{ form.numero(size=15) }}
+        </div>
+        <div>
+            {{ form.anio.label }}<br>
+            {{ form.anio(size=15) }}
+        </div>
+        <div>
+            {{ form.mes_inicial.label }}<br>
+            {{ form.mes_inicial }}
+        </div>
+        <div>
+            {{ form.mes_final.label }}<br>
+            {{ form.mes_final }}
+        </div>
+        <div>
+            {{ form.parte.label }}<br>
+            {{ form.parte }}
+        </div>
+        <div>
+            {{ form.fecha_creacion.label }}<br>
+            {{ form.fecha_creacion }}
+        </div>
+        <div>
+            {{ form.fecha_actualizacion.label }}<br>
+            {{ form.fecha_actualizacion }}
+        </div>
+        <p><button type="submit" class="btn btn-primary btn-sm">{{ _('Registrar') }}</button></p>
+    </form>
+{% endblock %}

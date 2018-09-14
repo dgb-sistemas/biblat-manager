@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-28 12:29-0500\n"
+"POT-Creation-Date: 2018-08-08 15:17-0500\n"
 "PO-Revision-Date: 2018-06-28 12:29-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es_MX\n"
@@ -18,16 +18,123 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: biblat_manager/webapp/main/views.py:18
+#: biblat_manager/webapp/__init__.py:74
+msgid "Por favor inicie sesión para acceder a esta página."
+msgstr ""
+
+#: biblat_manager/webapp/controllers.py:13
+msgid "El parámetro email debe ser un string"
+msgstr ""
+
+#: biblat_manager/webapp/controllers.py:24
+#: biblat_manager/webapp/controllers.py:36
+#, python-format
+msgid "Usuario debe ser de tipo %s"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:8
+msgid "Nombre de usuario"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:12 biblat_manager/webapp/forms.py:25
+msgid "Correo electrónico"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:17 biblat_manager/webapp/forms.py:30
+msgid "Contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:21 biblat_manager/webapp/forms.py:49
+msgid "Confirmar contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:36
+msgid "Email"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:42
+msgid "Nueva contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/forms.py:46
+msgid "Las contraseñas deben coincidir"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:26
 msgid "Inicio"
 msgstr ""
 
-#: biblat_manager/webapp/main/views.py:31
+#: biblat_manager/webapp/main/views.py:40
 msgid "Revistas"
 msgstr ""
 
-#: biblat_manager/webapp/main/views.py:60
+#: biblat_manager/webapp/main/views.py:70
 msgid "Código de idioma inválido"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:104
+#, python-format
+msgid "Sesión iniciada como %s"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:107
+#: biblat_manager/webapp/main/views.py:176
+msgid "Usuario no registrado"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:109
+msgid "Contraseña incorrecta"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:111
+msgid "Correo electrónico no verificado"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:138
+#, python-format
+msgid "Se envío un correo de confirmación a: %(email)s"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:141
+#, python-format
+msgid ""
+"Ocurrió un error en el envío del correo de confirmación  a: %(email)s "
+"%(error_msg)s"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:146
+msgid "El correo electrónico ya esta registrado"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:162
+msgid "Usuario no encontrado"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:165
+#, python-format
+msgid "Email: %(email)s confirmado com éxito!"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:183
+#, python-format
+msgid ""
+"Se enviaron instrucciones para recuperar su contraseña al correo: "
+"%(email)s"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:186
+#, python-format
+msgid ""
+"Ocurrió un problema al enviar el correo con las instrucciones de "
+"recuperación de contraseña a la dirección: %(email)s. Erro: %(error)s"
+msgstr ""
+
+#: biblat_manager/webapp/main/views.py:216
+msgid "Nueva contraseña guardada con éxito!"
+msgstr ""
+
+#: biblat_manager/webapp/templates/flash_messages.html:8
+msgid "Cerrar"
 msgstr ""
 
 #: biblat_manager/webapp/templates/header.html:11
@@ -50,11 +157,50 @@ msgstr ""
 msgid "Cerrar sesión"
 msgstr ""
 
-#: biblat_manager/webapp/templates/sidebar_layout.html:46
-msgid "Cerrar"
+#: biblat_manager/webapp/templates/auth/login.html:28
+msgid "Recordarme"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/login.html:31
+#: biblat_manager/webapp/templates/auth/reset.html:15
+msgid "Recuperar contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/login.html:36
+msgid "Iniciar sesión"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/reset.html:9
+#: biblat_manager/webapp/templates/auth/reset_with_token.html:9
+msgid "Recuperar a contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/reset_with_token.html:16
+msgid "Guardar nueva contraseña"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/unconfirmed_email.html:9
+msgid "Correo electrónico no confirmado!"
+msgstr ""
+
+#: biblat_manager/webapp/templates/auth/unconfirmed_email.html:12
+msgid ""
+"Primero <strong>debe</strong> confirmar su correo electrónico, se envió "
+"un nuevo correo de verificación."
+msgstr ""
+
+#: biblat_manager/webapp/templates/forms/register.html:6
+msgid "Registro de usuario"
+msgstr ""
+
+#: biblat_manager/webapp/templates/forms/register.html:15
+msgid "Enviar"
 msgstr ""
 
 #: biblat_manager/webapp/templates/main/index.html:4
 msgid "Hola mundo!"
 msgstr ""
+
+#~ msgid "Registra usuario"
+#~ msgstr ""
 
