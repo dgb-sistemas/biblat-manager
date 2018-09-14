@@ -117,6 +117,8 @@ def login():
 @register_breadcrumb(main, '.users', __('Usuarios'))
 @login_required
 def list_users(page=1):
+    # TODO: implementación de borrado de usuarios
+    # TODO: implementación de reenvío de correo de confirmación
     order_by = request.args.get('order_by', None)
     column_list = {
         'username': _('Nombre de usuario'),
@@ -154,6 +156,7 @@ def user_detail(user_id):
                      })
 @login_required
 def user_edit(user_id):
+    # TODO: permitir la actualización de usuarios sin actualizar contraseña
     user = User.get_by_id(user_id)
     form = RegistrationForm(obj=user)
     if request.method == 'POST' and form.validate():
@@ -169,6 +172,7 @@ def user_edit(user_id):
                 user.email_confirmed = False
                 user.save()
                 try:
+                    # TODO: enviar email de actualización
                     was_sent, error_msg = update_user.send_confirmation_email()
                 except (ValueError, socket.error) as e:
                     was_sent = False
