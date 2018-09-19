@@ -22,3 +22,4 @@ Jinja2==2.10
 Safe==0.4
 Werkzeug==0.14.1
 WTForms==2.2.1
+-e git+https://github.com/dgb-sistemas/biblat-schema#egg=biblatschema

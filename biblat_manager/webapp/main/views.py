@@ -11,11 +11,14 @@ from flask import (request,
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
+from biblat_schema.models import Documento
+from flask_mongoengine import Pagination
+
 
 from . import main
-from biblat_manager.webapp import babel, controllers
+from biblat_manager.webapp import babel, controllers, dbmongo as db
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentRegistrationForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -300,4 +303,85 @@ def reset_with_token(token):
         'token': token
     }
     return render_template('auth/reset_with_token.html', **data)
+
+
+# Documento
+@main.route('/documentos')
+@main.route('/documentos/<int:page>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.documents', __('Documentos'))
+# @login_required
+def document_list(page=1):
+    # Listado de documentos de la revista
+    order_by = request.args.get('order_by', None)
+    column_list = {
+        'numero_sistema': _('Número de sistema'),
+        'titulo_documento': _('Título del documento'),
+        'fecha_creacion': _('Fecha de creación'),
+        'fecha_actualizacion': _('Fecha de actualización'),
+    }
+    documents = Pagination(Documento.objects.order_by(order_by), page=page, per_page=10)
+    data = {
+        'html_title': 'Biblat Manager - %s' % _('Documentos'),
+        'documents': documents,
+        'order_by': order_by,
+        'column_list': column_list
+    }
+    return render_template('documents/listar.html', **data)
+
+
+@main.route('/documentos/detalle/<document_id>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.documents.detail', __('Detalle'),
+                     endpoint_arguments_constructor=lambda: {
+                         'document_id': request.view_args['document_id']
+                     })
+# @login_required
+def document_detail(document_id):
+    document = Documento.get_by_id(document_id)
+    data = {
+        'document': document
+    }
+    return render_template('documents/detail.html', **data)
+
+
+@main.route('/documentos/agregar')
+@register_breadcrumb(main, '.documents.add', __('Agregar'))
+# @login_required
+def document_add():
+    # Registro de documentos de la revista
+    form = DocumentRegistrationForm()
+    if request.method == 'POST' and form.validate():
+        existing_user = User.get_by_email(form.email.data)
+        if existing_user is None:
+            user_data = {
+                'username': form.username.data,
+                'email': form.email.data,
+                'password': form.password.data
+            }
+            user = User(**user_data).save()
+            try:
+                was_sent, error_msg = user.send_confirmation_email()
+            except (ValueError, socket.error) as e:
+                was_sent = False
+                error_msg = str(e)
+            # Enviamos el email de confirmación al usuario.
+            if was_sent:
+                flash(_('Se envío un correo de confirmación a: %(email)s',
+                        email=user.email), 'info')
+            else:
+                flash(_('Ocurrió un error en el envío del correo de '
+                        'confirmación  a: %(email)s %(error_msg)s',
+                        email=user.email, error_msg=error_msg),
+                      'error')
+            return redirect(url_for('main.user_add'))
+        else:
+            flash(_('El correo electrónico ya esta registrado'), 'error')
+    return render_template('documents/agregar.html', form=form)
+
+
+@main.route('/documentos/editar')
+@register_breadcrumb(main, '.documents.edit', __('Editar'))
+# @login_required
+def document_edit():
+    # Edición de documentos de la revista
+    return
 

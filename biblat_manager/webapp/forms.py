@@ -7,7 +7,8 @@ from wtforms import (
     PasswordField,
     BooleanField,
     validators,
-    ValidationError)
+    ValidationError,
+    FieldList)
 
 
 def check_secure_password(form, field):
@@ -74,3 +75,21 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+
+class DocumentRegistrationForm(FlaskForm):
+    numero_sistema = StringField(__('Número de sistema'), [
+        validators.Length(min=9, max=9),
+        validators.DataRequired()
+    ])
+    titulo_documento = StringField(__('Título de documento'), [
+        validators.Length(max=256),
+        validators.DataRequired()
+    ])
+    doi = StringField(__('DOI'), [
+        validators.Length(max=256),
+        validators.DataRequired()
+    ])
+    authors = FieldList(StringField('Autor', [
+        validators.DataRequired()
+    ]))
