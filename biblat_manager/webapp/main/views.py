@@ -15,7 +15,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from . import main
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, RevistaForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -300,4 +300,13 @@ def reset_with_token(token):
         'token': token
     }
     return render_template('auth/reset_with_token.html', **data)
+
+
+@main.route('/revistas/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.revistas.add', __('Agregar revista'))
+@login_required
+def revista_add():
+    # TODO: Registro de información de nueva revista.
+    form = RevistaForm()
+    return render_template('forms/revistas_add.html', form=form)
 

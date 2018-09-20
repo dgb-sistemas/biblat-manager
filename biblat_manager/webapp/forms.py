@@ -7,7 +7,8 @@ from wtforms import (
     PasswordField,
     BooleanField,
     validators,
-    ValidationError)
+    ValidationError,
+    DateTimeField)
 
 
 def check_secure_password(form, field):
@@ -74,3 +75,51 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+class RevistaForm(FlaskForm):
+    base_datos = StringField(__('Base de datos'), [
+        validators.length(max=5),
+        validators.DataRequired()
+    ])
+    titulo = StringField(__('Titulo'), [
+        validators.length(max=256),
+        validators.DataRequired()
+    ])
+    titulo_abreviado = StringField(__('Titulo abreviado'), [
+        validators.length(max=256),
+    ])
+    issn = StringField(__('ISSN'), [
+        validators.length(max=9),
+        validators.DataRequired()
+    ])
+    issn_electronico = StringField(__('ISSN electronico'), [
+        validators.length(max=9),
+    ])
+    pais = StringField(__('Pais'), [
+        validators.DataRequired()
+    ])
+    disciplina = StringField(__('Disciplina'), [
+        validators.DataRequired()
+    ])
+    """¿Como se va a hacer para jalar los referencedFields?"""
+    licencia_cc = StringField(__('Licencia CC (Creative Commons)'), [
+
+    ])
+    sherpa_romeo = StringField(__('Sherpa Romeo'), [
+
+    ])
+    idioma = StringField(__('Idioma'), [
+
+    ])
+    logo = StringField(__('Logo'), [
+        validators.length(max=100)
+    ])
+    portada = StringField(__('Portada'), [
+        validators.length(max=100)
+    ])
+    fecha_creacion = DateTimeField(__('Fecha de creación'), [
+        validators.DataRequired()
+    ])
+    fecha_actualizacion = DateTimeField(__('Fecha de actualización'), [
+        validators.DataRequired()
+    ])

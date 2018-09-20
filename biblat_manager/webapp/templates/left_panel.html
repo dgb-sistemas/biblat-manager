@@ -23,6 +23,12 @@
                             <li><i class="fa fa-user-plus"></i><a href="{{ url_for('main.user_add') }}">{{ _('Agregar') }}</a></li>
                         </ul>
                     </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-book"></i>{{ _('Revistas') }}</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-user-plus"></i><a href="{{ url_for('main.revista_add') }}">{{ _('Agregar revista') }}</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
