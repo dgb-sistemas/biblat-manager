@@ -375,6 +375,9 @@ def document_add():
             return redirect(url_for('main.user_add'))
         else:
             flash(_('El correo electrónico ya esta registrado'), 'error')
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
     return render_template('documents/agregar.html', form=form)
 
 
