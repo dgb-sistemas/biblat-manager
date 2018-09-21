@@ -1,17 +1,15 @@
 {% extends "sidebar_layout.html" %}
 {% from "_helpers.html" import render_field_icon %}
 {% block content %}
-    <div class="col-lg-6">
+    <div class="col-md-12">
         <div class="card">
           <div class="card-header">{{ _('Registro del documento') }}</div>
           <div class="card-body card-block">
-            <form action="" method="post" class="">
-                {{ render_field_icon(form.numero_sistema, '', class_='form-control') }}
-                {{ render_field_icon(form.titulo_documento, '', class_='form-control') }}
-                {{ render_field_icon(form.doi, '', class_='form-control') }}
-                {{ form.authors }}
+            <form method="post">
+                {% for field in form %}
+                    {{ render_field_icon(field, class_='form-control') }}   
+                {% endfor %}
                 <div class="form-actions form-group">
-                    {{ form.hidden_tag() }}
                     <button type="submit" class="btn btn-primary btn-sm">{{ _('Enviar') }}</button>
                 </div>
             </form>

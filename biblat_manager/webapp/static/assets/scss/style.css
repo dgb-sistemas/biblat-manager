@@ -2277,4 +2277,8 @@ table thead .sorting_desc_disabled:after{
     z-index: 999;
 }
 
+.borderless td, .borderless th {
+    border: none;
+}
+
 /*# sourceMappingURL=style.css.map */
