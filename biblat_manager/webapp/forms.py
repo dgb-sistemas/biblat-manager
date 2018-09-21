@@ -2,13 +2,18 @@
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
+from wtforms import Form as NoCsrfForm
 from wtforms import (
     StringField,
     PasswordField,
     BooleanField,
     validators,
     ValidationError,
-    FieldList)
+    FieldList,
+    SelectField,
+    IntegerField,
+    FormField,
+)
 
 
 def check_secure_password(form, field):
@@ -77,6 +82,19 @@ class PasswordForm(FlaskForm):
     confirm = PasswordField(__('Confirmar contraseña'))
 
 
+# Documento
+class AutorForm(NoCsrfForm):
+    nombre = StringField(__('Nombre'), validators=[
+        validators.DataRequired(),
+        validators.Length(max=100)
+    ])
+    correo_electronico = StringField(__('Email'), validators=[
+        validators.email(__('Correo electrónico inválido!')),
+        validators.Length(max=100)
+    ])
+    referencia = IntegerField(__('Referencia'))
+
+
 class DocumentRegistrationForm(FlaskForm):
     numero_sistema = StringField(__('Número de sistema'), [
         validators.Length(min=9, max=9),
@@ -90,6 +108,12 @@ class DocumentRegistrationForm(FlaskForm):
         validators.Length(max=256),
         validators.DataRequired()
     ])
-    authors = FieldList(StringField('Autor', [
-        validators.DataRequired()
-    ]))
+    idioma = FieldList(
+        SelectField(__('Idioma'), [
+            validators.DataRequired()
+        ], choices=[('es', 'Español'), ('en', 'Inglés')]),
+        label=__('Idiomas'), min_entries=1)
+
+    autores = FieldList(FormField(AutorForm),
+                        label=__('Autores'),
+                        min_entries=1)
