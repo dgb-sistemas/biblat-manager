@@ -343,13 +343,13 @@ def document_detail(document_id):
     return render_template('documents/detail.html', **data)
 
 
-@main.route('/documentos/agregar')
+@main.route('/documentos/agregar', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.documents.add', __('Agregar'))
 # @login_required
 def document_add():
     # Registro de documentos de la revista
     form = DocumentRegistrationForm()
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate_on_submit():
         existing_user = User.get_by_email(form.email.data)
         if existing_user is None:
             user_data = {
