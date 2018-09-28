@@ -2,12 +2,14 @@
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
+import re
 from wtforms import (
     StringField,
     PasswordField,
     BooleanField,
     validators,
     ValidationError,
+    SelectField,
     DateTimeField)
 
 
@@ -77,9 +79,8 @@ class PasswordForm(FlaskForm):
     confirm = PasswordField(__('Confirmar contraseña'))
 
 class RevistaForm(FlaskForm):
-    base_datos = StringField(__('Base de datos'), [
-        validators.length(max=5),
-        validators.DataRequired()
+    #base_datos = StringField(__('Base de datos'), [
+    base_datos = SelectField(__('Base de datos'), choices=[('CLA01', 'CLASE'), ('PER01', 'PERIÓDICA')
     ])
     titulo = StringField(__('Titulo'), [
         validators.length(max=256),
@@ -90,7 +91,9 @@ class RevistaForm(FlaskForm):
     ])
     issn = StringField(__('ISSN'), [
         validators.length(max=9),
-        validators.DataRequired()
+        validators.DataRequired(),
+        validators.Regexp('^\d{4}-\d{3}[\dxX]$', message="Los datos no corresponden a un ISSN")
+
     ])
     issn_electronico = StringField(__('ISSN electronico'), [
         validators.length(max=9),

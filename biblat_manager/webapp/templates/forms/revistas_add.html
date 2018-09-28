@@ -1,25 +1,25 @@
 {% extends "sidebar_layout.html" %}
 {% from "_helpers.html" import render_field_icon %}
 {% block content %}
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="card">
           <div class="card-header">{{ _('Registro de nueva revista') }}</div>
           <div class="card-body card-block">
             <form action="" method="post" class="">
-                {{ render_field_icon(form.base_datos, 'at', class_='form-control') }}
-                {{ render_field_icon(form.titulo, 'at', class_='form-control') }}
-                {{ render_field_icon(form.titulo_abreviado, 'at', class_='form-control') }}
-                {{ render_field_icon(form.issn, 'at', class_='form-control') }}
-                {{ render_field_icon(form.issn_electronico, 'at', class_='form-control') }}
-                {{ render_field_icon(form.pais, 'at', class_='form-control') }}
-                {{ render_field_icon(form.disciplina, 'at', class_='form-control') }}
-                {{ render_field_icon(form.licencia_cc, 'at', class_='form-control') }}
-                {{ render_field_icon(form.sherpa_romeo, 'at', class_='form-control') }}
-                {{ render_field_icon(form.idioma, 'at', class_='form-control') }}
-                {{ render_field_icon(form.logo, 'at', class_='form-control') }}
-                {{ render_field_icon(form.portada, 'at', class_='form-control') }}
-                {{ render_field_icon(form.fecha_creacion, 'at', class_='form-control') }}
-                {{ render_field_icon(form.fecha_actualizacion, 'at', class_='form-control') }}
+                {{ render_field_icon(form.base_datos, 'database', class_='form-control') }}
+                {{ render_field_icon(form.titulo, 'bold', class_='form-control') }}
+                {{ render_field_icon(form.titulo_abreviado, 'scissors', class_='form-control') }}
+                {{ render_field_icon(form.issn, 'barcode', class_='form-control') }}
+                {{ render_field_icon(form.issn_electronico, 'barcode', class_='form-control') }}
+                {{ render_field_icon(form.pais, 'flag', class_='form-control') }}
+                {{ render_field_icon(form.disciplina, 'graduation-cap', class_='form-control') }}
+                {{ render_field_icon(form.licencia_cc, 'creative-commons', class_='form-control') }}
+                {{ render_field_icon(form.sherpa_romeo, 'tags', class_='form-control') }}
+                {{ render_field_icon(form.idioma, 'globe', class_='form-control') }}
+                {{ render_field_icon(form.logo, 'paper-plane', class_='form-control') }}
+                {{ render_field_icon(form.portada, 'book', class_='form-control') }}
+                {{ render_field_icon(form.fecha_creacion, 'calendar', class_='form-control') }}
+                {{ render_field_icon(form.fecha_actualizacion, 'calendar', class_='form-control') }}
                 <div class="form-actions form-group">
                     {{ form.hidden_tag() }}
                     <button type="submit" class="btn btn-primary btn-sm">{{ _('Registrar') }}</button>
