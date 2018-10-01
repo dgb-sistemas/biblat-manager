@@ -2,12 +2,15 @@
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
+import re
 from wtforms import (
     StringField,
     PasswordField,
     BooleanField,
     validators,
-    ValidationError)
+    ValidationError,
+    SelectField,
+    DateTimeField)
 
 
 def check_secure_password(form, field):
@@ -74,3 +77,52 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+class RevistaForm(FlaskForm):
+    #base_datos = StringField(__('Base de datos'), [
+    base_datos = SelectField(__('Base de datos'), choices=[('CLA01', 'CLASE'), ('PER01', 'PERIÓDICA')
+    ])
+    titulo = StringField(__('Titulo'), [
+        validators.length(max=256),
+        validators.DataRequired()
+    ])
+    titulo_abreviado = StringField(__('Titulo abreviado'), [
+        validators.length(max=256),
+    ])
+    issn = StringField(__('ISSN'), [
+        validators.length(max=9),
+        validators.DataRequired(),
+        validators.Regexp('^\d{4}-\d{3}[\dxX]$', message="Los datos no corresponden a un ISSN")
+
+    ])
+    issn_electronico = StringField(__('ISSN electronico'), [
+        validators.length(max=9),
+    ])
+    pais = StringField(__('Pais'), [
+        validators.DataRequired()
+    ])
+    disciplina = StringField(__('Disciplina'), [
+        validators.DataRequired()
+    ])
+    """¿Como se va a hacer para jalar los referencedFields?"""
+    licencia_cc = StringField(__('Licencia CC (Creative Commons)'), [
+
+    ])
+    sherpa_romeo = StringField(__('Sherpa Romeo'), [
+
+    ])
+    idioma = StringField(__('Idioma'), [
+
+    ])
+    logo = StringField(__('Logo'), [
+        validators.length(max=100)
+    ])
+    portada = StringField(__('Portada'), [
+        validators.length(max=100)
+    ])
+    fecha_creacion = DateTimeField(__('Fecha de creación'), [
+        validators.DataRequired()
+    ])
+    fecha_actualizacion = DateTimeField(__('Fecha de actualización'), [
+        validators.DataRequired()
+    ])

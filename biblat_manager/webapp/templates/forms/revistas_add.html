@@ -1,0 +1,31 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import render_field_icon %}
+{% block content %}
+    <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">{{ _('Registro de nueva revista') }}</div>
+          <div class="card-body card-block">
+            <form action="" method="post" class="">
+                {{ render_field_icon(form.base_datos, 'database', class_='form-control') }}
+                {{ render_field_icon(form.titulo, 'bold', class_='form-control') }}
+                {{ render_field_icon(form.titulo_abreviado, 'scissors', class_='form-control') }}
+                {{ render_field_icon(form.issn, 'barcode', class_='form-control') }}
+                {{ render_field_icon(form.issn_electronico, 'barcode', class_='form-control') }}
+                {{ render_field_icon(form.pais, 'flag', class_='form-control') }}
+                {{ render_field_icon(form.disciplina, 'graduation-cap', class_='form-control') }}
+                {{ render_field_icon(form.licencia_cc, 'creative-commons', class_='form-control') }}
+                {{ render_field_icon(form.sherpa_romeo, 'tags', class_='form-control') }}
+                {{ render_field_icon(form.idioma, 'globe', class_='form-control') }}
+                {{ render_field_icon(form.logo, 'paper-plane', class_='form-control') }}
+                {{ render_field_icon(form.portada, 'book', class_='form-control') }}
+                {{ render_field_icon(form.fecha_creacion, 'calendar', class_='form-control') }}
+                {{ render_field_icon(form.fecha_actualizacion, 'calendar', class_='form-control') }}
+                <div class="form-actions form-group">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary btn-sm">{{ _('Registrar') }}</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+{% endblock %}
