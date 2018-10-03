@@ -2,7 +2,6 @@
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
-import re
 from wtforms import (
     StringField,
     PasswordField,
@@ -10,7 +9,7 @@ from wtforms import (
     validators,
     ValidationError,
     SelectField,
-    DateTimeField)
+    FileField)
 
 
 def check_secure_password(form, field):
@@ -78,6 +77,7 @@ class PasswordForm(FlaskForm):
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
 
+
 class RevistaForm(FlaskForm):
     #base_datos = StringField(__('Base de datos'), [
     base_datos = SelectField(__('Base de datos'), choices=[('CLA01', 'CLASE'), ('PER01', 'PERIÓDICA')
@@ -105,24 +105,28 @@ class RevistaForm(FlaskForm):
         validators.DataRequired()
     ])
     """¿Como se va a hacer para jalar los referencedFields?"""
-    licencia_cc = StringField(__('Licencia CC (Creative Commons)'), [
-
+    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), choices=[
+        ('CC0','Zero Public Domain, "No Rights Reserved"'),
+        ('CC-BY', 'Attribution'),
+        ('CC-BY-SA', 'Attribution-ShareAlike'),
+        ('CC-BY-NC', 'Attribution-NonCommercial'),
+        ('CC-BY-NC-ND', 'Attribution-NonCommercial-NoDerivs'),
+        ('CC-BY-NC-SA', 'Attribution-NonCommercial-ShareAlike'),
+        ('CC-BY-ND', 'Attribution-NoDerivs'),
+        ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
     sherpa_romeo = StringField(__('Sherpa Romeo'), [
 
     ])
-    idioma = StringField(__('Idioma'), [
-
+    idioma = SelectField(__('Idioma'), choices=[
+        ('ESP','Español'),
+        ('US', 'Ingles'),
+        ('PG', 'Portugues'),
+        ('FR','Frances')
     ])
-    logo = StringField(__('Logo'), [
-        validators.length(max=100)
+    logo = FileField(__('Logo'), [
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen"))
     ])
-    portada = StringField(__('Portada'), [
-        validators.length(max=100)
-    ])
-    fecha_creacion = DateTimeField(__('Fecha de creación'), [
-        validators.DataRequired()
-    ])
-    fecha_actualizacion = DateTimeField(__('Fecha de actualización'), [
-        validators.DataRequired()
+    portada = FileField(__('Portada'), [
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen"))
     ])
