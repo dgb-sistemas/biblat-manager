@@ -18,7 +18,7 @@ from flask_mongoengine import Pagination
 from . import main
 from biblat_manager.webapp import babel, controllers, dbmongo as db
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentRegistrationForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentEditForm, DocumentRegistrationForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -349,32 +349,9 @@ def document_detail(document_id):
 def document_add():
     # Registro de documentos de la revista
     form = DocumentRegistrationForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        existing_user = User.get_by_email(form.email.data)
-        if existing_user is None:
-            user_data = {
-                'username': form.username.data,
-                'email': form.email.data,
-                'password': form.password.data
-            }
-            user = User(**user_data).save()
-            try:
-                was_sent, error_msg = user.send_confirmation_email()
-            except (ValueError, socket.error) as e:
-                was_sent = False
-                error_msg = str(e)
-            # Enviamos el email de confirmación al usuario.
-            if was_sent:
-                flash(_('Se envío un correo de confirmación a: %(email)s',
-                        email=user.email), 'info')
-            else:
-                flash(_('Ocurrió un error en el envío del correo de '
-                        'confirmación  a: %(email)s %(error_msg)s',
-                        email=user.email, error_msg=error_msg),
-                      'error')
-            return redirect(url_for('main.user_add'))
-        else:
-            flash(_('El correo electrónico ya esta registrado'), 'error')
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('documents/agregar.html', form=form)
     for field in form:
         if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
             field.append_entry()
@@ -386,5 +363,12 @@ def document_add():
 # @login_required
 def document_edit():
     # Edición de documentos de la revista
-    return
+    form = DocumentEditForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('documents/agregar.html', form=form)
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
+    return render_template('documents/agregar.html', form=form)
 

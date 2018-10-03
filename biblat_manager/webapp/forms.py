@@ -88,32 +88,95 @@ class AutorForm(NoCsrfForm):
         validators.DataRequired(),
         validators.Length(max=100)
     ])
-    correo_electronico = StringField(__('Email'), validators=[
-        validators.email(__('Correo electrónico inválido!')),
-        validators.Length(max=100)
+    correo_electronico = StringField(__('Email'), [
+        validators.Length(min=6, max=100),
+        validators.Email(__('Correo electrónico inválido!'))
     ])
     referencia = IntegerField(__('Referencia'))
 
 
-class DocumentRegistrationForm(FlaskForm):
+class AutorCorporativoForm(NoCsrfForm):
+    institucion = StringField(__('Institución'), validators=[
+        validators.DataRequired(),
+        validators.Length(max=100)
+    ])
+    dependencia = StringField(__('Dependencia'), validators=[
+        validators.Length(max=100)
+    ])
+    pais = SelectField('Pais', choices=[('MX', 'México'), ('CO', 'Colombia'), ('BR', 'Brasil'), ('AR', 'Argentina')])
+
+
+class ResumenForm(NoCsrfForm):
+    idioma = SelectField('Idioma', choices=[('spa', 'Español'), ('eng', 'Inglés'), ('por', 'Portugués'), ('deu', 'Alemán')])
+    resumen = StringField(__('Resumen'), validators=[
+        validators.Length(max=900),
+        validators.DataRequired()
+    ])
+
+
+class DisciplinaForm(NoCsrfForm):
+    disciplina = SelectField('Disciplina',
+        choices=[('1', 'Administración y contaduría'), ('2', 'Agrociencias'), ('3', 'Bibliotecología y ciencia de la información'), ('4','Biología'), ('5','Economía')
+    ])
+
+
+class SubdisciplinaForm(NoCsrfForm):
+    subdisciplinas = SelectField('Subdisciplina',
+        choices=[('1', 'Administración de instituciones'), ('2', 'Administración de la producción'), ('3', 'Fertilización'), ('4','Fitotecnia'), ('5','Análisis y sistematización de la información')
+    ])
+
+
+class NombreGeograficoForm(NoCsrfForm):
+    nombres_geograficos = SelectField('Nombres geográficos',
+        choices=[('1', 'América'), ('2', 'Asia Central'), ('3', 'Corea del Norte'), ('4','Mesoamérica'), ('5','Vietnam')
+    ])
+
+
+class DocumentEditForm(FlaskForm):
     numero_sistema = StringField(__('Número de sistema'), [
         validators.Length(min=9, max=9),
         validators.DataRequired()
-    ])
+    ], render_kw={'disabled': True})
     titulo_documento = StringField(__('Título de documento'), [
         validators.Length(max=256),
         validators.DataRequired()
     ])
     doi = StringField(__('DOI'), [
-        validators.Length(max=256),
+        validators.Length(max=256)
+    ])
+    paginacion = StringField(__('Paginación'), [
+        validators.Length(max=100),
         validators.DataRequired()
     ])
-    idioma = FieldList(
-        SelectField(__('Idioma'), [
-            validators.DataRequired()
+    referencias = BooleanField(__('Referencias'))
+    idioma = FieldList(SelectField(__('Idioma'), [
+        validators.DataRequired()
         ], choices=[('es', 'Español'), ('en', 'Inglés')]),
-        label=__('Idiomas'), min_entries=1)
-
+        label=__('Agregar idiomas'), min_entries=1)
     autores = FieldList(FormField(AutorForm),
-                        label=__('Autores'),
-                        min_entries=1)
+        label=__('Agregar autores'),
+        min_entries=1)
+    autor_corporativo = FieldList(FormField(AutorCorporativoForm),
+        label=__('Agregar autores corporativos'),
+        min_entries=1)
+    resumen = FieldList(FormField(ResumenForm),
+        label=__('Agregar resumen'),
+        min_entries=1)
+    tipo_documento = SelectField('Tipo de documento', choices=[('1', 'Artículo'), ('2', 'Conferencia o discurso'), ('3', 'Entrevista')])
+    enfoque_documento = SelectField('Enfoque', choices=[('1', 'Analítico'), ('2', 'Descriptivo'), ('3', 'Experimental')])
+    disciplina = FieldList(FormField(DisciplinaForm),
+        label=__('Agregar disciplina'),
+        min_entries=1)
+    subdisciplinas = FieldList(FormField(SubdisciplinaForm),
+        label=__('Agregar subdisciplina'),
+        min_entries=1)
+    nombres_geograficos = FieldList(FormField(NombreGeograficoForm),
+        label=__('Agregar nombre geográfico'),
+        min_entries=1)
+    texto_completo = StringField(__('Texto Completo'), [
+        validators.Length(max=256)
+    ])
+
+
+class DocumentRegistrationForm(DocumentEditForm):
+    numero_sistema = None
