@@ -8,7 +8,7 @@
                 <button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-add-row"
                                                   data-target="#{{ field.name }}-fieldset"><i class="fa fa-plus-circle"></i></button>
                 {% if field[0].type == 'FormField' %}
-                    <table {% if field.min_entries == 0 and not all(field[0].data.values()) %}style="display: none;" {% endif %} class="table borderless">
+                    <table {% if field.min_entries == 0 and not any(field[0].data.values()) %}style="display: none;" {% endif %} class="table borderless">
                         <tr>
                             {% for subfield in field[0] %}
                             <th>{{ subfield.label }}</th>
@@ -19,7 +19,14 @@
                             {% set outer_loop = loop %}
                             <tr data-toggle="fieldset-entry">
                                 {% for formfield in subfield %}
-                                    <td>{{ formfield(disabled=not outer_loop.index0 < field.min_entries and not all(subfield.data.values())) }}</td>
+                                    <td>
+                                        {{ formfield(disabled=not outer_loop.index0 < field.min_entries and not any(subfield.data.values()), **kwargs) }}
+                                        {% if formfield.errors %}
+                                            {% for error in formfield.errors %}
+                                                <small class="help-block form-text text-danger">{{ error }}</small>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
                                 {% endfor %}
                                 <td><button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-remove-row" id="{{ field.name }}-{{loop.index0}}-remove" {% if loop.index0 < field.min_entries %}style="display:none;"{% endif %}><i class="fa fa-minus-circle"></i></button></td>
                             </tr>
@@ -33,7 +40,14 @@
                     </tr>
                     {% for subfield in field.entries %}
                         <tr data-toggle="fieldset-entry">
-                            <td>{{ subfield(disabled=not subfield.data) }}</td>
+                            <td>
+                                {{ subfield(disabled=not subfield.data, **kwargs) }}
+                                {% if subfield.errors %}
+                                    {% for error in subfield.errors %}
+                                        <small class="help-block form-text text-danger">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
                             <td><button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-remove-row" id="{{ field.name }}-{{loop.index0}}-remove" {% if loop.index0 < field.min_entries %}style="display:none;"{% endif %}><i class="fa fa-minus-circle"></i></button></td>
                         </tr>
                     {% endfor %}
@@ -49,12 +63,12 @@
                 </div>
                 {% endif %}
                 {{ field(**kwargs)|safe }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <small class="help-block form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                {% endif %}
             </div>
-        {% endif %}
-        {% if field.errors %}
-            {% for error in field.errors %}
-                <small class="help-block form-text text-danger">{{ error }}</small>
-            {% endfor %}
         {% endif %}
     </div>
 {% endmacro %}

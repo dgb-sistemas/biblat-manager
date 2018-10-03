@@ -48,7 +48,7 @@ def create_app(config_name):
         'is_bool': is_bool
     })
     app.jinja_env.globals.update(
-        all=all
+        any=any
     )
 
     # Configuraciones
