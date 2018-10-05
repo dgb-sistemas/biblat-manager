@@ -13,6 +13,7 @@ from wtforms import (
     SelectField,
     IntegerField,
     FormField,
+    TextAreaField,
 )
 
 
@@ -108,27 +109,29 @@ class AutorCorporativoForm(NoCsrfForm):
 
 class ResumenForm(NoCsrfForm):
     idioma = SelectField('Idioma', choices=[('spa', 'Español'), ('eng', 'Inglés'), ('por', 'Portugués'), ('deu', 'Alemán')])
-    resumen = StringField(__('Resumen'), validators=[
+    resumen = TextAreaField(__('Resumen'), validators=[
         validators.Length(max=900),
         validators.DataRequired()
     ])
 
 
 class DisciplinaForm(NoCsrfForm):
-    disciplina = SelectField('Disciplina',
-        choices=[('1', 'Administración y contaduría'), ('2', 'Agrociencias'), ('3', 'Bibliotecología y ciencia de la información'), ('4','Biología'), ('5','Economía')
+    disciplina = SelectField(__('Disciplina'), validators=[
+        validators.DataRequired()
+    ],
+        choices=[('',''), ('1', 'Administración y contaduría'), ('2', 'Agrociencias'), ('3', 'Bibliotecología y ciencia de la información'), ('4','Biología'), ('5','Economía')
     ])
 
 
 class SubdisciplinaForm(NoCsrfForm):
     subdisciplinas = SelectField('Subdisciplina',
-        choices=[('1', 'Administración de instituciones'), ('2', 'Administración de la producción'), ('3', 'Fertilización'), ('4','Fitotecnia'), ('5','Análisis y sistematización de la información')
+        choices=[('', ''), ('1', 'Administración de instituciones'), ('2', 'Administración de la producción'), ('3', 'Fertilización'), ('4','Fitotecnia'), ('5','Análisis y sistematización de la información')
     ])
 
 
 class NombreGeograficoForm(NoCsrfForm):
     nombres_geograficos = SelectField('Nombres geográficos',
-        choices=[('1', 'América'), ('2', 'Asia Central'), ('3', 'Corea del Norte'), ('4','Mesoamérica'), ('5','Vietnam')
+        choices=[('', ''), ('1', 'América'), ('2', 'Asia Central'), ('3', 'Corea del Norte'), ('4','Mesoamérica'), ('5','Vietnam')
     ])
 
 
@@ -162,8 +165,12 @@ class DocumentEditForm(FlaskForm):
     resumen = FieldList(FormField(ResumenForm),
         label=__('Agregar resumen'),
         min_entries=1)
-    tipo_documento = SelectField('Tipo de documento', choices=[('1', 'Artículo'), ('2', 'Conferencia o discurso'), ('3', 'Entrevista')])
-    enfoque_documento = SelectField('Enfoque', choices=[('1', 'Analítico'), ('2', 'Descriptivo'), ('3', 'Experimental')])
+    tipo_documento = SelectField('Tipo de documento', validators=[
+        validators.DataRequired()
+    ], choices=[('', ''), ('1', 'Artículo'), ('2', 'Conferencia o discurso'), ('3', 'Entrevista')])
+    enfoque_documento = SelectField('Enfoque', validators=[
+        validators.DataRequired()
+    ], choices=[('',''), ('1', 'Analítico'), ('2', 'Descriptivo'), ('3', 'Experimental')])
     disciplina = FieldList(FormField(DisciplinaForm),
         label=__('Agregar disciplina'),
         min_entries=1)
@@ -174,7 +181,9 @@ class DocumentEditForm(FlaskForm):
         label=__('Agregar nombre geográfico'),
         min_entries=1)
     texto_completo = StringField(__('Texto Completo'), [
-        validators.Length(max=256)
+        validators.Length(max=256),
+        validators.URL(message='URL inválido'),
+        validators.optional()
     ])
 
 
