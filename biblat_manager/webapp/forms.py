@@ -79,7 +79,6 @@ class PasswordForm(FlaskForm):
 
 
 class RevistaForm(FlaskForm):
-    #base_datos = StringField(__('Base de datos'), [
     base_datos = SelectField(__('Base de datos'), choices=[('CLA01', 'CLASE'), ('PER01', 'PERIÓDICA')
     ])
     titulo = StringField(__('Titulo'), [
@@ -91,15 +90,19 @@ class RevistaForm(FlaskForm):
     ])
     issn = StringField(__('ISSN'), [
         validators.length(max=9),
-        validators.DataRequired(),
-        validators.Regexp('^\d{4}-\d{3}[\dxX]$', message="Los datos no corresponden a un ISSN")
-
+        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN")),
+        validators.DataRequired()
     ])
     issn_electronico = StringField(__('ISSN electrónico'), [
         validators.length(max=9),
+        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN"))
     ])
-    pais = StringField(__('Pais'), [
-        validators.DataRequired()
+    pais = SelectField(__('Pais'), [validators.DataRequired()], choices=[
+        ('MX','México'),
+        ('ARG', 'Argentina'),
+        ('CO', 'Colombia'),
+        ('PE', 'Peru'),
+        ('BR', 'Brasil')
     ])
     disciplina = StringField(__('Disciplina'), [
         validators.DataRequired()
@@ -115,14 +118,22 @@ class RevistaForm(FlaskForm):
         ('CC-BY-ND', 'Attribution-NoDerivs'),
         ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
-    sherpa_romeo = StringField(__('Sherpa Romeo'), [
-
+    sherpa_romeo = SelectField(__('Sherpa Romeo'), choices=[
+        ('V','Verde'),
+        ('A', 'Azul'),
+        ('Y', 'Amarillo'),
+        ('B', 'Blanco'),
     ])
     idioma = SelectField(__('Idioma'), choices=[
         ('ESP','Español'),
         ('US', 'Ingles'),
         ('PG', 'Portugues'),
         ('FR','Frances')
+    ])
+    periodicidad = SelectField(__('Periodicidad'), [validators.DataRequired()], choices=[
+        ('M' ,'Mensual'),
+        ('B', 'Bimestral'),
+        ('T', 'Trimestral'),
     ])
     logo = FileField(__('Logo'), [
         validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen"))

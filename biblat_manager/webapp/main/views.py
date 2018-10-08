@@ -308,5 +308,8 @@ def reset_with_token(token):
 def revista_add():
     # TODO: Registro de información de nueva revista.
     form = RevistaForm()
+    if request.method == 'POST' and form.validate():
+        return redirect(url_for('main.revista_add'))
+    else:
+        flash(_('La revista ya existe'), 'error')
     return render_template('forms/revistas_add.html', form=form)
-
