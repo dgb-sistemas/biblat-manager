@@ -37,9 +37,11 @@
                                     {% for document in documents.items %}
                                         <tr>
                                             <td class="text-center">
+                                               <!--
                                                 <a class="icon" href="{{ url_for('main.document_detail', document_id=document.id) }}" title="{{ _('Ver registro') }}">
                                                   <span class="fa fa-eye glyphicon glyphicon-eye-open"></span>
                                                 </a>
+                                                -->
                                                 <a class="icon" href="{{ url_for('main.document_edit', document_id=document.id) }}" title="{{ _('Editar registro') }}" >
                                                     <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
                                                 </a>

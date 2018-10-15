@@ -7,7 +7,7 @@
           <div class="card-body card-block">
             <form method="post">
                 {% for field in form %}
-                    {{ render_field_icon(field, class_='form-control') }}   
+                    {{ render_field_icon(field, class_='form-control') }}
                 {% endfor %}
                 <div class="form-actions form-group">
                     <button type="submit" class="btn btn-primary btn-sm">{{ _('Enviar') }}</button>

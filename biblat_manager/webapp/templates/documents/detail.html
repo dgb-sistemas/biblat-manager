@@ -1,0 +1,35 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import bool_formatter %}
+{% block content %}
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-user"></i><strong class="card-title pl-2">{{ _('Detalle del documento') }}</strong>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><i class="fa fa-id-badge"></i> {{ _('ID') }}:</td>
+                            <td>{{ documento.id }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-user-o"></i> {{ _('Título del documento') }}:</td>
+                            <td>{{ documento.titulo_documento }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-envelope-o"></i> {{ _('Revista') }}:</td>
+                            <td>{{ documento.fecha_creacion }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-envelope-open-o"></i> {{ _('Autores') }}?</td>
+                            <td>{{ documento.fecha_actualizacion }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
