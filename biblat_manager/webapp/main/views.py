@@ -11,6 +11,8 @@ from flask import (request,
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
+from biblat_schema.models import Revista
+from flask_mongoengine import Pagination
 
 from . import main
 from biblat_manager.webapp import babel, controllers
@@ -35,14 +37,14 @@ def index():
     return render_template('main/index.html', **data)
 
 
-@main.route('/revistas', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.revistas', __('Revistas'))
-@login_required
-def revistas():
-    data = {
-        'html_title': 'Biblat Manager - Revistas'
-    }
-    return render_template('main/index.html', **data)
+#@main.route('/revistas', methods=['GET', 'POST'])
+#@register_breadcrumb(main, '.revistas', __('Revistas'))
+#@login_required
+#def revistas():
+#    data = {
+#        'html_title': 'Biblat Manager - Revistas'
+#    }
+#    return render_template('main/index.html', **data)
 
 
 # i18n
@@ -302,14 +304,41 @@ def reset_with_token(token):
     return render_template('auth/reset_with_token.html', **data)
 
 
+@main.route('/revistas')
+@main.route('/revistas/<int:page>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.revistas', __('Revistas'))
+@login_required
+def revista_list(page=1):
+    # Listado de documentos de la revista
+    order_by = request.args.get('order_by', None)
+    column_list = {
+        'issn': _('ISSN'),
+        'titulo_revista': _('Título de la revista'),
+        'fecha_creacion': _('Fecha de creación'),
+        'fecha_actualizacion': _('Fecha de actualización'),
+    }
+    documents = Pagination(Revista.objects.order_by(order_by), page=page, per_page=10)
+    data = {
+        'html_title': 'Biblat Manager - %s' % _('Revistas'),
+        'documents': documents,
+        'order_by': order_by,
+        'column_list': column_list
+    }
+    return render_template('forms/listar_revistas.html', **data)
+
+
 @main.route('/revistas/agregar', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.revistas.add', __('Agregar revista'))
 @login_required
 def revista_add():
     # TODO: Registro de información de nueva revista.
     form = RevistaForm()
-    if request.method == 'POST' and form.validate():
-        return redirect(url_for('main.revista_add'))
+    if request.method == 'POST' and form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/revistas_add.html', form=form)
     else:
         flash(_('La revista ya existe'), 'error')
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
     return render_template('forms/revistas_add.html', form=form)

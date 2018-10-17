@@ -5,22 +5,11 @@
         <div class="card">
           <div class="card-header">{{ _('Registro de nueva revista') }}</div>
           <div class="card-body card-block">
-            <form action="" method="post" class="">
-                {{ render_field_icon(form.base_datos, 'database', class_='form-control') }}
-                {{ render_field_icon(form.titulo, 'bold', class_='form-control') }}
-                {{ render_field_icon(form.titulo_abreviado, 'scissors', class_='form-control') }}
-                {{ render_field_icon(form.issn, 'barcode', class_='form-control') }}
-                {{ render_field_icon(form.issn_electronico, 'barcode', class_='form-control') }}
-                {{ render_field_icon(form.pais, 'flag', class_='form-control') }}
-                {{ render_field_icon(form.disciplina, 'graduation-cap', class_='form-control') }}
-                {{ render_field_icon(form.licencia_cc, 'creative-commons', class_='form-control') }}
-                {{ render_field_icon(form.sherpa_romeo, 'tags', class_='form-control') }}
-                {{ render_field_icon(form.idioma, 'globe', class_='form-control') }}
-                {{ render_field_icon(form.periodicidad, 'globe', class_='form-control') }}
-                {{ render_field_icon(form.logo, 'paper-plane', class_='form-control') }}
-                {{ render_field_icon(form.portada, 'book', class_='form-control') }}
+              <form method="post">
+                {% for field in form %}
+                    {{ render_field_icon(field, class_='form-control') }}
+                {% endfor %}
                 <div class="form-actions form-group">
-                    {{ form.hidden_tag() }}
                     <button type="submit" class="btn btn-primary btn-sm">{{ _('Registrar') }}</button>
                 </div>
             </form>

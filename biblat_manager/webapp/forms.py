@@ -104,8 +104,12 @@ class RevistaForm(FlaskForm):
         ('PE', 'Peru'),
         ('BR', 'Brasil')
     ])
-    disciplina = StringField(__('Disciplina'), [
-        validators.DataRequired()
+    disciplina = SelectField(__('Disciplina'), [validators.DataRequired()],choices=[
+        ('1' , 'Administracion'),
+        ('2', 'Agrociencias'),
+        ('3', 'Antropologia'),
+        ('4', 'Derecho'),
+        ('5', 'Ingenieria'),
     ])
     """¿Como se va a hacer para jalar los referencedFields?"""
     licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), choices=[
