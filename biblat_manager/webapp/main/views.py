@@ -342,3 +342,18 @@ def revista_add():
         if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
             field.append_entry()
     return render_template('forms/revistas_add.html', form=form)
+
+
+@main.route('/revistas/editar')
+@register_breadcrumb(main, '.revistas.edit', __('Editar'))
+# @login_required
+def revista_edit():
+    # Edición de documentos de la revista
+    form = RevistaForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/revistas_add.html', form=form)
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
+    return render_template('forms/revistas_add.html', form=form)
