@@ -3,6 +3,7 @@ from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
 from wtforms import Form as NoCsrfForm
+from wtforms.fields.html5 import DateField
 from wtforms import (
     StringField,
     PasswordField,
@@ -185,6 +186,8 @@ class DocumentEditForm(FlaskForm):
         validators.URL(message='URL inválido'),
         validators.optional()
     ])
+    fecha_recepcion = DateField('fecha_recepcion', format='%Y-%m-%d', validators=(validators.Optional(),))
+    fecha_aceptacion = DateField('fecha_aceptacion', format='%Y-%m-%d', validators=(validators.Optional(),))
 
 
 class DocumentRegistrationForm(DocumentEditForm):
