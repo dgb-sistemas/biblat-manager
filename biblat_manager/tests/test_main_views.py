@@ -49,13 +49,13 @@ class MainTestCase(BaseTestCase):
                     data=admin_user,
                     follow_redirects=True)
                 self.assertStatus(login_response, 200)
-                response = c.get(url_for('main.revistas'))
+                response = c.get(url_for('main.revista_list'))
                 self.assertStatus(response, 200)
                 self.assertEqual('text/html; charset=utf-8',
                                  response.content_type)
                 self.assertEqual([i.url for i in current_breadcrumbs],
                                  ['/', '/revistas'])
-                self.assert_template_used("main/index.html")
+                self.assert_template_used("forms/listar_revistas.html")
 
     def test_change_set_locale(self):
         """

@@ -79,7 +79,10 @@ class PasswordForm(FlaskForm):
 
 
 class RevistaForm(FlaskForm):
-    base_datos = SelectField(__('Base de datos'), choices=[('CLA01', 'CLASE'), ('PER01', 'PERIÓDICA')
+    base_datos = SelectField(__('Base de datos'), choices=[
+        ('N', ''),
+        ('CLA01', 'CLASE'),
+        ('PER01', 'PERIÓDICA')
     ])
     titulo = StringField(__('Titulo'), [
         validators.length(max=256),
@@ -98,6 +101,7 @@ class RevistaForm(FlaskForm):
         validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN"))
     ])
     pais = SelectField(__('Pais'), [validators.DataRequired()], choices=[
+        ('N',''),
         ('MX','México'),
         ('ARG', 'Argentina'),
         ('CO', 'Colombia'),
@@ -105,6 +109,7 @@ class RevistaForm(FlaskForm):
         ('BR', 'Brasil')
     ])
     disciplina = SelectField(__('Disciplina'), [validators.DataRequired()],choices=[
+        ('N', ''),
         ('1' , 'Administracion'),
         ('2', 'Agrociencias'),
         ('3', 'Antropologia'),
@@ -113,6 +118,7 @@ class RevistaForm(FlaskForm):
     ])
     """¿Como se va a hacer para jalar los referencedFields?"""
     licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), choices=[
+        ('N', ''),
         ('CC0','Zero Public Domain, "No Rights Reserved"'),
         ('CC-BY', 'Attribution'),
         ('CC-BY-SA', 'Attribution-ShareAlike'),
@@ -123,18 +129,21 @@ class RevistaForm(FlaskForm):
         ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
     sherpa_romeo = SelectField(__('Sherpa Romeo'), choices=[
+        ('N', ''),
         ('V','Verde'),
         ('A', 'Azul'),
         ('Y', 'Amarillo'),
         ('B', 'Blanco'),
     ])
     idioma = SelectField(__('Idioma'), choices=[
+        ('N', ''),
         ('ESP','Español'),
         ('US', 'Ingles'),
         ('PG', 'Portugues'),
         ('FR','Frances')
     ])
     periodicidad = SelectField(__('Periodicidad'), [validators.DataRequired()], choices=[
+        ('N', ''),
         ('M' ,'Mensual'),
         ('B', 'Bimestral'),
         ('T', 'Trimestral'),
