@@ -303,7 +303,7 @@ def reset_with_token(token):
 
 
 @main.route('/fasciculos/agregar', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.fasciculos', __('Fasciculos'))
+@register_breadcrumb(main, '.fasciculos.agregar', __('Agregar fascículo'))
 @login_required
 def fasciculos():
     form = FasciculoForm()
