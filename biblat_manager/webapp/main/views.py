@@ -309,6 +309,7 @@ def reset_with_token(token):
 @main.route('/documentos')
 @main.route('/documentos/<int:page>', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.documents', __('Documentos'))
+@login_required
 def document_list(page=1):
     # Listado de documentos de la revista
     order_by = request.args.get('order_by', None)
@@ -333,6 +334,7 @@ def document_list(page=1):
                      endpoint_arguments_constructor=lambda: {
                          'document_id': request.view_args['document_id']
                      })
+@login_required
 def document_detail(document_id):
     document = Documento.get_by_id(document_id)
     data = {
@@ -343,12 +345,13 @@ def document_detail(document_id):
 
 @main.route('/documentos/agregar', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.documents.add', __('Agregar'))
+@login_required
 def document_add():
     # Registro de documentos de la revista
     form = DocumentRegistrationForm()
+    respuesta = request.values
     if form.validate_on_submit():
         flash(_('Datos correctos'), 'success')
-        return render_template('documents/agregar.html', form=form)
     for field in form:
         if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
             field.append_entry()
@@ -357,6 +360,7 @@ def document_add():
 
 @main.route('/documentos/editar')
 @register_breadcrumb(main, '.documents.edit', __('Editar'))
+@login_required
 def document_edit():
     # Edición de documentos de la revista
     form = DocumentEditForm()

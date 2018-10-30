@@ -30,5 +30,5 @@ setup(
     ],
     tests_require=[],
     dependency_links=[],
-    test_suite=''
+    test_suite='',
 )
