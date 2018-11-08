@@ -333,7 +333,7 @@ def revista_list(page=1):
 def revista_add():
     # TODO: Registro de información de nueva revista.
     form = RevistaForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if form.validate_on_submit():
         flash(_('Datos correctos'), 'success')
         return render_template('forms/revistas_add.html', form=form)
     else:

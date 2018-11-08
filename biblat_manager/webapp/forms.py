@@ -90,6 +90,7 @@ class RevistaForm(FlaskForm):
     ])
     titulo_abreviado = StringField(__('Titulo abreviado'), [
         validators.length(max=256),
+        validators.Optional(),
     ])
     issn = StringField(__('ISSN'), [
         validators.length(max=9),
@@ -98,7 +99,8 @@ class RevistaForm(FlaskForm):
     ])
     issn_electronico = StringField(__('ISSN electrónico'), [
         validators.length(max=9),
-        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN"))
+        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN")),
+        validators.Optional(),
     ])
     pais = SelectField(__('Pais'), [validators.DataRequired()], choices=[
         ('N',''),
@@ -108,7 +110,7 @@ class RevistaForm(FlaskForm):
         ('PE', 'Peru'),
         ('BR', 'Brasil')
     ])
-    disciplina = SelectField(__('Disciplina'), [validators.DataRequired()],choices=[
+    disciplina = SelectField(__('Disciplina'), [validators.DataRequired()], choices=[
         ('N', ''),
         ('1' , 'Administracion'),
         ('2', 'Agrociencias'),
@@ -117,7 +119,7 @@ class RevistaForm(FlaskForm):
         ('5', 'Ingenieria'),
     ])
     """¿Como se va a hacer para jalar los referencedFields?"""
-    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), choices=[
+    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), [validators.Optional()], choices=[
         ('N', ''),
         ('CC0','Zero Public Domain, "No Rights Reserved"'),
         ('CC-BY', 'Attribution'),
@@ -128,14 +130,14 @@ class RevistaForm(FlaskForm):
         ('CC-BY-ND', 'Attribution-NoDerivs'),
         ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
-    sherpa_romeo = SelectField(__('Sherpa Romeo'), choices=[
+    sherpa_romeo = SelectField(__('Sherpa Romeo'), [validators.Optional()], choices=[
         ('N', ''),
         ('V','Verde'),
         ('A', 'Azul'),
         ('Y', 'Amarillo'),
         ('B', 'Blanco'),
     ])
-    idioma = SelectField(__('Idioma'), choices=[
+    idioma = SelectField(__('Idioma'), [validators.Optional()], choices=[
         ('N', ''),
         ('ESP','Español'),
         ('US', 'Ingles'),
@@ -149,8 +151,10 @@ class RevistaForm(FlaskForm):
         ('T', 'Trimestral'),
     ])
     logo = FileField(__('Logo'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen"))
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen")),
+        validators.Optional(),
     ])
     portada = FileField(__('Portada'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen"))
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen")),
+        validators.Optional(),
     ])
