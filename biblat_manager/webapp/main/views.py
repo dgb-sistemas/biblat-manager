@@ -16,7 +16,7 @@ from flask_mongoengine import Pagination
 
 
 from . import main
-from biblat_manager.webapp import babel, controllers, dbmongo as db
+from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
     RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentEditForm, DocumentRegistrationForm
 )
