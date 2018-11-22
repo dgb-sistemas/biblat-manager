@@ -86,15 +86,18 @@ class FasciculoForm(FlaskForm):
     ])
     volumen = IntegerField(__('Volumen'), [
         validators.Length(max=15),
+        validators.Optional(),
     ])
     numero = IntegerField(__('Numero'), [
         validators.Length(max=15),
+        validators.Optional(),
     ])
     anio = IntegerField(__('Año'), [
         validators.Length(max=4),
         validators.DataRequired()
     ])
     mes_inicial = SelectField(__('Mes inicial'), choices=[
+         ('0', __('Elige una opción')),
          ('1', __('Enero')),
          ('2', __('Febrero')),
          ('3', __('Marzo')),
@@ -110,6 +113,7 @@ class FasciculoForm(FlaskForm):
         validators = [validators.DataRequired()]
     )
     mes_final = SelectField(__('Mes final'), choices=[
+        ('0', __('Elige una opción')),
          ('1', __('Enero')),
          ('2', __('Febrero')),
          ('3', __('Marzo')),

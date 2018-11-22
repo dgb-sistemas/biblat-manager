@@ -11,6 +11,8 @@ from flask import (request,
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
+from biblat_schema.models import Fasciculo
+from flask_mongoengine import Pagination
 
 from . import main
 from biblat_manager.webapp import babel, controllers
@@ -308,3 +310,57 @@ def reset_with_token(token):
 def fasciculos():
     form = FasciculoForm()
     return render_template('forms/fasciculos.html', form=form)
+
+
+@main.route('/fasciculos')
+@main.route('/fasciculos/<int:page>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.fasciculos', __('Fasciculos'))
+@login_required
+def fasciculo_list(page=1):
+    # Listado de documentos de la revista
+    order_by = request.args.get('order_by', None)
+    column_list = {
+        'revista': _('Título de la revista'),
+        'Volumen': _('Volumen'),
+        'anio': _('Año'),
+    }
+    documents = Pagination(Fasciculo.objects.order_by(order_by), page=page, per_page=10)
+    data = {
+        'html_title': 'Biblat Manager - %s' % _('Fasciculos'),
+        'documents': documents,
+        'order_by': order_by,
+        'column_list': column_list
+    }
+    return render_template('forms/listar_fasciculos.html', **data)
+
+
+@main.route('/fasciculos/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.fasciculos.add', __('Agregar revista'))
+@login_required
+def fasciculo_add():
+    # TODO: Registro de información de nueva revista.
+    form = FasciculoForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/fasciculos_add.html', form=form)
+    else:
+        flash(_('La revista ya existe'), 'error')
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
+    return render_template('forms/fasciculos_add.html', form=form)
+
+
+@main.route('/fasciculos/editar')
+@register_breadcrumb(main, '.fasciculos.edit', __('Editar'))
+# @login_required
+def fasciculo_edit():
+    # Edición de documentos de la revista
+    form = FasciculoForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/fasciculos_add.html', form=form)
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+            field.append_entry()
+    return render_template('forms/fasciculos_add.html', form=form)

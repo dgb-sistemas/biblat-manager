@@ -1,0 +1,67 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import bool_formatter, render_navigation %}
+{% block content %}
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs">
+                          <li class="nav-item">
+                            <a class="nav-link active" href="#">{{ _('Listado (%s)' % documents.total) }}</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.fasciculo_add') }}">{{ _('Agregar') }} <i class="fa fa-plus-circle"></i></a>
+                          </li>
+                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover model-list">
+                                <thead>
+                                  <tr>
+                                      <th></th>
+                                      {% for column, column_name in column_list.items() %}
+                                          {% set order_class = 'sorting_asc' if order_by == column else '' %}
+                                          {% set order_class = 'sorting_desc' if order_by and order_by[1:] == column else order_class %}
+                                          {% set column_order = '-{0}'.format(column) if order_class == 'sorting_asc' else column %}
+                                          <th class="sorting {{ order_class }}">
+                                              <a href="{{ url_for('main.list_users', order_by=column_order) }}">
+                                                  {{ column_name }}
+                                              </a>
+                                          </th>
+                                      {% endfor %}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for document in documents.items %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <a class="icon" href="{{ url_for('main.fasciculo_edit', document_id=document.id) }}" title="{{ _('Editar registro') }}" >
+                                                    <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                            </td>
+                                            {% for column in column_list %}
+                                                {% if document[column] | is_bool %}
+                                                    <td class="text-center">{{ bool_formatter(document[column]) }}</td>
+                                                {% else %}
+                                                    <td>{{ document[column] }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{ render_navigation(documents, 'main.fasciculo_list') }}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div><!-- .animated -->
+    </div>
+    <div class="modal fade" id="fa_modal_window" tabindex="-1" role="dialog" aria-labelledby="fa_modal_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+{% endblock %} 
