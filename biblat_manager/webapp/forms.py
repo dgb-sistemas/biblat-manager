@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
@@ -80,20 +82,21 @@ class PasswordForm(FlaskForm):
 
 
 class FasciculoForm(FlaskForm):
+    yr = datetime.now().year + 1
     revista = StringField(__('Revista'), [
         validators.Length(max=150),
         validators.DataRequired()
     ])
     volumen = IntegerField(__('Volumen'), [
-        validators.Length(max=15),
+        validators.NumberRange(min=1, message='El volumen debe ser minimo 1'),
         validators.Optional(),
     ])
     numero = IntegerField(__('Numero'), [
-        validators.Length(max=15),
+        validators.NumberRange(min=1, message='El numero debe ser minimo 1'),
         validators.Optional(),
     ])
     anio = IntegerField(__('Año'), [
-        validators.Length(max=4),
+        validators.NumberRange(max=yr, message='El año debe tener un valor maximo de '+str(yr)),
         validators.DataRequired()
     ])
     mes_inicial = SelectField(__('Mes inicial'), choices=[

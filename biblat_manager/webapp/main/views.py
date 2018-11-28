@@ -304,20 +304,12 @@ def reset_with_token(token):
     return render_template('auth/reset_with_token.html', **data)
 
 
-@main.route('/fasciculos/agregar', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.fasciculos.agregar', __('Agregar fascículo'))
-@login_required
-def fasciculos():
-    form = FasciculoForm()
-    return render_template('forms/fasciculos.html', form=form)
-
-
 @main.route('/fasciculos')
 @main.route('/fasciculos/<int:page>', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.fasciculos', __('Fasciculos'))
 @login_required
 def fasciculo_list(page=1):
-    # Listado de documentos de la revista
+    # Listado de fasciculos
     order_by = request.args.get('order_by', None)
     column_list = {
         'revista': _('Título de la revista'),
@@ -335,16 +327,15 @@ def fasciculo_list(page=1):
 
 
 @main.route('/fasciculos/agregar', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.fasciculos.add', __('Agregar revista'))
+@register_breadcrumb(main, '.fasciculos.add', __('Agregar fasciculo'))
 @login_required
 def fasciculo_add():
-    # TODO: Registro de información de nueva revista.
     form = FasciculoForm()
     if form.validate_on_submit():
         flash(_('Datos correctos'), 'success')
         return render_template('forms/fasciculos_add.html', form=form)
     else:
-        flash(_('La revista ya existe'), 'error')
+        flash(_('El fasiculo ya existe'), 'error')
     for field in form:
         if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
             field.append_entry()
