@@ -37,17 +37,7 @@ def index():
     return render_template('main/index.html', **data)
 
 
-#@main.route('/revistas', methods=['GET', 'POST'])
-#@register_breadcrumb(main, '.revistas', __('Revistas'))
-#@login_required
-#def revistas():
-#    data = {
-#        'html_title': 'Biblat Manager - Revistas'
-#    }
-#    return render_template('main/index.html', **data)
 
-
-# i18n
 @babel.localeselector
 def get_locale():
     langs = current_app.config.get('LANGUAGES')

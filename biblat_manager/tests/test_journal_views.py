@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 
-
 from biblat_schema.models import (
     Revista
 )
@@ -14,7 +13,6 @@ from biblat_manager.webapp import forms
 from biblat_manager.webapp.controllers import create_user
 
 url_pattern = re.compile('href="(.+?)">')
-
 
 
 class JournalTestCase(BaseTestCase):

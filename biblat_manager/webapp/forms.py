@@ -80,7 +80,7 @@ class PasswordForm(FlaskForm):
 
 class RevistaForm(FlaskForm):
     base_datos = SelectField(__('Base de datos'), choices=[
-        ('N', ''),
+        ('', 'Selecciona una opción'),
         ('CLA01', 'CLASE'),
         ('PER01', 'PERIÓDICA')
     ])
@@ -94,33 +94,37 @@ class RevistaForm(FlaskForm):
     ])
     issn = StringField(__('ISSN'), [
         validators.length(max=9),
-        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN")),
+        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+                          message=__("Los datos no corresponden a un ISSN")),
         validators.DataRequired()
     ])
     issn_electronico = StringField(__('ISSN electrónico'), [
         validators.length(max=9),
-        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]', message=__("Los datos no corresponden a un ISSN")),
+        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+                          message=__("Los datos no corresponden a un ISSN")),
         validators.Optional(),
     ])
     pais = SelectField(__('Pais'), [validators.DataRequired()], choices=[
-        ('N',''),
+        ('','Selecciona un país'),
         ('MX','México'),
         ('ARG', 'Argentina'),
         ('CO', 'Colombia'),
         ('PE', 'Peru'),
         ('BR', 'Brasil')
     ])
-    disciplina = SelectField(__('Disciplina'), [validators.DataRequired()], choices=[
-        ('N', ''),
-        ('1' , 'Administracion'),
-        ('2', 'Agrociencias'),
-        ('3', 'Antropologia'),
-        ('4', 'Derecho'),
-        ('5', 'Ingenieria'),
+    disciplina = SelectField(__('Disciplina'),
+                             [validators.DataRequired()],
+                             choices=[
+                                    ('', 'Selecciona una disciplina'),
+                                    ('1' , 'Administracion'),
+                                    ('2', 'Agrociencias'),
+                                    ('3', 'Antropologia'),
+                                    ('4', 'Derecho'),
+                                    ('5', 'Ingenieria'),
     ])
-    """¿Como se va a hacer para jalar los referencedFields?"""
-    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'), [validators.Optional()], choices=[
-        ('N', ''),
+    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'),
+                              [validators.Optional()], choices=[
+        ('', 'Selecciona una licencia'),
         ('CC0','Zero Public Domain, "No Rights Reserved"'),
         ('CC-BY', 'Attribution'),
         ('CC-BY-SA', 'Attribution-ShareAlike'),
@@ -131,30 +135,30 @@ class RevistaForm(FlaskForm):
         ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
     sherpa_romeo = SelectField(__('Sherpa Romeo'), [validators.Optional()], choices=[
-        ('N', ''),
+        ('', 'Selecciona una opción'),
         ('V','Verde'),
         ('A', 'Azul'),
         ('Y', 'Amarillo'),
         ('B', 'Blanco'),
     ])
     idioma = SelectField(__('Idioma'), [validators.Optional()], choices=[
-        ('N', ''),
+        ('', 'Selecciona un idioma'),
         ('ESP','Español'),
         ('US', 'Ingles'),
         ('PG', 'Portugues'),
         ('FR','Frances')
     ])
     periodicidad = SelectField(__('Periodicidad'), [validators.DataRequired()], choices=[
-        ('N', ''),
+        ('', 'Seleccciona una opción'),
         ('M' ,'Mensual'),
         ('B', 'Bimestral'),
         ('T', 'Trimestral'),
     ])
     logo = FileField(__('Logo'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen")),
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imágen")),
         validators.Optional(),
     ])
     portada = FileField(__('Portada'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imagen")),
+        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imágen")),
         validators.Optional(),
     ])
