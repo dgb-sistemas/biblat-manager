@@ -16,7 +16,6 @@ from biblat_manager.webapp.controllers import create_user
 url_pattern = re.compile('href="(.+?)">')
 
 
-
 class FasciculoTestCase(BaseTestCase):
     def test_fasciculo_list_view(self):
         """Test de la vista del listado de fasciculos"""
