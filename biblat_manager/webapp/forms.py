@@ -134,7 +134,8 @@ class RevistaForm(FlaskForm):
         ('CC-BY-ND', 'Attribution-NoDerivs'),
         ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
     ])
-    sherpa_romeo = SelectField(__('Sherpa Romeo'), [validators.Optional()], choices=[
+    sherpa_romeo = SelectField(__('Sherpa Romeo'),
+                               [validators.Optional()], choices=[
         ('', 'Selecciona una opción'),
         ('V','Verde'),
         ('A', 'Azul'),
@@ -148,17 +149,20 @@ class RevistaForm(FlaskForm):
         ('PG', 'Portugues'),
         ('FR','Frances')
     ])
-    periodicidad = SelectField(__('Periodicidad'), [validators.DataRequired()], choices=[
+    periodicidad = SelectField(__('Periodicidad'),
+                               [validators.DataRequired()], choices=[
         ('', 'Seleccciona una opción'),
         ('M' ,'Mensual'),
         ('B', 'Bimestral'),
         ('T', 'Trimestral'),
     ])
     logo = FileField(__('Logo'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imágen")),
+        validators.Regexp('\w+(\.jpg)$',
+                          message=__("El archivo no es una imágen")),
         validators.Optional(),
     ])
     portada = FileField(__('Portada'), [
-        validators.Regexp('\w+(\.jpg)$', message=__("El archivo no es una imágen")),
+        validators.Regexp('\w+(\.jpg)$',
+                          message=__("El archivo no es una imágen")),
         validators.Optional(),
     ])
