@@ -83,7 +83,7 @@ class PasswordForm(FlaskForm):
 class FasciculoForm(FlaskForm):
     def calc_yr(self, n):
         return lambda a: a + n
-    anio_actual = calc_yr(1)
+    anio_actual = calc_yr(1,1)
     revista = StringField(__('Revista'), [
         validators.Length(max=150),
         validators.DataRequired()
