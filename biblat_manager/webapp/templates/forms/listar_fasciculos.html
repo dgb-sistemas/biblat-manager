@@ -12,7 +12,8 @@
                             <a class="nav-link active" href="#">{{ _('Listado (%s)' % documents.total) }}</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.fasciculo_add') }}">{{ _('Agregar') }} <i class="fa fa-plus-circle"></i></a>
+                            <a class="nav-link" href="{{ url_for('main.fasciculo_add') }}">{{ _('Agregar') }}
+                                <i class="fa fa-plus-circle"></i></a>
                           </li>
                         </ul>
                         <div class="table-responsive">
@@ -22,8 +23,11 @@
                                       <th></th>
                                       {% for column, column_name in column_list.items() %}
                                           {% set order_class = 'sorting_asc' if order_by == column else '' %}
-                                          {% set order_class = 'sorting_desc' if order_by and order_by[1:] == column else order_class %}
-                                          {% set column_order = '-{0}'.format(column) if order_class == 'sorting_asc' else column %}
+                                          {% set order_class = 'sorting_desc'
+                                               if order_by and order_by[1:] == column
+                                               else order_class %}
+                                          {% set column_order = '-{0}'.format(column) if order_class == 'sorting_asc'
+                                                else column %}
                                           <th class="sorting {{ order_class }}">
                                               <a href="{{ url_for('main.list_users', order_by=column_order) }}">
                                                   {{ column_name }}

@@ -229,12 +229,13 @@ def user_add():
 
 @main.route('/user/confirm/<token>')
 def confirm_email(token):
+    email = ""
     try:
         ts = get_timed_serializer()
         email = ts.loads(token,
                          salt=current_app.config.get('TOKEN_EMAIL_SALT'),
                          max_age=current_app.config.get('TOKEN_MAX_AGE'))
-    except Exception:  # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
+    except Exception:
         abort(404)
 
     user = User.get_by_email(email)
@@ -278,6 +279,7 @@ def reset():
 
 @main.route('/reset/password/<token>', methods=['GET', 'POST'])
 def reset_with_token(token):
+    email = ""
     try:
         ts = get_timed_serializer()
         email = ts.loads(token,
@@ -306,19 +308,19 @@ def reset_with_token(token):
 
 @main.route('/fasciculos')
 @main.route('/fasciculos/<int:page>', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.fasciculos', __('Fasciculos'))
+@register_breadcrumb(main, '.fasciculos', __('Fascículos'))
 @login_required
 def fasciculo_list(page=1):
-    # Listado de fasciculos
     order_by = request.args.get('order_by', None)
     column_list = {
         'revista': _('Título de la revista'),
         'Volumen': _('Volumen'),
         'anio': _('Año'),
     }
-    documents = Pagination(Fasciculo.objects.order_by(order_by), page=page, per_page=10)
+    documents = Pagination(Fasciculo.objects.order_by(order_by), page=page,
+                           per_page=10)
     data = {
-        'html_title': 'Biblat Manager - %s' % _('Fasciculos'),
+        'html_title': 'Biblat Manager - %s' % _('Fascículos'),
         'documents': documents,
         'order_by': order_by,
         'column_list': column_list
@@ -327,7 +329,7 @@ def fasciculo_list(page=1):
 
 
 @main.route('/fasciculos/agregar', methods=['GET', 'POST'])
-@register_breadcrumb(main, '.fasciculos.add', __('Agregar fasciculo'))
+@register_breadcrumb(main, '.fasciculos.add', __('Agregar fascículo'))
 @login_required
 def fasciculo_add():
     form = FasciculoForm()
@@ -335,23 +337,23 @@ def fasciculo_add():
         flash(_('Datos correctos'), 'success')
         return render_template('forms/fasciculos_add.html', form=form)
     else:
-        flash(_('El fasiculo ya existe'), 'error')
+        flash(_('El fascículo ya existe'), 'error')
     for field in form:
-        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
             field.append_entry()
     return render_template('forms/fasciculos_add.html', form=form)
 
 
 @main.route('/fasciculos/editar')
 @register_breadcrumb(main, '.fasciculos.edit', __('Editar'))
-# @login_required
 def fasciculo_edit():
-    # Edición de documentos de la revista
     form = FasciculoForm()
     if form.validate_on_submit():
         flash(_('Datos correctos'), 'success')
         return render_template('forms/fasciculos_add.html', form=form)
     for field in form:
-        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
             field.append_entry()
     return render_template('forms/fasciculos_add.html', form=form)

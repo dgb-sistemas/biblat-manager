@@ -18,7 +18,7 @@ url_pattern = re.compile('href="(.+?)">')
 
 class FasciculoTestCase(BaseTestCase):
     def test_fasciculo_list_view(self):
-        """Test de la vista del listado de fasciculos"""
+        """Test de la vista del listado de fascículos"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
             'password': 'F00barbaz$',
@@ -40,7 +40,7 @@ class FasciculoTestCase(BaseTestCase):
                 self.assertTemplateUsed('forms/listar_fasciculos.html')
 
     def test_fasciculo_add_view(self):
-        """Test de la vista para agregar fasciculo"""
+        """Test de la vista para agregar fascículo"""
         user_data = {
             'email': 'admin@biblat.unam.mx',
             'password': 'F00barbaz$',
