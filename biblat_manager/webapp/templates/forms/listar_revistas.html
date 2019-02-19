@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs">
                           <li class="nav-item">
-                            <a class="nav-link active" href="#">{{ _('Listado (%s)' % documents.total) }}</a>
+                            <a class="nav-link active" href="#">{{ _('Listado (%s)' % journals.total) }}</a>
                           </li>
                           <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.revista_add') }}">{{ _('Agregar') }} <i class="fa fa-plus-circle"></i></a>
@@ -34,18 +34,18 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                    {% for document in documents.items %}
+                                    {% for journal in journals.items %}
                                         <tr>
                                             <td class="text-center">
-                                                <a class="icon" href="{{ url_for('main.revista_edit', document_id=document.id) }}" title="{{ _('Editar registro') }}" >
+                                                <a class="icon" href="{{ url_for('main.revista_edit', journal_id=journal.id) }}" title="{{ _('Editar registro') }}" >
                                                     <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
                                                 </a>
                                             </td>
                                             {% for column in column_list %}
-                                                {% if document[column] | is_bool %}
-                                                    <td class="text-center">{{ bool_formatter(document[column]) }}</td>
+                                                {% if journal[column] | is_bool %}
+                                                    <td class="text-center">{{ bool_formatter(journal[column]) }}</td>
                                                 {% else %}
-                                                    <td>{{ document[column] }}</td>
+                                                    <td>{{ journal[column] }}</td>
                                                 {% endif %}
                                             {% endfor %}
                                         </tr>
@@ -53,7 +53,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {{ render_navigation(documents, 'main.revista_list') }}
+                        {{ render_navigation(journals, 'main.revista_list') }}
                     </div>
 
                 </div>

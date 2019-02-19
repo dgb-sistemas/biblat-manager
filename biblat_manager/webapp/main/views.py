@@ -307,10 +307,10 @@ def revista_list(page=1):
         'fecha_creacion': _('Fecha de creación'),
         'fecha_actualizacion': _('Fecha de actualización'),
     }
-    documents = Pagination(Revista.objects.order_by(order_by), page=page, per_page=10)
+    journals = Pagination(Revista.objects.order_by(order_by), page=page, per_page=10)
     data = {
         'html_title': 'Biblat Manager - %s' % _('Revistas'),
-        'documents': documents,
+        'journals': journals,
         'order_by': order_by,
         'column_list': column_list
     }

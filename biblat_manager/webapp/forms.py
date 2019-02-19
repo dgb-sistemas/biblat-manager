@@ -94,13 +94,13 @@ class RevistaForm(FlaskForm):
     ])
     issn = StringField(__('ISSN'), [
         validators.length(max=9),
-        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
-                          message=__("Los datos no corresponden a un ISSN")),
-        validators.DataRequired()
+        validators.DataRequired(),
+        validators.Regexp('[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+                          message=__("Los datos no corresponden a un ISSN"))
     ])
     issn_electronico = StringField(__('ISSN electrónico'), [
         validators.length(max=9),
-        validators.Regexp('^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+        validators.Regexp('[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
                           message=__("Los datos no corresponden a un ISSN")),
         validators.Optional(),
     ])
