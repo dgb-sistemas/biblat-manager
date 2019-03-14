@@ -69,6 +69,7 @@ class LoginForm(FlaskForm):
 class EmailForm(FlaskForm):
     email = StringField(__('Email'), validators=[
         validators.required(),
+        validators.Length(max=79),
         validators.email(__('Correo electrónico inválido!'))])
 
 
@@ -107,11 +108,21 @@ class AutorCorporativoForm(NoCsrfForm):
     dependencia = StringField(__('Dependencia'), validators=[
         validators.Length(max=100)
     ])
-    pais = SelectField('Pais', choices=[('',''),('MX', 'México'), ('CO', 'Colombia'), ('BR', 'Brasil'), ('AR', 'Argentina')])
+    pais = SelectField('Pais', choices=[('', ''),
+                                        ('MX', 'México'),
+                                        ('CO', 'Colombia'),
+                                        ('BR', 'Brasil'),
+                                        ('AR', 'Argentina')]
+                       )
 
 
 class ResumenForm(NoCsrfForm):
-    idioma = SelectField('Idioma', choices=[('',''), ('spa', 'Español'), ('eng', 'Inglés'), ('por', 'Portugués'), ('deu', 'Alemán')])
+    idioma = SelectField('Idioma', choices=[('', ''),
+                                            ('spa', 'Español'),
+                                            ('eng', 'Inglés'),
+                                            ('por', 'Portugués'),
+                                            ('deu', 'Alemán')]
+                         )
     resumen = TextAreaField(__('Resumen'), validators=[
         validators.Length(max=900)
     ])
@@ -121,18 +132,29 @@ class DisciplinaForm(NoCsrfForm):
     disciplina = SelectField(__('Disciplina'), validators=[
         validators.DataRequired()
     ],
-        choices=[('',''), ('1', 'Administración y contaduría'), ('2', 'Agrociencias'), ('3', 'Bibliotecología y ciencia de la información'), ('4','Biología'), ('5','Economía')
-    ])
+        choices=[('', ''),
+                 ('1', 'Administración y contaduría'),
+                 ('2', 'Agrociencias'),
+                 ('3', 'Bibliotecología y ciencia de la información'),
+                 ('4', 'Biología'),
+                 ('5', 'Economía')])
 
 
 class SubdisciplinaForm(NoCsrfForm):
-    subdisciplinas = SelectField('Subdisciplina',
-        choices=[('', ''), ('1', 'Administración de instituciones'), ('2', 'Administración de la producción'), ('3', 'Fertilización'), ('4','Fitotecnia'), ('5','Análisis y sistematización de la información')
-    ])
+    subdisciplinas = SelectField('Subdisciplina', choices=[
+                             ('', ''),
+                             ('1', 'Administración de instituciones'),
+                             ('2', 'Administración de la producción'),
+                             ('3', 'Fertilización'),
+                             ('4', 'Fitotecnia'),
+                             ('5', 'Análisis y sistematización de la'
+                                   'información')])
 
 
 class PalabraClaveForm(NoCsrfForm):
-    idioma = SelectField('Idioma', choices=[('',''), ('spa', 'Español'), ('eng', 'Inglés')], validators=[
+    idioma = SelectField('Idioma', choices=[('', ''),
+                                            ('spa', 'Español'),
+                                            ('eng', 'Inglés')], validators=[
         validators.DataRequired()
     ])
     palabra_clave = StringField(__('Palabra Clave'), validators=[
@@ -143,8 +165,12 @@ class PalabraClaveForm(NoCsrfForm):
 
 class NombreGeograficoForm(NoCsrfForm):
     nombres_geograficos = SelectField('Nombres geográficos',
-        choices=[('', ''), ('1', 'América'), ('2', 'Asia Central'), ('3', 'Corea del Norte'), ('4','Mesoamérica'), ('5','Vietnam')
-    ])
+                                      choices=[('', ''),
+                                               ('1', 'América'),
+                                               ('2', 'Asia Central'),
+                                               ('3', 'Corea del Norte'),
+                                               ('4', 'Mesoamérica'),
+                                               ('5', 'Vietnam')])
 
 
 class DocumentEditForm(FlaskForm):
@@ -166,42 +192,55 @@ class DocumentEditForm(FlaskForm):
     referencias = BooleanField(__('Referencias'))
     idioma = FieldList(SelectField(__('Idioma'), [
         validators.DataRequired()
-        ], choices=[('',''),('es', 'Español'), ('en', 'Inglés')]),
+        ], choices=[('', ''),
+                    ('es', 'Español'),
+                    ('en', 'Inglés')]),
         label=__('Agregar idiomas'), min_entries=1)
     autores = FieldList(FormField(AutorForm),
-        label=__('Agregar autores'),
-        min_entries=1)
+                        label=__('Agregar autores'),
+                        min_entries=1)
     autor_corporativo = FieldList(FormField(AutorCorporativoForm),
-        label=__('Agregar autores corporativos'),
-        min_entries=0)
+                                  label=__('Agregar autores corporativos'),
+                                  min_entries=0)
     resumen = FieldList(FormField(ResumenForm),
-        label=__('Agregar resumen'),
-        min_entries=0)
+                        label=__('Agregar resumen'),
+                        min_entries=0)
     tipo_documento = SelectField('Tipo de documento', validators=[
         validators.DataRequired()
-    ], choices=[('', ''), ('1', 'Artículo'), ('2', 'Conferencia o discurso'), ('3', 'Entrevista')])
+    ], choices=[('', ''),
+                ('1', 'Artículo'),
+                ('2', 'Conferencia o discurso'),
+                ('3', 'Entrevista')
+                ])
     enfoque_documento = SelectField('Enfoque', validators=[
         validators.DataRequired()
-    ], choices=[('',''), ('1', 'Analítico'), ('2', 'Descriptivo'), ('3', 'Experimental')])
+    ], choices=[('', ''),
+                ('1', 'Analítico'),
+                ('2', 'Descriptivo'),
+                ('3', 'Experimental')])
     disciplina = FieldList(FormField(DisciplinaForm),
-        label=__('Agregar disciplina'),
-        min_entries=1)
+                           label=__('Agregar disciplina'),
+                           min_entries=1)
     subdisciplinas = FieldList(FormField(SubdisciplinaForm),
-        label=__('Agregar subdisciplina'),
-        min_entries=1)
+                               label=__('Agregar subdisciplina'),
+                               min_entries=1)
     palabra_clave = FieldList(FormField(PalabraClaveForm),
-        label=__('Agregar palabra clave'),
-        min_entries=1)
+                              label=__('Agregar palabra clave'),
+                              min_entries=1)
     nombres_geograficos = FieldList(FormField(NombreGeograficoForm),
-        label=__('Agregar nombre geográfico'),
-        min_entries=1)
+                                    label=__('Agregar nombre geográfico'),
+                                    min_entries=1)
     texto_completo = StringField(__('Texto Completo'), [
         validators.Length(max=256),
         validators.URL(message='URL inválido'),
         validators.optional()
     ])
-    fecha_recepcion = DateField('fecha_recepcion', format='%Y-%m-%d', validators=(validators.Optional(),))
-    fecha_aceptacion = DateField('fecha_aceptacion', format='%Y-%m-%d', validators=(validators.Optional(),))
+    fecha_recepcion = DateField('fecha_recepcion',
+                                format='%Y-%m-%d',
+                                validators=(validators.Optional(), ))
+    fecha_aceptacion = DateField('fecha_aceptacion',
+                                 format='%Y-%m-%d',
+                                 validators=(validators.Optional(),))
 
 
 class DocumentRegistrationForm(DocumentEditForm):

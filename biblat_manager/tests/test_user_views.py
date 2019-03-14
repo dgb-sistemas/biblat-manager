@@ -268,7 +268,8 @@ class UserTestCase(BaseTestCase):
         reset_url = url_for('main.reset')
         expected_error_msg = 'Ocurrió un problema al enviar el correo con ' \
                              'las instrucciones de recuperación de ' \
-                             'contraseña a la dirección: %s' % user_data['email']
+                             'contraseña a la dirección: %s'\
+                             % user_data['email']
         with current_app.app_context():
             with self.client as c:
                 with patch('biblat_manager.webapp.utils'
@@ -530,7 +531,8 @@ class UserTestCase(BaseTestCase):
                 self.assertIn(expected_msg,
                               response.data.decode('utf-8'))
                 updated_user = User.get_by_id(user.id)
-                self.assertEqual(user_data_update['username'], updated_user.username)
+                self.assertEqual(user_data_update['username'],
+                                 updated_user.username)
 
     def test_user_edit_update_email(self):
         """Test para actualizar un usuario"""
@@ -621,7 +623,8 @@ class UserTestCase(BaseTestCase):
                     self.assertIn(expected_error_msg,
                                   response.data.decode('utf-8'))
                     updated_user = User.get_by_id(user.id)
-                    self.assertEqual(user_data_update['email'], updated_user.email)
+                    self.assertEqual(user_data_update['email'],
+                                     updated_user.email)
 
     def test_user_edit_update_raise_value_error(self):
         """Test para actualizar un usuario"""
@@ -637,7 +640,8 @@ class UserTestCase(BaseTestCase):
             with self.client as c:
                 with patch('biblat_manager.webapp.models.User'
                            '.send_confirmation_email') as mock:
-                    mock.side_effect = ValueError('recipient_email es inválido!')
+                    mock.side_effect = ValueError('recipient_email '
+                                                  'es inválido!')
                     # login de usuario
                     c.post(
                         login_url,
@@ -670,7 +674,8 @@ class UserTestCase(BaseTestCase):
                     self.assertIn(expected_error_msg,
                                   response.data.decode('utf-8'))
                     updated_user = User.get_by_id(user.id)
-                    self.assertEqual(user_data_update['email'], updated_user.email)
+                    self.assertEqual(user_data_update['email'],
+                                     updated_user.email)
 
     def test_user_edit_duplicated_email(self):
         """Test para registro de un usuario"""
@@ -760,7 +765,8 @@ class UserTestCase(BaseTestCase):
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
         user_add_url = (url_for('main.user_add'))
-        expected_msg = 'Se envío un correo de confirmación a: %s' % new_user_data['email']
+        expected_msg = 'Se envío un correo de confirmación a: %s' \
+                       % new_user_data['email']
         with current_app.app_context():
             with self.client as c:
                 # login de usuario
@@ -799,8 +805,8 @@ class UserTestCase(BaseTestCase):
         create_user(user_data['email'], user_data['password'], True)
         login_url = url_for('main.login')
         user_add_url = (url_for('main.user_add'))
-        expected_error_msg = 'La contraseña es muy corta, la longitud mínima ' \
-                             'es de 8 caracteres'
+        expected_error_msg = 'La contraseña es muy corta, la longitud ' \
+                             'mínima es de 8 caracteres'
         with current_app.app_context():
             with self.client as c:
                 # login de usuario
@@ -923,13 +929,13 @@ class UserTestCase(BaseTestCase):
             with self.client as c:
                 with patch('biblat_manager.webapp.models.User'
                            '.send_confirmation_email') as mock:
-                    mock.side_effect = ValueError('recipient_email es inválido!')
+                    mock.side_effect = ValueError('recipient_email '
+                                                  'es inválido!')
                     # login de usuario
                     c.post(
                         login_url,
                         data=user_data,
                         follow_redirects=True)
-
                     # registro de usuario
                     response = c.post(
                         user_add_url,

@@ -18,7 +18,8 @@ from flask_mongoengine import Pagination
 from . import main
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentEditForm, DocumentRegistrationForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm,
+    DocumentEditForm, DocumentRegistrationForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -235,7 +236,8 @@ def confirm_email(token):
         email = ts.loads(token,
                          salt=current_app.config.get('TOKEN_EMAIL_SALT'),
                          max_age=current_app.config.get('TOKEN_MAX_AGE'))
-    except Exception:  # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
+    # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
+    except Exception:
         abort(404)
 
     user = User.get_by_email(email)
@@ -243,7 +245,8 @@ def confirm_email(token):
         abort(404, _('Usuario no encontrado'))
 
     controllers.set_user_email_confirmed(user)
-    flash(_('Email: %(email)s confirmado com éxito!', email=user.email), 'success')
+    flash(_('Email: %(email)s confirmado com éxito!',
+            email=user.email), 'success')
     return redirect(url_for('.index'))
 
 
@@ -319,7 +322,8 @@ def document_list(page=1):
         'fecha_creacion': _('Fecha de creación'),
         'fecha_actualizacion': _('Fecha de actualización'),
     }
-    documents = Pagination(Documento.objects.order_by(order_by), page=page, per_page=10)
+    documents = Pagination(Documento.objects.order_by(order_by),
+                           page=page, per_page=10)
     data = {
         'html_title': 'Biblat Manager - %s' % _('Documentos'),
         'documents': documents,
@@ -349,11 +353,11 @@ def document_detail(document_id):
 def document_add():
     # Registro de documentos de la revista
     form = DocumentRegistrationForm()
-    respuesta = request.values
     if form.validate_on_submit():
         flash(_('Datos correctos'), 'success')
     for field in form:
-        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
             field.append_entry()
     return render_template('documents/agregar.html', form=form)
 
@@ -368,7 +372,7 @@ def document_edit():
         flash(_('Datos correctos'), 'success')
         return render_template('documents/agregar.html', form=form)
     for field in form:
-        if field.type == 'FieldList' and field.min_entries == 0 and len(field) == 0:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
             field.append_entry()
     return render_template('documents/agregar.html', form=form)
-
