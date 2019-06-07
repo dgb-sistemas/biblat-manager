@@ -86,6 +86,14 @@ class PasswordForm(FlaskForm):
 
 
 # Documento
+class Idiomas(NoCsrfForm):
+    idioma = SelectField('Idioma', choices=[('', ''),
+                                            ('spa', 'Español'),
+                                            ('eng', 'Inglés')], validators=[
+        validators.DataRequired()
+    ])
+
+
 class AutorForm(NoCsrfForm):
     nombre = StringField(__('Nombre'), validators=[
         validators.DataRequired(),
@@ -151,12 +159,7 @@ class SubdisciplinaForm(NoCsrfForm):
                                    'información')])
 
 
-class PalabraClaveForm(NoCsrfForm):
-    idioma = SelectField('Idioma', choices=[('', ''),
-                                            ('spa', 'Español'),
-                                            ('eng', 'Inglés')], validators=[
-        validators.DataRequired()
-    ])
+class PalabraClaveForm(Idiomas):
     palabra_clave = StringField(__('Palabra Clave'), validators=[
         validators.Length(max=100),
         validators.DataRequired()
@@ -190,12 +193,9 @@ class DocumentEditForm(FlaskForm):
         validators.DataRequired()
     ])
     referencias = BooleanField(__('Referencias'))
-    idioma = FieldList(SelectField(__('Idioma'), [
-        validators.DataRequired()
-        ], choices=[('', ''),
-                    ('es', 'Español'),
-                    ('en', 'Inglés')]),
-        label=__('Agregar idiomas'), min_entries=1)
+    idioma = FieldList(FormField(Idiomas),
+                       label=__('Agregar idiomas'),
+                       min_entries=1)
     autores = FieldList(FormField(AutorForm),
                         label=__('Agregar autores'),
                         min_entries=1)
