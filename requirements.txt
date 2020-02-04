@@ -4,7 +4,7 @@ click==6.7
 coverage==5.0.3
 gunicorn==19.9.0
 itsdangerous==0.24
-mock==2.0.0
+mock==3.0.5
 mongoengine==0.15.3
 mongomock==3.19.0
 passlib==1.7.1
