@@ -2,7 +2,7 @@ bcrypt==3.1.7
 blinker==1.4
 click==6.7
 coverage==5.0.3
-gunicorn==19.9.0
+gunicorn==20.0.4
 itsdangerous==0.24
 mock==3.0.5
 mongoengine==0.19.1
