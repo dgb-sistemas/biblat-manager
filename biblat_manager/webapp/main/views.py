@@ -11,11 +11,13 @@ from flask import (request,
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
+from biblat_schema.models import Fasciculo
+from flask_mongoengine import Pagination
 
 from . import main
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, FasciculoForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -227,12 +229,13 @@ def user_add():
 
 @main.route('/user/confirm/<token>')
 def confirm_email(token):
+    email = ""
     try:
         ts = get_timed_serializer()
         email = ts.loads(token,
                          salt=current_app.config.get('TOKEN_EMAIL_SALT'),
                          max_age=current_app.config.get('TOKEN_MAX_AGE'))
-    except Exception:  # posibles exepciones: https://pythonhosted.org/itsdangerous/#exceptions
+    except Exception:
         abort(404)
 
     user = User.get_by_email(email)
@@ -276,6 +279,7 @@ def reset():
 
 @main.route('/reset/password/<token>', methods=['GET', 'POST'])
 def reset_with_token(token):
+    email = ""
     try:
         ts = get_timed_serializer()
         email = ts.loads(token,
@@ -301,3 +305,55 @@ def reset_with_token(token):
     }
     return render_template('auth/reset_with_token.html', **data)
 
+
+@main.route('/fasciculos')
+@main.route('/fasciculos/<int:page>', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.fasciculos', __('Fascículos'))
+@login_required
+def fasciculo_list(page=1):
+    order_by = request.args.get('order_by', None)
+    column_list = {
+        'revista': _('Título de la revista'),
+        'Volumen': _('Volumen'),
+        'anio': _('Año'),
+    }
+    documents = Pagination(Fasciculo.objects.order_by(order_by), page=page,
+                           per_page=10)
+    data = {
+        'html_title': 'Biblat Manager - %s' % _('Fascículos'),
+        'documents': documents,
+        'order_by': order_by,
+        'column_list': column_list
+    }
+    return render_template('forms/listar_fasciculos.html', **data)
+
+
+@main.route('/fasciculos/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.fasciculos.add', __('Agregar fascículo'))
+@login_required
+def fasciculo_add():
+    form = FasciculoForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/fasciculos_add.html', form=form)
+    else:
+        flash(_('El fascículo ya existe'), 'error')
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
+            field.append_entry()
+    return render_template('forms/fasciculos_add.html', form=form)
+
+
+@main.route('/fasciculos/editar')
+@register_breadcrumb(main, '.fasciculos.edit', __('Editar'))
+def fasciculo_edit():
+    form = FasciculoForm()
+    if form.validate_on_submit():
+        flash(_('Datos correctos'), 'success')
+        return render_template('forms/fasciculos_add.html', form=form)
+    for field in form:
+        if field.type == 'FieldList' and field.min_entries == 0 \
+                and len(field) == 0:
+            field.append_entry()
+    return render_template('forms/fasciculos_add.html', form=form)

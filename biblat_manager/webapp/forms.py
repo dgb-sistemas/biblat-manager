@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from flask_babelex import lazy_gettext as __
 from flask_wtf import FlaskForm
 import safe
@@ -7,13 +9,15 @@ from wtforms import (
     PasswordField,
     BooleanField,
     validators,
-    ValidationError)
+    ValidationError,
+    IntegerField,
+    SelectField)
 
 
 def check_secure_password(form, field):
     strength = safe.check(field.data)
     messages = {
-        'password is too short': __('La contraseña es muy corta, la longitud '
+        'password is too short': __('La contraseña es muy corta, la longitud'
                                     'mínima es de 8 caracteres'),
         'password has a pattern': __('La contraseña es un patrón'),
         'password is too common': __('La contraseña es muy común'),
@@ -74,3 +78,68 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+
+class FasciculoForm(FlaskForm):
+    def calc_yr(self, n):
+        return lambda a: a + n
+
+    anio_actual = calc_yr(1, 1)
+
+    revista = StringField(__('Revista'), [
+        validators.Length(max=150),
+        validators.DataRequired()
+    ])
+    volumen = IntegerField(__('Volumen'), [
+        validators.NumberRange(min=1, message=__
+        ('El valor de volumen mínimo es uno')),
+        validators.Optional(),
+    ])
+    numero = IntegerField(__('Número'), [
+        validators.NumberRange(min=1, message=__
+        ('El valor del número mínimo es uno')),
+        validators.Optional(),
+    ])
+    anio = IntegerField(__('Año'), [
+        validators.NumberRange(max=anio_actual(datetime.now().year),
+                               message=__
+                               ('El valor máximo para el año es de {}')
+                               .format(anio_actual(datetime.now().year))),
+        validators.DataRequired()
+    ])
+    mes_inicial = SelectField(__('Mes inicial'), choices=[
+        ('0', __('Elige una opción')),
+        ('1', __('Enero')),
+        ('2', __('Febrero')),
+        ('3', __('Marzo')),
+        ('4', __('Abril')),
+        ('5', __('Mayo')),
+        ('6', __('Junio')),
+        ('7', __('Julio')),
+        ('8', __('Agosto')),
+        ('9', __('Septiembre')),
+        ('10', __('Octubre')),
+        ('11', __('Noviembre')),
+        ('12', __('Diciembre'))],
+        validators=[validators.DataRequired()]
+    )
+    mes_final = SelectField(__('Mes final'), choices=[
+        ('0', __('Elige una opción')),
+        ('1', __('Enero')),
+        ('2', __('Febrero')),
+        ('3', __('Marzo')),
+        ('4', __('Abril')),
+        ('5', __('Mayo')),
+        ('6', __('Junio')),
+        ('7', __('Julio')),
+        ('8', __('Agosto')),
+        ('9', __('Septiembre')),
+        ('10', __('Octubre')),
+        ('11', __('Noviembre')),
+        ('12', __('Diciembre'))],
+        validators=[validators.DataRequired()]
+    )
+    parte = StringField(__('Parte'), [
+        validators.Length(max=100),
+        validators.DataRequired()
+    ])
