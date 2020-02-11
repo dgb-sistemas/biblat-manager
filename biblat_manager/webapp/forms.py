@@ -8,6 +8,7 @@ from wtforms import (
     BooleanField,
     SelectField,
     TextAreaField,
+    FileField,
     validators,
     ValidationError)
 
@@ -136,3 +137,175 @@ class RevistaRegistrationForm(FlaskForm):
     acerca = TextAreaField(__('Sobre la revista'), [
         validators.optional(), validators.length(max=200)
     ], default="Misión, visión, etc...")
+
+
+class FasciculoRegistrationForm(FlaskForm):
+    anio = StringField(__('Año*'), [
+        validators.Length(min=1, max=4),
+        validators.DataRequired()
+    ])
+
+    volumen = StringField(__('Volumen'), [
+        validators.Length(min=1, max=3),
+        validators.optional()
+    ])
+
+    numero = StringField(__('Número'), [
+        validators.Length(min=1, max=3),
+        validators.optional()
+    ])
+
+    mes_inicial = SelectField(__('Mes inicial'), [
+        validators.DataRequired()
+    ], choices=[('01', 'ENERO'),
+                ('02', 'FEBRERO')]
+                     )
+
+    mes_final = SelectField(__('Mes final'), [
+        validators.DataRequired()
+    ], choices=[('02', 'FEBRERO'),
+                ('03', 'MARZO')]
+                              )
+
+
+class DocumentoRegistrationForm(FlaskForm):
+    titulo = StringField(__('Título del documento (245a)*'), [
+        validators.Length(min=1, max=100),
+        validators.DataRequired()
+    ])
+
+    doi = StringField(__('DOI (036a)'), [
+        validators.Length(min=1, max=100),
+        validators.optional()
+    ])
+
+    publicacion = StringField(__('Publicación (036a)*'), [
+        validators.Length(min=1, max=100),
+        validators.DataRequired()
+    ])
+
+    idioma = SelectField(__('Idioma*'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Inglés'),
+                ('2', 'Español')]
+                              )
+
+    paginacion = StringField(__('Paginación (300e)*'), [
+        validators.Length(min=1, max=50),
+        validators.DataRequired()
+    ])
+
+    nombre = StringField(__('Nombre (100a)'), [
+        validators.Length(min=1, max=100),
+        validators.optional()
+    ])
+
+    correo = StringField(__('Correo (1006)'), [
+        validators.Length(min=1, max=100),
+        validators.optional()
+    ])
+
+    orcid = StringField(__('ORCID'), [
+        validators.Length(min=1, max=100),
+        validators.optional()
+    ])
+
+    afiliacion = SelectField(__('Afiliación (100z)'), [
+        validators.DataRequired()
+    ], choices=[('1', '1. Univerdidad de la Habana'),
+                ('2', '2. UNAM')]
+                             )
+
+    pais = SelectField(__('País (120x)'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Cuba'),
+                ('2', 'Argentina'),
+                ('3', 'Brasil'),
+                ('4', 'México')]
+                             )
+
+    ciudad = SelectField(__('Ciudad (120w)'), [
+        validators.DataRequired()
+    ], choices=[('1', 'La Habana'),
+                ('2', 'Cienfuegos'),
+                ('3', 'Trinidad')]
+                       )
+
+    institucion = SelectField(__('Institución (120u)'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Universidad de la Habana'),
+                ('2', 'Universidad de las Ciencias Informáticas'),
+                ('3', 'Universidad de Matanzas')]
+                         )
+
+    dependencia = SelectField(__('Dependencia (120v)'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Facultad de Física'),
+                ('2', 'Facultad de Ingeniería'),
+                ('3', 'Facultad de Medicina')]
+                              )
+
+    idioma_resumen = SelectField('', [
+        validators.DataRequired()
+    ], choices=[('1', 'Inglés'),
+                ('2', 'Español')]
+                         )
+
+    resumen = TextAreaField('', [
+        validators.optional(), validators.length(max=200)
+    ], default="Texto del resumen")
+
+    idioma_palabra = SelectField('', [
+        validators.DataRequired()
+    ], choices=[('1', 'Inglés'),
+                ('2', 'Español')]
+                                 )
+
+    palabra = StringField('', [
+        validators.optional(), validators.length(max=100)
+    ])
+
+    idioma_palabras = SelectField('', [
+        validators.DataRequired()
+    ], choices=[('1', 'Inglés'),
+                ('2', 'Español')]
+                                 )
+
+    palabras = StringField('', [
+        validators.optional(), validators.length(max=100)
+    ])
+
+    tipo_documento = SelectField(__('Tipo de documento (590)'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Artículo'),
+                ('2', 'Reseña del libro')]
+                              )
+
+    tipo_documentob = SelectField('&nbsp;', [
+        validators.DataRequired()
+    ], choices=[('1', 'Analítico, teórico'),
+                ('2', 'Analítico, crítico'),
+                ('3', 'Divulgación')]
+                                  )
+
+    disciplina = StringField(__('Disciplina (650a)*'), [
+        validators.DataRequired(), validators.length(max=100)
+    ])
+
+    texto_completo_select = SelectField(__('Texto completo (856u)*'), [
+        validators.DataRequired()
+    ], choices=[('1', 'URL')]
+                                        )
+
+    texto_completo_text = StringField('', [
+        validators.DataRequired(), validators.length(max=100)
+    ])
+
+    archivo_select = SelectField(__('Texto completo (856u)*'), [
+        validators.DataRequired()
+    ], choices=[('1', 'Archivo')]
+                                 )
+
+    archivo = FileField(__(''), [
+        validators.DataRequired()
+    ])
