@@ -60,3 +60,53 @@
       </ul>
     </nav>
 {% endmacro %}
+
+{% macro render_field_select(field, showlabel) %}
+    {% set showlabel = showlabel|default(true) %}
+    <div class="form-group">
+        {% if showlabel or showlabel == None %}
+            <label>{{ field.label }}</label>
+        {% endif %}
+        {{ field(**kwargs)|safe }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_field_ta(field, showlabel) %}
+    {% set showlabel = showlabel|default(true) %}
+    <div class="form-group">
+        {% if showlabel %}
+            <label>{{ field.label }}</label>
+        {% endif %}
+        {{ field(**kwargs)|safe }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_field_select_text(field_select, field_text) %}
+    <div class="form-group">
+        <label>{{ field_select.label }}</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                {{ field_select(**kwargs)|safe }}
+            </div>
+            {{ field_text(**kwargs)|safe }}
+        </div>
+        {% if field_select.errors or field_text.errors %}
+            {% for error in field_select.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% for error in field_text.errors %}
+                <small class="help-block form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}

@@ -1,0 +1,118 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import render_field_icon, render_field_select, render_field_ta, render_field_select_text%}
+{% block content %}
+    <div class="col-lg-6">
+        <div class="card">
+          {% include "top_nav.html" %}
+          <div class="card-header">{{ _('Registro de documento') }}</div>
+          <div class="card-body card-block">
+            <form action="" method="post" class="">
+                {{ render_field_icon(form.titulo, class_='form-control') }}
+                {{ render_field_icon(form.doi, '', class_='form-control') }}
+                {{ render_field_icon(form.publicacion, '', class_='form-control') }}
+                {{ render_field_select(form.idioma, class_='form-control') }}
+                {{ render_field_icon(form.paginacion, '', class_='form-control') }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row form-group">
+                                <div class="col col-lg-10 text-left">
+                                    {{ _('Autores') }}
+                                </div>
+                                <div class="col col-lg-2 text-right">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        {{ render_field_icon(form.nombre, '', class_='form-control') }}
+                        {{ render_field_icon(form.correo, '', class_='form-control') }}
+                        {{ render_field_icon(form.orcid, '', class_='form-control') }}
+                        {{ render_field_select(form.afiliacion, class_='form-control') }}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row form-group">
+                                <div class="col col-lg-10 text-left">
+                                    {{ _('Instituciones') }}
+                                </div>
+                                <div class="col col-lg-2 text-right">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        {{ render_field_select(form.pais, class_='form-control') }}
+                        {{ render_field_select(form.ciudad, class_='form-control') }}
+                        {{ render_field_select(form.institucion, class_='form-control') }}
+                        {{ render_field_select(form.dependencia, class_='form-control') }}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row form-group">
+                                <div class="col col-lg-10 text-left">
+                                    {{ _('Resumen') }}
+                                </div>
+                                <div class="col col-lg-2 text-right">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        {{ render_field_select(form.idioma_resumen, false, class_='form-control') }}
+                        {{ render_field_ta(form.resumen, false, class_='input-xlarge form-control') }}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row form-group">
+                                <div class="col col-lg-10 text-left">
+                                    {{ _('Palabra clave') }}
+                                </div>
+                                <div class="col col-lg-2 text-right">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        {{ render_field_select(form.idioma_palabra, false, class_='form-control') }}
+                        {{ render_field_ta(form.palabra, false, class_='input-xlarge form-control') }}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row form-group">
+                                <div class="col col-lg-10 text-left">
+                                    {{ _('Palabras clave (separadas por punto y coma)') }}
+                                </div>
+                                <div class="col col-lg-2 text-right">
+                                    <i class="fa fa-plus-circle"></i>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        {{ render_field_select(form.idioma_palabras, false, class_='form-control') }}
+                        {{ render_field_ta(form.palabras, false, class_='input-xlarge form-control') }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-lg-6">
+                        {{ render_field_select(form.tipo_documento, class_='form-control') }}
+                    </div>
+                    <div class="col col-lg-6">
+                        {{ render_field_select(form.tipo_documentob, class_='form-control') }}
+                    </div>
+                </div>
+                {{ render_field_select(form.disciplina, class_='form-control') }}
+                {{ render_field_select_text(form.texto_completo_select, form.texto_completo_text, class_='form-control') }}
+                {{ render_field_select_text(form.archivo_select, form.archivo, class_='form-control') }}
+                <div class="form-actions form-group">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary btn-sm">{{ _('Enviar') }}</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+{% endblock %}
