@@ -1,5 +1,4 @@
 # coding:utf-8
-import mongoengine
 
 from flask import current_app
 from flask_testing import TestCase

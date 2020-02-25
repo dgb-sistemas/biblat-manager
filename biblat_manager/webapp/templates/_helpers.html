@@ -1,16 +1,74 @@
-{% macro render_field_icon(field, icon) %}
+{% macro render_field_icon(field, icon=None) %}
     <div class="form-group">
-        <label>{{ field.label }}</label>
-        <div class="input-group">
-            <div class="input-group-prepend">
-              <div class="input-group-text"><i class="fa fa-{{ icon }}"></i></div>
+        {% if field.type == 'CSRFTokenField'%}
+		{{ field }}
+        {% elif field.type == 'FieldList' %}
+            <div data-toggle="fieldset" id="{{ field.name }}-fieldset">
+                 <label>{{ field.label }}</label>
+                <button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-add-row"
+                                                  data-target="#{{ field.name }}-fieldset"><i class="fa fa-plus-circle"></i></button>
+                {% if field[0].type == 'FormField' %}
+                    <table {% if field.min_entries == 0 and not any(field[0].data.values()) %}style="display: none;" {% endif %} class="table borderless">
+                        <tr>
+                            {% for subfield in field[0] %}
+                            <th>{{ subfield.label }}</th>
+                            {% endfor %}
+                            <th></th>
+                        </tr>
+                        {% for subfield in field %}
+                            {% set outer_loop = loop %}
+                            <tr data-toggle="fieldset-entry">
+                                {% for formfield in subfield %}
+                                    <td>
+                                        {{ formfield(disabled=not outer_loop.index0 < field.min_entries and not any(subfield.data.values()), **kwargs) }}
+                                        {% if formfield.errors %}
+                                            {% for error in formfield.errors %}
+                                                <small class="help-block form-text text-danger">{{ error }}</small>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                                <td><button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-remove-row" id="{{ field.name }}-{{loop.index0}}-remove" {% if loop.index0 < field.min_entries %}style="display:none;"{% endif %}><i class="fa fa-minus-circle"></i></button></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <table {% if field.min_entries == 0 and not field[0].data %}style="display: none;" {% endif %} class="table borderless">
+                    <tr>
+                        <th>{{ field[0].label }}</th>
+                        <th></th>
+                    </tr>
+                    {% for subfield in field.entries %}
+                        <tr data-toggle="fieldset-entry">
+                            <td>
+                                {{ subfield(disabled=not subfield.data, **kwargs) }}
+                                {% if subfield.errors %}
+                                    {% for error in subfield.errors %}
+                                        <small class="help-block form-text text-danger">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                            <td><button type="button" class="btn btn-outline-link btn-sm" data-toggle="fieldset-remove-row" id="{{ field.name }}-{{loop.index0}}-remove" {% if loop.index0 < field.min_entries %}style="display:none;"{% endif %}><i class="fa fa-minus-circle"></i></button></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
             </div>
-            {{ field(**kwargs)|safe }}
-        </div>
-        {% if field.errors %}
-            {% for error in field.errors %}
-                <small class="help-block form-text text-danger">{{ error }}</small>
-            {% endfor %}
+        {% else %}
+            <label>{{ field.label }}</label>
+            <div class="input-group">
+                {% if icon %}
+                <div class="input-group-prepend">
+                  <div class="input-group-text"><i class="fa fa-{{ icon }}"></i></div>
+                </div>
+                {% endif %}
+                {{ field(**kwargs)|safe }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <small class="help-block form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 {% endmacro %}

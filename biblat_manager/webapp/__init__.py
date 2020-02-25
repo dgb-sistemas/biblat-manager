@@ -45,8 +45,11 @@ def create_app(config_name):
     # Jinja filters
 
     app.jinja_env.filters.update({
-        'is_bool': is_bool,
+        'is_bool': is_bool
     })
+    app.jinja_env.globals.update(
+        any=any
+    )
 
     # Configuraciones
     app.config.from_object(settings.config[config_name])
