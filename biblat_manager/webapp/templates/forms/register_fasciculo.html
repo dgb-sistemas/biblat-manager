@@ -1,0 +1,23 @@
+{% extends "sidebar_layout.html" %}
+{% from "_helpers.html" import render_field_icon, render_field_select %}
+{% block content %}
+    <div class="col-lg-6">
+        <div class="card">
+          {% include "top_nav.html" %}
+          <div class="card-header">{{ _('Registro de fascículo') }}</div>
+          <div class="card-body card-block">
+            <form action="" method="post" class="">
+                {{ render_field_select(form.anio, class_='form-control') }}
+                {{ render_field_icon(form.volumen, '', class_='form-control') }}
+                {{ render_field_icon(form.numero, '', class_='form-control') }}
+                {{ render_field_icon(form.mes_inicial, '', class_='form-control') }}
+                {{ render_field_icon(form.mes_final, '', class_='form-control') }}
+                <div class="form-actions form-group">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary btn-sm">{{ _('Enviar') }}</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+{% endblock %}
