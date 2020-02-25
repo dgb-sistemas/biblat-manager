@@ -1,20 +1,8 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link {%  if pag == 'about' %} active {% endif %}" href="{{ url_for('main.revistas_about') }}">{{ _('Acerca') }}</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link {%  if pag == 'verfasc' %} active {% endif %}" href="{{ url_for('main.fasciculos') }}">{{ _('Fascículos') }} <i class="fa fa-file"></i></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {%  if pag == 'verdocs' %} active {% endif %}" href="{{ url_for('main.documentos') }}">{{ _('Documentos') }} <i class="fa fa-file-text"></i></a>
-    </li>
-    <li class="nav-item">
-        <a style="background-color:#ff8000" class="nav-link {%  if pag == 'addrev' %} active {% endif %}" {%  if pag != 'about' and pag != 'addrev' %} hidden {% endif %} href="{{ url_for('main.revistas_add') }}">{{ _('Nueva revista') }} <i class="fa fa-plus"></i></a>
-    </li>
-    <li class="nav-item">
         <a style="background-color:#ff8000" class="nav-link {%  if pag == 'addfasc' %} active {% endif %}" {%  if pag != 'verfasc' and pag != 'addfasc' %} hidden {% endif %} href="{{ url_for('main.fasciculos_add') }}">{{ _('Nuevo fascículo') }} <i class="fa fa-file"></i></a>
-    </li>
-    <li class="nav-item">
-        <a style="background-color:#ff8000" class="nav-link {%  if pag == 'adddocs' %} active {% endif %}" {%  if pag != 'verdocs' and pag != 'adddocs' %} hidden {% endif %} href="{{ url_for('main.documentos_add') }}">{{ _('Nuevo documento') }} <i class="fa fa-file-text"></i></a>
     </li>
 </ul>
