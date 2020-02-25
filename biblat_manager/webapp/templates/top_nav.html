@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link {%  if pag == 'verdocs' %} active {% endif %}" href="{{ url_for('main.documentos') }}">{{ _('Documentos') }} <i class="fa fa-file-text"></i></a>
+    </li>
+    <li class="nav-item">
+        <a style="background-color:#ff8000" class="nav-link {%  if pag == 'adddocs' %} active {% endif %}" {%  if pag != 'verdocs' and pag != 'adddocs' %} hidden {% endif %} href="{{ url_for('main.documentos_add') }}">{{ _('Nuevo documento') }} <i class="fa fa-file-text"></i></a>
+    </li>
+</ul>

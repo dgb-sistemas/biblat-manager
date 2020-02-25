@@ -15,7 +15,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from . import main
 from biblat_manager.webapp import babel, controllers
 from biblat_manager.webapp.forms import (
-    RegistrationForm, LoginForm, EmailForm, PasswordForm
+    RegistrationForm, LoginForm, EmailForm, PasswordForm, DocumentoRegistrationForm
 )
 from biblat_manager.webapp.models import User
 from biblat_manager.webapp.utils import get_timed_serializer
@@ -301,3 +301,20 @@ def reset_with_token(token):
     }
     return render_template('auth/reset_with_token.html', **data)
 
+
+@main.route('/documentos', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.documentos', __('Documentos'))
+@login_required
+def documentos():
+    return render_template('main/documento.html', pag='verdocs')
+
+
+@main.route('/documentos/agregar', methods=['GET', 'POST'])
+@register_breadcrumb(main, '.documentos.add', __('Agregar Documento'))
+@login_required
+def documentos_add():
+    form = DocumentoRegistrationForm()
+    if request.method == 'POST' and form.validate():
+        print('envío')
+
+    return render_template('forms/register_documento.html', form=form, pag='adddocs')
