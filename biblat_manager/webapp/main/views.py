@@ -302,7 +302,7 @@ def reset_with_token(token):
     return render_template('auth/reset_with_token.html', **data)
 
 
-@main.route('/docuemntos', methods=['GET', 'POST'])
+@main.route('/documentos', methods=['GET', 'POST'])
 @register_breadcrumb(main, '.documentos', __('Documentos'))
 @login_required
 def documentos():
