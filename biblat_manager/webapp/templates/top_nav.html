@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link {%  if pag == 'verfasc' %} active {% endif %}" href="{{ url_for('main.fasciculos') }}">{{ _('Fascículos') }} <i class="fa fa-file"></i></a>
+    </li>
+    <li class="nav-item">
+        <a style="background-color:#ff8000" class="nav-link {%  if pag == 'addfasc' %} active {% endif %}" {%  if pag != 'verfasc' and pag != 'addfasc' %} hidden {% endif %} href="{{ url_for('main.fasciculos_add') }}">{{ _('Nuevo fascículo') }} <i class="fa fa-file"></i></a>
+    </li>
+</ul>

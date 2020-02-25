@@ -6,6 +6,7 @@ from wtforms import (
     StringField,
     PasswordField,
     BooleanField,
+    SelectField,
     validators,
     ValidationError)
 
@@ -74,3 +75,32 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+
+class FasciculoRegistrationForm(FlaskForm):
+    anio = StringField(__('Año*'), [
+        validators.Length(min=1, max=4),
+        validators.DataRequired()
+    ])
+
+    volumen = StringField(__('Volumen'), [
+        validators.Length(min=1, max=3),
+        validators.optional()
+    ])
+
+    numero = StringField(__('Número'), [
+        validators.Length(min=1, max=3),
+        validators.optional()
+    ])
+
+    mes_inicial = SelectField(__('Mes inicial'), [
+        validators.DataRequired()
+    ], choices=[('01', 'ENERO'),
+                ('02', 'FEBRERO')]
+                     )
+
+    mes_final = SelectField(__('Mes final'), [
+        validators.DataRequired()
+    ], choices=[('02', 'FEBRERO'),
+                ('03', 'MARZO')]
+                              )
