@@ -1,4 +1,4 @@
-$.noConflict();
+//$.noConflict();
 
 jQuery(document).ready(function($) {
 
@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
         new SelectFx(el);
     } );
 
-    jQuery('.selectpicker').selectpicker;
+    $('.selectpicker').selectpicker;
 
 
     $('#menuToggle').on('click', function(event) {

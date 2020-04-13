@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask
+from flask import Flask, url_for
 from flask.json import JSONEncoder
 from flask_babelex import Babel
 from flask_babelex import lazy_gettext as __
@@ -7,6 +7,10 @@ from flask_breadcrumbs import Breadcrumbs
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
 from flask_mail import Mail
+from flask_security import Security, MongoEngineUserDatastore
+
+from flask_admin import Admin
+from flask_admin import helpers as admin_helpers
 
 from biblat_manager.config import settings
 
@@ -15,7 +19,12 @@ breadcrumbs = Breadcrumbs()
 login_manager = LoginManager()
 dbmongo = MongoEngine()
 mail = Mail()
-
+security = Security()
+admin_obj = Admin(
+    name='Biblat-Manager',
+    base_template='admin/base.html',
+    template_mode='bootstrap4'
+)
 
 class CustomJSONEncoder(JSONEncoder):
     """This class adds support for lazy translation texts to Flask's
@@ -69,9 +78,34 @@ def create_app(config_name):
     # mongoDB
     dbmongo.init_app(app)
 
+    # Setup Flask-Security
+    from .models import User, Role
+    app.user_datastore = MongoEngineUserDatastore(dbmongo, User, Role)
+    security_ctx = security.init_app(app, app.user_datastore)
+
     # Mail
     mail.init_app(app)
+
+    # Admin
+    from .models import User
+    from .admin.views import(
+        AdminIndexView,
+        UserModelView
+    )
+    admin_obj.init_app(app, index_view=AdminIndexView())
+    admin_obj.add_view(UserModelView(User, name='Usuarios', endpoint='user'))
+
+    # flask-security views.
+    @security_ctx.context_processor
+    def security_context_processor():
+        return dict(
+            admin_base_template=admin_obj.base_template,
+            admin_view=admin_obj.index_view,
+            h=admin_helpers,
+            get_url=url_for
+        )
 
     app.register_blueprint(main_blueprint)
 
     return app
+

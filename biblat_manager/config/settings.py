@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from flask_babelex import lazy_gettext as __
 
 """
     Archivo de configuración de Biblat Manager
@@ -82,6 +83,35 @@ class Config:
 
     # webassets
     # SASS_STYLE = 'compressed'
+
+    # Session
+    SESSION_COOKIE_NAME = 'session_biblat'
+
+    # Flask-Security
+    SECURITY_URL_PREFIX = "/"
+
+    SECURITY_LOGIN_URL = "/login/"
+    SECURITY_LOGOUT_URL = "/logout/"
+    SECURITY_REGISTER_URL = "/register/"
+    SECURITY_POST_LOGIN_VIEW = "/"
+    SECURITY_POST_LOGOUT_VIEW = "/"
+    SECURITY_PASSWORD_SALT = os.environ.get('BIBLAT_SECURITY_PASSWORD_SALT',
+                                            'secr3t-k3y')
+    SECURITY_EMAIL_SUBJECT_REGISTER = __('Bienvenido')
+    SECURITY_EMAIL_SUBJECT_PASSWORDLESS = __('Instrucciones de inicio de sesión')
+    SECURITY_EMAIL_SUBJECT_PASSWORD_NOTICE = __('Su contraseña ha sido restablecida')
+    SECURITY_EMAIL_SUBJECT_PASSWORD_RESET = __('Instrucciones para restablecer su contraseña')
+    SECURITY_EMAIL_SUBJECT_PASSWORD_CHANGE_NOTICE = __('Su constraseña ha sido cambiada')
+    SECURITY_EMAIL_SUBJECT_CONFIRM = __('Por favor confirme su correo')
+
+    # Flask-Security features
+    SECURITY_CONFIRMABLE = True
+    SECURITY_REGISTERABLE = True
+    SECURITY_RECOVERABLE = True
+    SECURITY_SEND_REGISTER_EMAIL = True
+    SECURITY_EMAIL_SENDER = MAIL_DEFAULT_SENDER
+    SECURITY_LOGIN_USER_TEMPLATE = 'auth/login.html'
+    SECURITY_RESET_PASSWORD_TEMPLATE = 'auth/reset_with_token.html'
 
     @staticmethod
     def init_app(app):

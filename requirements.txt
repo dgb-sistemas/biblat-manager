@@ -12,6 +12,8 @@ six==1.11.0
 speaklater==1.3
 Babel==2.6.0
 Flask==1.0.2
+-e git+https://github.com/flask-admin/flask-admin@bootstrap4#egg=Flask-Admin
+#Flask-Admin==1.5.0
 Flask-BabelEx==0.9.3
 Flask-Breadcrumbs==0.4.0
 flask-login==0.4.1
@@ -22,3 +24,4 @@ Jinja2==2.10
 Safe==0.4
 Werkzeug==0.14.1
 WTForms==2.2.1
+Flask-Security==3.0.0
