@@ -1,0 +1,73 @@
+{% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as lib with context %}
+
+{% block body %}
+  {% block navlinks %}
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="{{ return_url }}" class="nav-link">{{ _gettext('List') }}</a>
+    </li>
+    {%- if admin_view.can_create -%}
+    <li class="nav-item">
+        <a href="{{ get_url('.create_view', url=return_url) }}" class="nav-link">{{ _gettext('Create') }}</a>
+    </li>
+    {%- endif -%}
+    <li class="nav-item">
+        <a href="{{ get_url('.edit_view', id=request.args.get('id'), url=return_url) }}" class="nav-link">{{ _gettext('Edit') }}</a>
+    </li>
+    {%- if admin_view.can_view_details -%}
+    <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0)">{{ _gettext('Details') }}</a>
+    </li>
+    {%- endif -%}
+  </ul>
+  {% endblock %}
+
+  {% block details_search %}
+    <div class="input-group fa_filter_container col-lg-6">
+      <span class="input-group-addon">{{ _gettext('Filter') }}</span>
+      <input id="fa_filter" type="text" class="form-control">
+    </div>
+  {% endblock %}
+
+  {% block details_table %}
+    <table class="table table-hover table-bordered searchable">
+    {% for c, name in details_columns %}
+      <tr>
+        <td>
+          <b>{{ name }}</b>
+        </td>
+        <td>
+            {% if c == 'logo' %}
+                {% if get_value(model, c) != '' %}
+                    {{
+                        get_value(model, c) |
+                        replace(get_value(model, c),get_value(model, c)+'">') |
+                        replace('images','<img width="100px" src="/media/images') |
+                        safe
+                    }}
+                {% endif %}
+            {% elif c == 'portada' %}
+                {{
+                        get_value(model, c) |
+                        replace('[]','') |
+                        replace('[\'','<img width="100px" src="/media/') |
+                        replace('\']','">') |
+                        replace(',',',">') |
+                        replace(',','<img width="100px" src="/media/') |
+                        safe
+                }}
+            {% else %}
+                {{ get_value(model, c) | safe }}
+            {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endblock %}
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  <script src="{{ admin_static.url(filename='admin/js/details_filter.js', v='1.0.0') }}"></script>
+{% endblock %}

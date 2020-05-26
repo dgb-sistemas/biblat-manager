@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import socket
 from flask import (request,
                    session,
@@ -7,7 +8,9 @@ from flask import (request,
                    url_for,
                    abort,
                    render_template,
-                   flash)
+                   flash,
+                   send_from_directory,
+                   current_app as app)
 from flask_babelex import gettext as _, lazy_gettext as __
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_user, logout_user, login_required
@@ -87,28 +90,7 @@ def set_menutoggle():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('.login'))
-
-
-@main.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('.index'))
-    form = LoginForm()
-    if request.method == 'POST' and form.validate():
-        user = User.objects(email=form.email.data).first()
-        if user and user.check_password_hash(form.password.data) \
-                and user.email_confirmed:
-            login_user(user, remember=form.remember.data)
-            flash(_('Sesión iniciada como %s' % user.email), 'success')
-            return redirect(session.get('next') or url_for('.index'))
-        if not user:
-            flash(_('Usuario no registrado'), 'error')
-        if user and not user.check_password_hash(form.password.data):
-            flash(_('Contraseña incorrecta'), 'error')
-        if user and not user.email_confirmed:
-            flash(_('Correo electrónico no verificado'), 'error')
-    return render_template('auth/login.html', form=form)
+    return redirect(url_for('.logout'))
 
 
 # USER
@@ -301,3 +283,25 @@ def reset_with_token(token):
     }
     return render_template('auth/reset_with_token.html', **data)
 
+@main.route("/media/<path:filename>/", methods=['GET'])
+def download_file_by_filename(filename):
+    media_root = app.config['MEDIA_ROOT']
+    return send_from_directory(media_root, filename)
+
+
+@main.before_app_first_request
+def init_my_blueprint():
+    if not app.user_datastore.get_user('user@example.com'):
+        app.user_datastore.create_user(email='user@example.com',
+                                       username='user',
+                                       _password='password',
+                                       email_confirmed=True,
+                                       confirmed_at=datetime.datetime.utcnow())
+    if not app.user_datastore.get_user('admin@example.com'):
+        app.user_datastore.create_role(name="admin")
+        app.user_datastore.create_user(email='admin@example.com',
+                                       username='admin',
+                                       _password='password',
+                                       email_confirmed=True,
+                                       confirmed_at=datetime.datetime.utcnow(),
+                                       roles=['admin'])
