@@ -23,6 +23,13 @@
                             <li><i class="fa fa-user-plus"></i><a href="{{ url_for('user.create_view') }}">{{ _('Agregar') }}</a></li>
                         </ul>
                     </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-book"></i>{{ _('Revistas') }}</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-list fa-xs"></i><a href="{{ url_for('revista.edit_view') }}">{{ _('Listado') }}</a></li>
+                            <li><i class="fa fa-plus"></i><a href="{{ url_for('revista.create_view') }}">{{ _('Agregar') }}</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
