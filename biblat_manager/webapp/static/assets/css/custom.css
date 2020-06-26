@@ -1,0 +1,24 @@
+.inline-field.well{
+    border-top-style: groove;
+    border-top-width: 1px;
+}
+
+.inline-form-field{
+    border-bottom-style: groove;
+    border-bottom-width: 1px;
+    border-top-style: groove;
+    border-top-width: 1px;
+}
+
+.inline-field legend{
+    text-align: center;
+}
+
+.inline-field small{
+    font-size: 16px;
+}
+
+.form-group input[type=checkbox]{
+    height: 20px!important;
+    width: 20px;
+}

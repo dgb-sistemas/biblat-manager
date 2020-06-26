@@ -31,10 +31,10 @@ def index():
     data = {
         'html_title': 'Biblat Manager - Index'
     }
-    flash('You successfully read this important success message.', 'success')
-    flash('You successfully read this important error message.', 'error')
-    flash('You successfully read this important warning message.', 'warning')
-    flash('You successfully read this important info message.', 'info')
+    #flash('You successfully read this important success message.', 'success')
+    #flash('You successfully read this important error message.', 'error')
+    #flash('You successfully read this important warning message.', 'warning')
+    #flash('You successfully read this important info message.', 'info')
     return render_template('main/index.html', **data)
 
 

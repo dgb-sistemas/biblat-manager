@@ -1,16 +1,44 @@
 # -*- coding: utf-8 -*-
 from flask_security import UserMixin, RoleMixin
-from mongoengine import queryset_manager
+from mongoengine import queryset_manager, CASCADE
 import flask_security.utils as security_utils
 from flask_security import confirmable, recoverable
 from . import dbmongo as db, login_manager, notifications, utils, admin
 from flask_admin.contrib.mongoengine import ModelView
 from biblat_manager.config import settings
+# -*- coding: utf-8 -*-
+from mongoengine import (
+    Document,
+    StringField,
+    DateTimeField,
+    ListField,
+    IntField,
+    EmbeddedDocument,
+    BooleanField,
+    EmbeddedDocumentField,
+    EmbeddedDocumentListField,
+    ReferenceField,
+    URLField
+)
+from .catalogs import (
+    Pais,
+    Idioma,
+    TipoDocumento,
+    EnfoqueDocumento,
+    #Disciplina,
+    #SubDisciplina,
+    NombreGeografico,
+    LicenciaCC,
+    SherpaRomeo,
+    I18NField
+)
+from .marc import MarcDocumentField
 import json
 
-class Role(db.Document, RoleMixin):
-    name = db.StringField(max_length=80, unique=True)
-    description = db.StringField(max_length=255)
+
+class Role(Document, RoleMixin):
+    name = StringField(max_length=80, unique=True)
+    description = StringField(max_length=255)
 
     meta = {'collection': 'roles'}
 
@@ -21,24 +49,24 @@ class Role(db.Document, RoleMixin):
         return self.name
 
 
-class User(db.Document, UserMixin):
-    username = db.StringField(max_length=100, unique=True)
-    email = db.StringField(max_length=100, required=True)
-    _password = db.StringField(required=True, db_field='password')
-    email_confirmed = db.BooleanField(default=False)
-    confirmed_at = db.DateTimeField()
-    active = db.BooleanField(default=True)
-    roles = db.ListField(db.ReferenceField(Role), default=[])
+class User(Document, UserMixin):
+    username = StringField(max_length=100, unique=True)
+    email = StringField(max_length=100, required=True)
+    _password = StringField(required=True, db_field='password')
+    email_confirmed = BooleanField(default=False)
+    confirmed_at = DateTimeField()
+    active = BooleanField(default=True)
+    roles = ListField(ReferenceField(Role), default=[])
 
     meta = {'collection': 'users'}
 
     def __init__(self, *args, **kwargs):
         if 'password' in kwargs:
             kwargs['_password'] = kwargs.pop('password')
-            db.Document.__init__(self, *args, **kwargs)
+            Document.__init__(self, *args, **kwargs)
             self.password = kwargs['_password']
         else:
-            db.Document.__init__(self, *args, **kwargs)
+            Document.__init__(self, *args, **kwargs)
 
 
     @property
@@ -85,80 +113,12 @@ class User(db.Document, UserMixin):
         return self.email
 
 
-class I18NField(db.EmbeddedDocument):
-    es = db.StringField()
-    en = db.StringField()
-
-    def __unicode__(self):
-        #if settings.Config.BABEL_DEFAULT_LOCALE == 'es_MX':
-        return self.es
-        #else:
-        #    return self.en
-
-
-class Pais(db.Document):
-    """Esquema de catálogo país
-    _id: Código ISO 3166-2
-    alpha2: código de país en dos letras designado para representar la
-    mayoría de los lenguajes en el mundo
-    alpha: código de país en tres caracteres
-    codigo_pais: Código numérico de país
-    iso_3166-2: Descripción del ISO 3166-2
-    """
-    _id = db.StringField(max_length=2, primary_key=True, required=True)
-    nombre = db.EmbeddedDocumentField(I18NField)
-    alpha2 = db.StringField(max_length=2, required=True)
-    alpha3 = db.StringField(max_length=3, required=True)
-    codigo_pais = db.StringField(max_length=3, required=True)
-    iso_3166_2 = db.StringField(max_length=14)
-    region = db.EmbeddedDocumentField(I18NField)
-    sub_region = db.EmbeddedDocumentField(I18NField)
-    region_intermedia = db.EmbeddedDocumentField(I18NField)
-    codigo_region = db.StringField(max_length=3)
-    codigo_sub_region = db.StringField(max_length=3)
-    codigo_region_intermedia = db.StringField(max_length=3)
-
-    meta = {
-        'collection': 'paises',
-        'indexes': [
-            'nombre.es',
-            'alpha2'
-        ]
-    }
-
-    @classmethod
-    def get_all(cls):
-        output = []
-        if settings.Config.BABEL_DEFAULT_LOCALE == 'es_MX':
-            for p in cls.objects:
-                output.append((p._id, p.nombre.es))
-        else:
-            for p in cls.objects:
-                output.append((p._id, p.nombre.en))
-        return output
-
-
-    def save(self, *args, **kwargs):
-        """Override save in Pais"""
-        if not self._id:
-            self._id = self.alpha2
-
-        return super(Pais, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self._id
-
-    def __unicode__(self):
-        return self._id
-
-
-
-class Disciplina(db.Document):
+class Disciplina(Document):
     """Esquema de catálogo disciplina"""
-    _id = db.StringField(max_length=32, primary_key=True, required=True,
+    _id = StringField(max_length=32, primary_key=True, required=True,
                       default=lambda: utils.generate_uuid_32_string())
-    base = db.ListField(db.StringField(max_length=10, required=True))
-    nombre = db.EmbeddedDocumentField(I18NField)
+    base = ListField(StringField(max_length=10, required=True))
+    nombre = EmbeddedDocumentField(I18NField)
 
     meta = {
         'collection': 'disciplinas_revista',
@@ -176,7 +136,6 @@ class Disciplina(db.Document):
 
     @classmethod
     def get_all(cls):
-        print('Get all disc')
         output = []
         if settings.Config.BABEL_DEFAULT_LOCALE == 'es_MX':
             for p in cls.objects:
@@ -184,9 +143,18 @@ class Disciplina(db.Document):
         else:
             for p in cls.objects:
                 output.append((p._id, p.nombre.en))
-        print(output)
-        print(Disciplina.objects)
         return output
+
+    @classmethod
+    def get_all_qs(cls):
+        queryset = cls.objects
+        if settings.Config.BABEL_DEFAULT_LOCALE == 'es_MX':
+            for p in queryset:
+                p.nombre = p.nombre.es
+        else:
+            for p in queryset:
+                p.nombre = p.nombre.en
+        return queryset
 
     @classmethod
     def get_by_base(cls, base):
@@ -200,101 +168,30 @@ class Disciplina(db.Document):
                 output.append((p._id, p.base, p.nombre.en))
         return output
 
-
-class LicenciaCC(db.Document):
-    """Esquema de catálogo licencia
-    tipo: tipo de licencia creative commons
-    url: url del legal code de la licencia
-    """
-    _id = db.StringField(max_length=32, primary_key=True, required=True,
-                      default=lambda: utils.generate_uuid_32_string())
-    tipo = db.StringField(max_length=16, required=True)
-    url = db.URLField(required=True)
-
-    meta = {
-        'collection': 'licencias_cc',
-        'indexes': [
-            'tipo'
-        ]
-    }
-
-    def __str__(self):
-        return self._id
-
-    def __unicode__(self):
-        return self._id
-
     @classmethod
-    def get_all(cls):
-        output = []
-        for p in cls.objects:
-            output.append((p._id, p.tipo))
-        return output
-
-class SherpaRomeo(db.Document):
-    """Esquema de catálogo sherpa romeo
-    politica: especificacion de la politica utilizada
-    codigo: codigo hexagecimal utilizado por el color
-    """
-    _id = db.StringField(max_length=32, primary_key=True, required=True,
-                      default=lambda: utils.generate_uuid_32_string())
-    color = db.EmbeddedDocumentField(I18NField)
-    politica = db.EmbeddedDocumentField(I18NField)
-    codigo = db.StringField(required=True)
-
-    meta = {
-        'collection': 'sherparomeo',
-        'indexes': [
-            'color.es'
-        ]
-    }
-
-    def __str__(self):
-        return self._id
-
-    def __unicode__(self):
-        return self._id
-
-    @classmethod
-    def get_all(cls):
-        output = []
+    def get_by_rev(cls, id_rev):
+        queryset = cls.objects(base=Revista.objects(_id=id_rev).first().base_datos).all()
         if settings.Config.BABEL_DEFAULT_LOCALE == 'es_MX':
-            for p in cls.objects:
-                output.append((p._id, p.color.es))
+            for p in queryset:
+                p.nombre = p.nombre.es
         else:
-            for p in cls.objects:
-                output.append((p._id, p.color.en))
-        return output
+            for p in queryset:
+                p.nombre = p.nombre.en
+        return queryset
 
 
-class Idioma(db.Document):
-    """Esquema de catálogo idioma
-    _id : Código ISO 639-3
-    iso_639_1: Identificador 639-1 para identificar los idiomas principales
-    iso_639_3: Identificador 639-3 para identificar todos los lenguajes humanos
-               conocidos, incluyendo vivos, extintos, antiguos, históricos,
-               artificiales o de señas
-    iso_639_2b: Identificador 639-2 para aplicaciones bibliográficas
-    iso_639_2t: Identificador 639-2 para aplicaciones de terminología
-    type: Tipo de idioma A(ncient), C(onstructed),
-          E(xtinct), H(istorical), L(iving), S(pecial)
-    scope: Cobertura del idioma I(ndividual), M(acrolanguage), S(pecial)
-    """
-    _id = db.StringField(max_length=3, primary_key=True, required=True)
-    iso_639_1 = db.StringField(min_length=2, max_length=2)
-    iso_639_3 = db.StringField(min_length=3, max_length=3, required=True)
-    iso_639_2b = db.StringField(min_length=2, max_length=3)
-    iso_639_2t = db.StringField(min_length=2, max_length=3)
-    type = db.StringField(max_length=1)
-    scope = db.StringField(max_length=1)
-    nombre = db.EmbeddedDocumentField(I18NField)
+class SubDisciplina(Document):
+    """Esquema de catálogo subdisciplina"""
+    _id = StringField(max_length=32, primary_key=True, required=True,
+                      default=lambda: utils.generate_uuid_32_string())
+    disciplina = ReferenceField(Disciplina, required=True)
+    nombre = EmbeddedDocumentField(I18NField)
 
     meta = {
-        'collection': 'idiomas',
+        'collection': 'subdisciplinas',
         'indexes': [
             'nombre.es',
-            'iso_639_1',
-            'iso_639_3',
+            'disciplina'
         ]
     }
 
@@ -303,13 +200,6 @@ class Idioma(db.Document):
 
     def __unicode__(self):
         return self._id
-
-    def save(self, *args, **kwargs):
-        """Override save Idioma"""
-        if not self._id:
-            self._id = self.iso_639_3
-
-        return super(Idioma, self).save(*args, **kwargs)
 
     @classmethod
     def get_all(cls):
@@ -322,7 +212,8 @@ class Idioma(db.Document):
                 output.append((p._id, p.nombre.en))
         return output
 
-class Revista(db.Document):
+
+class Revista(Document):
     """Esquema de Revista
     base_datos: Nombre de la base de datos(CLA01 o PER01)
     titulo: Título de la revista
@@ -339,24 +230,24 @@ class Revista(db.Document):
     fecha_creacion: fecha en que fue creada la revista
     fecha_actualizacion: fecha en que se actualizaron los datos
     """
-    _id = db.StringField(max_length=32, primary_key=True, required=True,
+    _id = StringField(max_length=32, primary_key=True, required=True,
                       default=lambda: utils.generate_uuid_32_string())
-    base_datos = db.StringField(max_length=5, required=True)
-    titulo = db.StringField(max_length=256, required=True)
-    titulo_abreviado = db.StringField(max_length=256)
-    issn = db.StringField(max_length=9, required=True)
-    issn_electronico = db.StringField(max_length=9)
-    pais = db.ReferenceField(Pais, required=True)
-    disciplina = db.ReferenceField(Disciplina, required=True)
-    licencia_cc = db.ReferenceField(LicenciaCC)
-    sherpa_romeo = db.ReferenceField(SherpaRomeo)
-    idioma = db.ReferenceField(Idioma)
-    logo = db.StringField(max_length=100)
-    portada = db.StringField()
-    fecha_creacion = db.DateTimeField(required=True)
-    fecha_actualizacion = db.DateTimeField(required=True)
-    periodicidad = db.StringField(max_length=1, required=True)
-    acerca = db.StringField(max_length=256, required=True)
+    base_datos = StringField(max_length=5, required=True)
+    titulo = StringField(max_length=256, required=True)
+    titulo_abreviado = StringField(max_length=256)
+    issn = StringField(max_length=9, required=True)
+    issn_electronico = StringField(max_length=9)
+    pais = ReferenceField(Pais, required=True)
+    disciplina = ReferenceField(Disciplina, required=True)
+    licencia_cc = ReferenceField(LicenciaCC)
+    sherpa_romeo = ReferenceField(SherpaRomeo)
+    idioma = ReferenceField(Idioma)
+    logo = StringField(max_length=100)
+    portada = StringField()
+    fecha_creacion = DateTimeField(required=True)
+    fecha_actualizacion = DateTimeField(required=True)
+    periodicidad = StringField(max_length=1, required=True)
+    acerca = StringField(max_length=256, required=True)
 
     def __str__(self):
         return self._id
@@ -398,7 +289,7 @@ class Revista(db.Document):
         return super(Revista, self).save(*args, **kwargs)
 
 
-class Fasciculo(db.Document):
+class Fasciculo(Document):
     """Esquema de fascículo
     revista:Objeto referenciado de tipo revista
     volumen: volúmen del fascículo
@@ -410,17 +301,17 @@ class Fasciculo(db.Document):
     fecha_creacion:
     fecha_actualizacion:
     """
-    _id = db.StringField(max_length=32, primary_key=True, required=True,
+    _id = StringField(max_length=32, primary_key=True, required=True,
                       default=lambda: utils.generate_uuid_32_string())
-    revista = db.ReferenceField(Revista, required=True)
-    volumen = db.IntField()
-    numero = db.IntField()
-    anio = db.IntField(required=True)
-    mes_inicial = db.IntField(required=True)
-    mes_final = db.IntField(required=True)
-    parte = db.StringField(max_length=100)
-    fecha_creacion = db.DateTimeField(required=True)
-    fecha_actualizacion = db.DateTimeField(required=True)
+    revista = ReferenceField(Revista, required=True, reverse_delete_rule=CASCADE)
+    volumen = IntField()
+    numero = IntField()
+    anio = IntField(required=True)
+    mes_inicial = IntField(required=True)
+    mes_final = IntField(required=True)
+    parte = StringField(max_length=100)
+    fecha_creacion = DateTimeField(required=True)
+    fecha_actualizacion = DateTimeField(required=True)
 
     meta = {
         'collection': 'fasciculos',
@@ -433,13 +324,193 @@ class Fasciculo(db.Document):
     }
 
     def __str__(self):
-        return self.anio
+        return self._id
 
     def __unicode__(self):
-        return self.anio
+        return self._id
 
     def save(self, *args, **kwargs):
         """Override save in Fascículo"""
         self.revista = Revista.objects(_id=self.revista).first()
 
         return super(Fasciculo, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_by_revista(cls, revista):
+        output = []
+        for p in cls.objects(revista=revista).all():
+            output.append((p._id, str(p.anio) + (' vol.'+str(p.volumen) if p.volumen else '') + (' num.'+str(p.numero) if p.numero else '')))
+        return output
+
+    @classmethod
+    def get_all(cls):
+        output = []
+        for p in cls.objects:
+            output.append((p._id, str(p.anio) + (' vol.'+str(p.volumen) if p.volumen else '') + (' num.'+str(p.numero) if p.numero else '')))
+        return output
+
+
+class Autor(EmbeddedDocument):
+    """Esquema de autor
+    nombre: Nombre del autor
+    correo_electronico: correo de contacto del autor
+    referencia: valor entero que referencia a la institución
+    a la que pertenece el autor
+    """
+    nombre = StringField(max_length=100, required=True)
+    correo_electronico = StringField(max_length=100)
+    referencia = IntField()
+
+    def __str__(self):
+        return self.nombre + ', ' + self.correo_electronico + ' (' + str(self.referencia) + ')'
+
+    def __unicode__(self):
+        return self.nombre + ', ' + self.correo_electronico + ' (' + str(self.referencia) + ')'
+
+
+class AutorCorporativo(EmbeddedDocument):
+    """Esquema de autor corporativo
+    institucion: nombre de la institución a la que pertenece el autor
+    dependencia: nombre de la dependencia a la que pertenece el autor
+    pais: nombre del país de la institución a la que pertenece el autor"""
+    institucion = StringField(max_length=100, required=True)
+    dependencia = StringField(max_length=100)
+    pais = ReferenceField(Pais)
+
+    def __str__(self):
+        return self.institucion + ', ' + self.dependencia
+
+    def __unicode__(self):
+        return self.institucion + ', ' + self.dependencia
+
+
+class Institucion(EmbeddedDocument):
+    """Esquema de institución
+    institucion: Nombre de la institución
+    dependencia: Nombre de la dependencia
+    ciudad_estado: Nombre de la ciudad o estado
+    pais: Referencia al identificador del país
+    referencia: Número entero para ser referenciado por el autor
+    """
+    institucion = StringField(max_length=256, required=True)
+    dependencia = StringField(max_length=256)
+    ciudad_estado = StringField(max_length=256)
+    pais = ReferenceField(Pais, required=True)
+    referencia = IntField()
+
+    def __str__(self):
+        return self.institucion + ', ' + self.dependencia + ' (' + str(self.referencia) + ')'
+
+    def __unicode__(self):
+        return self.institucion + ', ' + self.dependencia + ' (' + str(self.referencia) + ')'
+
+
+class UrlTextoCompleto(EmbeddedDocument):
+    """Esquema de Url de texto completo
+    url: URL del recurso para texto completo
+    descripcion: Descripción del formato en Texto completo
+    Texto completo (Ver PDF) o Texto completo (Ver HTML)
+    """
+    url = URLField(required=True)
+    descripcion = StringField(max_length=100, required=True)
+
+    def __str__(self):
+        return self.url + ' (' + self.descripcion + ')'
+
+    def __unicode__(self):
+        return self.url + ' (' + self.descripcion + ')'
+
+
+class Resumen(EmbeddedDocument):
+    """Esquema de resúmen
+    idioma: Objeto referenciado de idioma
+    resumen:
+    """
+    idioma = ReferenceField(Idioma, required=True)
+    resumen = StringField(required=True)
+
+    def __str__(self):
+        return self.idioma.nombre.es + ': ' + self.resumen
+
+    def __unicode__(self):
+        return self.idioma.nombre.es + ': ' + self.resumen
+
+
+class PalabraClave(EmbeddedDocument):
+    """Esquema de palabra clave
+    idioma: Objeto referenciado de idioma
+    palabra_clave: definición de la palabra clave
+    """
+    idioma = ReferenceField(Idioma, required=True)
+    palabra_clave = StringField(max_length=100, required=True)
+
+    def __str__(self):
+        return self.idioma.nombre.es + ': ' + self.palabra_clave
+
+    def __unicode__(self):
+        return self.idioma.nombre.es + ': ' + self.palabra_clave
+
+
+class Documento(Document):
+    """Esquema de documento
+    doi: identificador de objeto digital
+    """
+    _id = StringField(max_length=32, primary_key=True, required=True,
+                      default=lambda: utils.generate_uuid_32_string())
+    revista = ReferenceField(Revista, required=True, reverse_delete_rule=CASCADE)
+    fasciculo = ReferenceField(Fasciculo, required=True, reverse_delete_rule=CASCADE)
+    numero_sistema = StringField(max_length=14, required=True)
+    titulo_documento = StringField(max_length=256, required=True)
+    doi = StringField(max_length=256)
+    idioma = ListField(ReferenceField(Idioma))
+    paginacion = StringField(max_length=100)
+    autor = ListField(EmbeddedDocumentField(Autor))
+    autor_corporativo = ListField(EmbeddedDocumentField(AutorCorporativo))
+    institucion = ListField(EmbeddedDocumentField(Institucion))
+    resumen = ListField(EmbeddedDocumentField(Resumen))
+    palabra_clave = ListField(EmbeddedDocumentField(PalabraClave, required=True))
+    tipo_documento = ReferenceField(TipoDocumento, required=True)
+    enfoque_documento = ReferenceField(EnfoqueDocumento, required=True)
+    disciplina = ListField(ReferenceField(Disciplina), required=False)
+    subdisciplinas = ListField(ReferenceField(SubDisciplina))
+    nombres_geograficos = ListField(ReferenceField(NombreGeografico))
+    referencias = BooleanField()
+    texto_completo = ListField(EmbeddedDocumentField(UrlTextoCompleto))
+    #marc21 = EmbeddedDocumentField(MarcDocumentField, required=True)
+    fecha_creacion = DateTimeField(required=True)
+    fecha_actualizacion = DateTimeField(required=True)
+    fecha_recepcion = DateTimeField()
+    fecha_aceptacion = DateTimeField()
+
+    meta = {
+        'collection': 'documentos',
+        'indexes': [
+            'revista',
+            'autor',
+            'institucion',
+            'palabra_clave',
+            'fasciculo',
+            'numero_sistema',
+            'titulo_documento',
+            'doi',
+            'idioma'
+        ]
+    }
+
+    def save(self, *args, **kwargs):
+        self.revista = Revista.objects(_id=self.revista).first()
+        self.fasciculo = Fasciculo.objects(_id=self.fasciculo).first()
+        self.enfoque_documento = EnfoqueDocumento.objects(_id=self.enfoque_documento).first()
+        self.tipo_documento = TipoDocumento.objects(_id=self.tipo_documento).first()
+        for a in self.autor_corporativo:
+            a.pais = Pais.objects(_id=a.pais).first()
+        for i in self.institucion:
+            i.pais = Pais.objects(_id=i.pais).first()
+        for r in self.resumen:
+            r.idioma = Idioma.objects(_id=r.idioma).first()
+        for pc in self.palabra_clave:
+            pc.idioma = Idioma.objects(_id=pc.idioma).first()
+        if not self._id:
+            self._id = self.alpha2
+
+        return super(Documento, self).save(*args, **kwargs)

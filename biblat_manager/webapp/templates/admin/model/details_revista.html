@@ -5,11 +5,11 @@
   {% block navlinks %}
   <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a href="{{ return_url }}" class="nav-link">{{ _gettext('List') }}</a>
+        <a href="{{ return_url }}" class="nav-link">{{ _gettext('Revistas') }}</a>
     </li>
     {%- if admin_view.can_create -%}
     <li class="nav-item">
-        <a href="{{ get_url('.create_view', url=return_url) }}" class="nav-link">{{ _gettext('Create') }}</a>
+        <a href="{{ get_url('.create_view', url=return_url) }}" class="nav-link">{{ _gettext('Nueva') }}</a>
     </li>
     {%- endif -%}
     <li class="nav-item">

@@ -1,0 +1,126 @@
+{% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as lib with context %}
+
+{% block body %}
+  <div>
+        <b>
+            {{  _gettext('Revista: ') }}{{ request.args.get('titulo') }}
+            {% if request.args.get('anio')  %}
+                {{ _('Año ')}}{{ request.args.get('anio') }}
+            {% endif %}
+            {% if request.args.get('vol')  %}
+                {{ _('Vol. ')}}{{ request.args.get('vol') }}
+            {% endif %}
+            {% if request.args.get('num')  %}
+                {{ _('Num. ')}}{{ request.args.get('num') }}
+            {% endif %}
+        </b>
+  </div>
+  <br>
+  {% block navlinks %}
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="{{ return_url }}" class="nav-link">{{ _gettext('Fascículos') }}</a>
+    </li>
+    {%- if admin_view.can_create -%}
+    <li class="nav-item">
+        <a href="{{ get_url('.create_view', url=return_url,
+                                    titulo=request.args.get('titulo'),
+                                    anio=request.args.get('anio'),
+                                    vol=request.args.get('vol'),
+                                    num=request.args.get('num'),
+                                    id_rev=request.args.get('id_rev'),
+                                    id_fasc=request.args.get('id_fasc')
+                            ) }}" class="nav-link">{{ _gettext('Nuevo') }}</a>
+    </li>
+    {%- endif -%}
+    <li class="nav-item">
+        <a href="{{ get_url('.edit_view', id=request.args.get('id'),
+                                    titulo=request.args.get('titulo'),
+                                    anio=request.args.get('anio'),
+                                    vol=request.args.get('vol'),
+                                    num=request.args.get('num'),
+                                    id_rev=request.args.get('id_rev'),
+                                    id_fasc=request.args.get('id_fasc'),
+                                    url=return_url
+                                    ) }}" class="nav-link">{{ _gettext('Edit') }}</a>
+    </li>
+    {%- if admin_view.can_view_details -%}
+    <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0)">{{ _gettext('Details') }}</a>
+    </li>
+    {%- endif -%}
+  </ul>
+  {% endblock %}
+
+  {% block details_search %}
+    <div class="input-group fa_filter_container col-lg-6">
+      <span class="input-group-addon">{{ _gettext('Filter') }}</span>
+      <input id="fa_filter" type="text" class="form-control">
+    </div>
+  {% endblock %}
+
+  {% block details_table %}
+    <table class="table table-hover table-bordered searchable">
+    {#{% for c, name in details_columns %}#}
+    {% for c, name in [
+        ('numero_sistema', 'Número de sistema'),
+        ('titulo_documento', 'Título del documento'),
+        ('doi', 'DOI'),
+        ('idioma', 'Idioma'),
+        ('paginacion', 'Paginación'),
+        ('autor', 'Autor'),
+        ('autor_corporativo', 'Autor corporativo'),
+        ('institucion', 'Institución'),
+        ('resumen', 'Resumen'),
+        ('palabra_clave', 'Palabra clave'),
+        ('tipo_documento.nombre.es', 'Tipo de documento'),
+        ('enfoque_documento.nombre.es', 'Enfoque del documento'),
+        ('disciplina', 'Disciplina'),
+        ('subdisciplinas', 'Subdisciplinas'),
+        ('nombres_geograficos', 'Nombres Geográficos'),
+        ('referencias', 'Referencias'),
+        ('texto_completo', 'Texto completo'),
+        ('fecha_creacion', 'Fecha de creación'),
+        ('fecha_actualizacion', 'Fecha de actualización'),
+        ('fecha_recepcion', 'Fecha de recepción'),
+        ('fecha_aceptacion', 'Fecha de aceptación')
+    ] %}
+      <tr>
+        <td>
+          <b>{{ name }}</b>
+        </td>
+        <td>
+            {% if c == 'logo' %}
+                {% if get_value(model, c) != '' %}
+                    {{
+                        get_value(model, c) |
+                        replace(get_value(model, c),get_value(model, c)+'">') |
+                        replace('images','<img width="100px" src="/media/images') |
+                        safe
+                    }}
+                {% endif %}
+            {% elif c == 'portada' %}
+                {{
+                        get_value(model, c) |
+                        replace('[]','') |
+                        replace('[\'','<img width="100px" src="/media/') |
+                        replace('\']','">') |
+                        replace(',',',">') |
+                        replace(',','<img width="100px" src="/media/') |
+                        safe
+                }}
+            {% else %}
+                {{ get_value(model, c) | safe }}
+            {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endblock %}
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  <script src="{{ admin_static.url(filename='admin/js/details_filter.js', v='1.0.0') }}"></script>
+{% endblock %}

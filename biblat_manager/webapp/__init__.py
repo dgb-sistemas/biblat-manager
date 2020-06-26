@@ -91,6 +91,7 @@ def create_app(config_name):
         User,
         Revista,
         Fasciculo,
+        Documento,
         Disciplina
     )
     from .admin.views import(
@@ -98,12 +99,14 @@ def create_app(config_name):
         UserModelView,
         RevistaModelView,
         FasciculoModelView,
+        DocumentoModelView,
         DisciplinaModelView
     )
     admin_obj.init_app(app, index_view=AdminIndexView())
     admin_obj.add_view(UserModelView(User, name='Usuarios', endpoint='user'))
     admin_obj.add_view(RevistaModelView(Revista, name='Revistas', endpoint='revista'))
     admin_obj.add_view(FasciculoModelView(Fasciculo, name='Fasciculo', endpoint='fasciculo'))
+    admin_obj.add_view(DocumentoModelView(Documento, name='Documento', endpoint='documento'))
     admin_obj.add_view(DisciplinaModelView(Disciplina, name='Disciplina', endpoint='disciplina'))
 
     # flask-security views.

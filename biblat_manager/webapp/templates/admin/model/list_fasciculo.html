@@ -25,15 +25,15 @@
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a href="javascript:void(0)" class="nav-link active">{{ _gettext('List') }}{% if count %} ({{ count }}){% endif %}</a>
+            <a href="javascript:void(0)" class="nav-link active">{{ _gettext('Fascículos') }}{% if count %} ({{ count }}){% endif %}</a>
         </li>
 
         {% if admin_view.can_create %}
         <li class="nav-item">
           {%- if admin_view.create_modal -%}
-            {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, modal=True), btn_class='nav-link', title=_gettext('Create New Record'), content=_gettext('Create')) }}
+            {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, modal=True), btn_class='nav-link', title=_gettext('Create New Record'), content=_gettext('Nuevo')) }}
           {% else %}
-            <a href="{{ get_url('.create_view', url=return_url) }}" title="{{ _gettext('Create New Record') }}" class="nav-link">{{ _gettext('Create') }}</a>
+            <a href="{{ get_url('.create_view', url=return_url, titulo=request.args.get('titulo',''), id_rev=request.args.get('flt0_0',request.args.get('flt1_0',''))) }}" title="{{ _gettext('Create New Record') }}" class="nav-link">{{ _gettext('Nuevo') }}</a>
           {%- endif -%}
         </li>
         {% endif %}
@@ -90,7 +90,7 @@
                 <div class="card-header" id="heading{{ ns.anio_actual }}">
                     <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{ ns.anio_actual }}" aria-expanded="{% if ns.cont==0 %}true{% else %}false{% endif %}" aria-controls="collapse{{ ns.anio_actual }}">
-                        {{ ns.anio_actual }}
+                        {{ _('Año: ') }}{{ ns.anio_actual }}
                     </button>
                     </h5>
                 </div>
@@ -157,7 +157,10 @@
                                                 {% block list_row_actions scoped %}
                                                   {% for action in list_row_actions %}
                                                   {{    action.render_ctx(get_pk_value(row), row) |
-                                                        replace('extra=','titulo='+request.args.get('titulo'))
+                                                        replace('extra=',
+                                                                    'titulo='+request.args.get('titulo','')+
+                                                                    '&id_rev='+request.args.get('flt1_0',request.args.get('flt0_0',''))
+                                                                    )
                                                   }}
                                                   {% endfor %}
                                                 {% endblock %}

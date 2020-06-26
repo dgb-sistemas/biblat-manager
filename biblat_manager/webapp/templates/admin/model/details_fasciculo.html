@@ -11,21 +11,31 @@
   {% block navlinks %}
   <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a href="{{ return_url }}" class="nav-link">{{ _gettext('List') }}</a>
+        <a href="{{ return_url }}" class="nav-link">{{ _gettext('Fascículos') }}</a>
     </li>
     {%- if admin_view.can_create -%}
     <li class="nav-item">
-        <a href="{{ get_url('.create_view', url=return_url) }}" class="nav-link">{{ _gettext('Create') }}</a>
+        <a href="{{ get_url('.create_view', url=return_url, titulo=request.args.get('titulo',''), id_rev=request.args.get('id_rev')) }}" class="nav-link">{{ _gettext('Nuevo') }}</a>
     </li>
     {%- endif -%}
     <li class="nav-item">
-        <a href="{{ get_url('.edit_view', id=request.args.get('id'), url=return_url) }}" class="nav-link">{{ _gettext('Edit') }}</a>
+        <a href="{{ get_url('.edit_view', titulo=request.args.get('titulo',''), id=request.args.get('id'), id_rev=request.args.get('id_rev'), url=return_url) }}" class="nav-link">{{ _gettext('Edit') }}</a>
     </li>
     {%- if admin_view.can_view_details -%}
     <li class="nav-item">
         <a class="nav-link active" href="javascript:void(0)">{{ _gettext('Details') }}</a>
     </li>
     {%- endif -%}
+    <li class="nav-item">
+        <a class="nav-link" href="{{    get_url('documento.index_view',
+                                        flt1_0=request.args.get('id'),
+                                        titulo=request.args.get('titulo'),
+                                        anio=get_value(model, 'anio'),
+                                        vol=get_value(model, 'volumen'),
+                                        num=get_value(model, 'numero'),
+                                        id_rev=request.args.get('id_rev'),
+                                        url=return_url) }}">{{ _gettext('Documentos') }}</a>
+    </li>
   </ul>
   {% endblock %}
 
