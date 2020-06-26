@@ -6,7 +6,7 @@ from flask_admin.helpers import get_form_data
 from wtforms import validators, widgets, fields, ValidationError
 import flask_security.utils as security_utils
 from flask_babelex import gettext as _, lazy_gettext as __
-
+from flask_admin.contrib.mongoengine import filters
 from flask import url_for, current_app, redirect, request, json, flash
 from flask_security import url_for_security
 import flask_security.utils as security_utils
@@ -20,7 +20,9 @@ from ..models import (
     Disciplina,
     Idioma,
     SherpaRomeo,
-    LicenciaCC
+    LicenciaCC,
+    Revista,
+    Fasciculo
     )
 from .fields import (
     GroupSelect2Widget
@@ -89,15 +91,16 @@ class UserModelView(BaseUserModelView):
 #Revista
 class RevistaModelView(BaseModelView):
     can_view_details = True
+    details_template = 'admin/model/details_revista.html'
 
     def checkPais(form, field):
         if not field.data:
-            flash(_('Seleccione un país'), 'error')
+            flash(__('Seleccione un país'), 'error')
             raise ValidationError(None)
 
     def checkDisciplina(form, field):
         if not field.data:
-            flash(_('Seleccione una disciplina'), 'error')
+            flash(__('Seleccione una disciplina'), 'error')
             raise ValidationError(None)
 
     column_details_exclude_list = {
@@ -183,6 +186,97 @@ class RevistaModelView(BaseModelView):
             choices=Idioma.get_all()
         )
     )
+
+
+#Fasciculo
+class FasciculoModelView(BaseModelView):
+    can_view_details = True
+    list_template='admin/model/list_fasciculo.html'
+    details_template = 'admin/model/details_fasciculo.html'
+
+    def checkRevista(form, field):
+        if not field.data:
+            flash(__('Seleccione una revista'), 'error')
+            raise ValidationError(None)
+
+    column_default_sort = [
+                                ('anio', True),
+                                ('numero', False),
+                                ('volumen', False),
+                                ('parte', False)
+                            ]
+
+
+    column_exclude_list = {
+        '_id',
+        'revista'
+    }
+
+    column_details_exclude_list = {
+        '_id',
+        'revista'
+    }
+
+    column_labels = {
+        'revista': __('Revista'),
+        'volumen': __('Volúmen'),
+        'numero': __('Número'),
+        'anio': __('Año'),
+        'mes_inicial': __('Mes inicial'),
+        'mes_final': __('Mes final'),
+        'parte': __('Parte'),
+        'fecha_creacion': __('Fecha de creación'),
+        'fecha_actualizacion': __('Fecha de actualización')
+    }
+
+    column_list = (
+        'volumen',
+        'numero',
+        'anio',
+        'mes_inicial',
+        'mes_final',
+        'parte',
+        'fecha_creacion',
+        'fecha_actualizacion'
+    )
+
+    form_overrides = dict(
+        revista=Select2Field,
+        mes_inicial=Select2Field,
+        mes_final=Select2Field
+    )
+
+    form_args = dict(
+        revista=dict(
+            allow_blank=True,
+            blank_text=__('Seleccione una revista...'),
+            choices=Revista.get_all(),
+            validators=[checkRevista]
+        ),
+        volumen=dict(
+            label=__('Volúmen')
+        ),
+        numero=dict(
+            label=__('Número')
+        ),
+        anio=dict(
+            label=__('Año')
+        ),
+        mes_inicial=dict(
+            choices=choices.MES
+        ),
+        mes_final=dict(
+            choices=choices.MES
+        ),
+        fecha_creacion=dict(
+            label=__('Fecha de creación')
+        ),
+        fecha_actualizacion=dict(
+            label=__('Fecha de actualización')
+        )
+    )
+
+    column_filters = (filters.FilterLike(column=Fasciculo.revista, name='Revista'),)
 
 
 # Disciplina

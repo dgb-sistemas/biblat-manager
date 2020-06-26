@@ -358,6 +358,11 @@ class Revista(db.Document):
     periodicidad = db.StringField(max_length=1, required=True)
     acerca = db.StringField(max_length=256, required=True)
 
+    def __str__(self):
+        return self._id
+
+    def __unicode__(self):
+        return self._id
 
     meta = {
         'collection': 'revistas',
@@ -372,6 +377,14 @@ class Revista(db.Document):
         ]
     }
 
+    @classmethod
+    def get_all(cls):
+        output = []
+        for p in cls.objects:
+            output.append((p._id, p.titulo))
+
+        return output
+
     def save(self, *args, **kwargs):
         """Override save in Revista"""
         self.pais = Pais.objects(_id=self.pais).first()
@@ -383,3 +396,50 @@ class Revista(db.Document):
             self._id = self.alpha2
 
         return super(Revista, self).save(*args, **kwargs)
+
+
+class Fasciculo(db.Document):
+    """Esquema de fascículo
+    revista:Objeto referenciado de tipo revista
+    volumen: volúmen del fascículo
+    numero: numero del fascículo
+    año: año del fascículo
+    mes_inicial:
+    mes_final:
+    parte: parte del fascículo
+    fecha_creacion:
+    fecha_actualizacion:
+    """
+    _id = db.StringField(max_length=32, primary_key=True, required=True,
+                      default=lambda: utils.generate_uuid_32_string())
+    revista = db.ReferenceField(Revista, required=True)
+    volumen = db.IntField()
+    numero = db.IntField()
+    anio = db.IntField(required=True)
+    mes_inicial = db.IntField(required=True)
+    mes_final = db.IntField(required=True)
+    parte = db.StringField(max_length=100)
+    fecha_creacion = db.DateTimeField(required=True)
+    fecha_actualizacion = db.DateTimeField(required=True)
+
+    meta = {
+        'collection': 'fasciculos',
+        'indexes': [
+            'revista',
+            'anio',
+            'volumen',
+            'numero'
+        ]
+    }
+
+    def __str__(self):
+        return self.anio
+
+    def __unicode__(self):
+        return self.anio
+
+    def save(self, *args, **kwargs):
+        """Override save in Fascículo"""
+        self.revista = Revista.objects(_id=self.revista).first()
+
+        return super(Fasciculo, self).save(*args, **kwargs)

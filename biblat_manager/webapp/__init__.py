@@ -87,16 +87,23 @@ def create_app(config_name):
     mail.init_app(app)
 
     # Admin
-    from .models import User, Revista, Disciplina
+    from .models import (
+        User,
+        Revista,
+        Fasciculo,
+        Disciplina
+    )
     from .admin.views import(
         AdminIndexView,
         UserModelView,
         RevistaModelView,
+        FasciculoModelView,
         DisciplinaModelView
     )
     admin_obj.init_app(app, index_view=AdminIndexView())
     admin_obj.add_view(UserModelView(User, name='Usuarios', endpoint='user'))
     admin_obj.add_view(RevistaModelView(Revista, name='Revistas', endpoint='revista'))
+    admin_obj.add_view(FasciculoModelView(Fasciculo, name='Fasciculo', endpoint='fasciculo'))
     admin_obj.add_view(DisciplinaModelView(Disciplina, name='Disciplina', endpoint='disciplina'))
 
     # flask-security views.
