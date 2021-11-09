@@ -18,7 +18,7 @@ flask-login==0.4.1
 flask-mongoengine==0.9.5
 Flask-Mail==0.9.1
 Flask-Testing==0.7.1
-Jinja2==2.11.1
+Jinja2==3.0.3
 Safe==0.4
 Werkzeug==0.16.1
 WTForms==2.2.1
