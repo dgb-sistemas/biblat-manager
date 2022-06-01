@@ -7,7 +7,9 @@ from wtforms import (
     PasswordField,
     BooleanField,
     validators,
-    ValidationError)
+    ValidationError,
+    SelectField,
+    FileField)
 
 
 def check_secure_password(form, field):
@@ -74,3 +76,93 @@ class PasswordForm(FlaskForm):
         check_secure_password
     ])
     confirm = PasswordField(__('Confirmar contraseña'))
+
+
+class RevistaForm(FlaskForm):
+    base_datos = SelectField(__('Base de datos'), choices=[
+        ('', 'Selecciona una opción'),
+        ('CLA01', 'CLASE'),
+        ('PER01', 'PERIÓDICA')
+    ])
+    titulo = StringField(__('Titulo'), [
+        validators.length(max=256),
+        validators.DataRequired()
+    ])
+    titulo_abreviado = StringField(__('Titulo abreviado'), [
+        validators.length(max=256),
+        validators.Optional(),
+    ])
+    issn = StringField(__('ISSN'), [
+        validators.length(max=9),
+        validators.DataRequired(),
+        validators.Regexp('[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+                          message=__("Los datos no corresponden a un ISSN"))
+    ])
+    issn_electronico = StringField(__('ISSN electrónico'), [
+        validators.length(max=9),
+        validators.Regexp('[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9xX]',
+                          message=__("Los datos no corresponden a un ISSN")),
+        validators.Optional(),
+    ])
+    pais = SelectField(__('Pais'), [validators.DataRequired()], choices=[
+        ('','Selecciona un país'),
+        ('MX','México'),
+        ('ARG', 'Argentina'),
+        ('CO', 'Colombia'),
+        ('PE', 'Peru'),
+        ('BR', 'Brasil')
+    ])
+    disciplina = SelectField(__('Disciplina'),
+                             [validators.DataRequired()],
+                             choices=[
+                                    ('', 'Selecciona una disciplina'),
+                                    ('1' , 'Administracion'),
+                                    ('2', 'Agrociencias'),
+                                    ('3', 'Antropologia'),
+                                    ('4', 'Derecho'),
+                                    ('5', 'Ingenieria'),
+    ])
+    licencia_cc = SelectField(__('Licencia CC (Creative Commons)'),
+                              [validators.Optional()], choices=[
+        ('', 'Selecciona una licencia'),
+        ('CC0','Zero Public Domain, "No Rights Reserved"'),
+        ('CC-BY', 'Attribution'),
+        ('CC-BY-SA', 'Attribution-ShareAlike'),
+        ('CC-BY-NC', 'Attribution-NonCommercial'),
+        ('CC-BY-NC-ND', 'Attribution-NonCommercial-NoDerivs'),
+        ('CC-BY-NC-SA', 'Attribution-NonCommercial-ShareAlike'),
+        ('CC-BY-ND', 'Attribution-NoDerivs'),
+        ('CC-BY-ND-NC', 'Attribution-NoDerivs-NonCommercial'),
+    ])
+    sherpa_romeo = SelectField(__('Sherpa Romeo'),
+                               [validators.Optional()], choices=[
+        ('', 'Selecciona una opción'),
+        ('V','Verde'),
+        ('A', 'Azul'),
+        ('Y', 'Amarillo'),
+        ('B', 'Blanco'),
+    ])
+    idioma = SelectField(__('Idioma'), [validators.Optional()], choices=[
+        ('', 'Selecciona un idioma'),
+        ('ESP','Español'),
+        ('US', 'Ingles'),
+        ('PG', 'Portugues'),
+        ('FR','Frances')
+    ])
+    periodicidad = SelectField(__('Periodicidad'),
+                               [validators.DataRequired()], choices=[
+        ('', 'Seleccciona una opción'),
+        ('M' ,'Mensual'),
+        ('B', 'Bimestral'),
+        ('T', 'Trimestral'),
+    ])
+    logo = FileField(__('Logo'), [
+        validators.Regexp('\w+(\.jpg)$',
+                          message=__("El archivo no es una imágen")),
+        validators.Optional(),
+    ])
+    portada = FileField(__('Portada'), [
+        validators.Regexp('\w+(\.jpg)$',
+                          message=__("El archivo no es una imágen")),
+        validators.Optional(),
+    ])
