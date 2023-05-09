@@ -20,5 +20,5 @@ Flask-Mail==0.9.1
 Flask-Testing==0.7.1
 Jinja2==2.11.1
 Safe==0.4
-Werkzeug==0.16.1
+Werkzeug==2.3.4
 WTForms==2.2.1
